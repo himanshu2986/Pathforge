@@ -438,3 +438,19 @@
  GET /dashboard 200 in 860ms (next.js: 811ms, application-code: 50ms)
  GET /fonts/Geist-Bold.ttf 404 in 124ms (next.js: 11ms, application-code: 114ms)
  GET /fonts/Geist-Regular.ttf 404 in 54ms (next.js: 1718µs, application-code: 52ms)
+ GET /dashboard 200 in 61ms (next.js: 3ms, application-code: 58ms)
+ GET /dashboard 200 in 21ms (next.js: 1883µs, application-code: 19ms)
+ GET / 200 in 38ms (next.js: 14ms, application-code: 24ms)
+○ Compiling /about ...
+ GET /about 200 in 7.4s (next.js: 7.4s, application-code: 56ms)
+ GET /dashboard 200 in 42ms (next.js: 12ms, application-code: 30ms)
+ GET /dashboard 200 in 152ms (next.js: 102ms, application-code: 50ms)
+ GET /dashboard 500 in 29ms (next.js: 6ms, application-code: 24ms)
+ GET /dashboard 500 in 15ms (next.js: 4ms, application-code: 11ms)
+▲ Next.js 16.2.0 (webpack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.31.212:3000
+✓ Ready in 584ms
+- Experiments (use with caution):
+  · optimizePackageImports
+

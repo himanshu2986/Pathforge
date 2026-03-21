@@ -1237,3 +1237,17 @@ Caused by:
     Syntax Error 
 ⚠ Fast Refresh had to perform a full reload due to a runtime error.
 ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⨯ ./app/globals.css
+Error: You forgot to add 'mini-css-extract-plugin' plugin (i.e. `{ plugins: [new MiniCssExtractPlugin()] }`), please read https://github.com/webpack-contrib/mini-css-extract-plugin#getting-started
+Import trace for requested module:
+./app/globals.css
+[browser] Uncaught ModuleBuildError: Module build failed (from ./node_modules/.pnpm/next@16.2.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/compiled/mini-css-extract-plugin/loader.js):
+Error: You forgot to add 'mini-css-extract-plugin' plugin (i.e. `{ plugins: [new MiniCssExtractPlugin()] }`), please read https://github.com/webpack-contrib/mini-css-extract-plugin#getting-started
+    at Object.pitch (D:\pathgrow-main\node_modules\.pnpm\next@16.2.0_react-dom@19.2.4_react@19.2.4__react@19.2.4\node_modules\next\dist\compiled\mini-css-extract-plugin\loader.js:1:5197)
+⚠ Found a change in next.config.mjs. Restarting the server to apply the changes...
+[browser] ./app/globals.css
+Error: You forgot to add 'mini-css-extract-plugin' plugin (i.e. `{ plugins: [new MiniCssExtractPlugin()] }`), please read https://github.com/webpack-contrib/mini-css-extract-plugin#getting-started 
+[browser] ./node_modules/.pnpm/next@16.2.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/font/google/target.css?{"path":"app\\layout.tsx","import":"Geist","arguments":[{"subsets":["latin"],"variable":"--font-geist-sans"}],"variableName":"geist"}
+Error: You forgot to add 'mini-css-extract-plugin' plugin (i.e. `{ plugins: [new MiniCssExtractPlugin()] }`), please read https://github.com/webpack-contrib/mini-css-extract-plugin#getting-started 
+[browser] ./node_modules/.pnpm/next@16.2.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/font/google/target.css?{"path":"app\\layout.tsx","import":"Geist_Mono","arguments":[{"subsets":["latin"],"variable":"--font-geist-mono"}],"variableName":"geistMono"}
+Error: You forgot to add 'mini-css-extract-plugin' plugin (i.e. `{ plugins: [new MiniCssExtractPlugin()] }`), please read https://github.com/webpack-contrib/mini-css-extract-plugin#getting-started 
