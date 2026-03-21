@@ -454,3 +454,9 @@
 - Experiments (use with caution):
   · optimizePackageImports
 
+○ Compiling /dashboard ...
+ GET /dashboard 200 in 15.8s (next.js: 15.5s, application-code: 364ms)
+ GET /dashboard 200 in 54ms (next.js: 16ms, application-code: 38ms)
+ GET /fonts/Geist-Bold.ttf 404 in 2.1s (next.js: 1878ms, application-code: 257ms)
+ GET /fonts/Geist-Regular.ttf 404 in 2.1s (next.js: 1831ms, application-code: 259ms)
+ GET /dashboard/settings 200 in 1127ms (next.js: 1062ms, application-code: 65ms)
