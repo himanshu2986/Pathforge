@@ -282,15 +282,6 @@ const createSampleDashboardData = (): DashboardSnapshot => ({
   weeklyProgress: 12,
 })
 
-const calculatePortfolioScore = (projects: PortfolioProject[]): number => {
-  if (projects.length === 0) return 0
-
-  // Calculate Total Portfolio Score (Sum of engagement: Stars + Forks + Likes)
-  return projects.reduce((acc, project) => {
-    return acc + (project.stars || 0) + (project.likes || 0) + (project.forks || 0)
-  }, 0)
-}
-
 const createEmptyDashboardData = (): DashboardSnapshot => ({
   skills: [],
   portfolioProjects: [],
@@ -402,40 +393,25 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
   deleteSkill: (id) => setAndPersistDashboardState(set, (state) => ({
     skills: state.skills.filter(s => s.id !== id)
   })),
-  setPortfolioProjects: (projects) => setAndPersistDashboardState(set, (state) => ({
-    portfolioProjects: projects,
-    portfolioScore: calculatePortfolioScore(projects),
+  setPortfolioProjects: (projects) => setAndPersistDashboardState(set, { portfolioProjects: projects }),
+  addPortfolioProject: (project) => setAndPersistDashboardState(set, (state) => ({
+    portfolioProjects: [...state.portfolioProjects, project],
+    skills: state.skills.map((skill) => {
+      if (project.skills.includes(skill.name)) {
+        const newLevel = Math.min(100, skill.level + 5)
+        return { ...skill, level: newLevel, lastUpdated: new Date().toISOString() }
+      }
+      return skill
+    }),
   })),
-  addPortfolioProject: (project) => setAndPersistDashboardState(set, (state) => {
-    const updatedProjects = [...state.portfolioProjects, project]
-    return {
-      portfolioProjects: updatedProjects,
-      portfolioScore: calculatePortfolioScore(updatedProjects),
-      skills: state.skills.map((skill) => {
-        if (project.skills.includes(skill.name)) {
-          const newLevel = Math.min(100, skill.level + 5)
-          return { ...skill, level: newLevel, lastUpdated: new Date().toISOString() }
-        }
-        return skill
-      }),
-    }
-  }),
-  updatePortfolioProject: (id, updates) => setAndPersistDashboardState(set, (state) => {
-    const updatedProjects = state.portfolioProjects.map((p) =>
+  updatePortfolioProject: (id, updates) => setAndPersistDashboardState(set, (state) => ({
+    portfolioProjects: state.portfolioProjects.map((p) =>
       p.id === id ? { ...p, ...updates } : p
-    )
-    return {
-      portfolioProjects: updatedProjects,
-      portfolioScore: calculatePortfolioScore(updatedProjects),
-    }
-  }),
-  deletePortfolioProject: (id) => setAndPersistDashboardState(set, (state) => {
-    const updatedProjects = state.portfolioProjects.filter((p) => p.id !== id)
-    return {
-      portfolioProjects: updatedProjects,
-      portfolioScore: calculatePortfolioScore(updatedProjects),
-    }
-  }),
+    ),
+  })),
+  deletePortfolioProject: (id) => setAndPersistDashboardState(set, (state) => ({
+    portfolioProjects: state.portfolioProjects.filter((p) => p.id !== id),
+  })),
   setLearningPaths: (paths) => setAndPersistDashboardState(set, { learningPaths: paths }),
   setInternships: (internships) => setAndPersistDashboardState(set, { internships }),
   applyToInternship: (id) => setAndPersistDashboardState(set, (state) => ({
