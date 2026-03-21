@@ -1,0 +1,1239 @@
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] React has detected a change in the order of Hooks called by SkillDetailPage. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks
+
+   Previous render            Next render
+   ------------------------------------------------------
+1. useContext                 useContext
+2. useCallback                useCallback
+3. useCallback                useCallback
+4. useSyncExternalStore       useSyncExternalStore
+5. useDebugValue              useDebugValue
+6. useCallback                useCallback
+7. useCallback                useCallback
+8. useSyncExternalStore       useSyncExternalStore
+9. useDebugValue              useDebugValue
+10. useState                  useState
+11. useState                  useState
+12. useState                  useState
+13. useState                  useState
+14. useMemo                   useMemo
+15. useMemo                   useMemo
+16. useMemo                   useMemo
+17. useMemo                   useMemo
+18. useMemo                   useMemo
+19. useEffect                 useEffect
+20. useMemo                   useMemo
+21. useMemo                   useMemo
+22. undefined                 useEffect
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+    at SkillDetailPage (app\dashboard\skills\[skillId]\page.tsx:647:12)
+  645 |   }
+  646 |
+> 647 |   useEffect(() => {
+      |            ^
+  648 |     if (!progressStorageKey) return
+  649 |     const raw = localStorage.getItem(progressStorageKey)
+  650 |     if (!raw) { (app\dashboard\skills\[skillId]\page.tsx:647:12)
+[browser] Uncaught Error: Rendered more hooks than during the previous render.
+    at SkillDetailPage (app\dashboard\skills\[skillId]\page.tsx:647:12)
+  645 |   }
+  646 |
+> 647 |   useEffect(() => {
+      |            ^
+  648 |     if (!progressStorageKey) return
+  649 |     const raw = localStorage.getItem(progressStorageKey)
+  650 |     if (!raw) {
+[browser] React has detected a change in the order of Hooks called by SkillDetailPage. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks
+
+   Previous render            Next render
+   ------------------------------------------------------
+1. useContext                 useContext
+2. useCallback                useCallback
+3. useCallback                useCallback
+4. useSyncExternalStore       useSyncExternalStore
+5. useDebugValue              useDebugValue
+6. useCallback                useCallback
+7. useCallback                useCallback
+8. useSyncExternalStore       useSyncExternalStore
+9. useDebugValue              useDebugValue
+10. useState                  useState
+11. useState                  useState
+12. useState                  useState
+13. useState                  useState
+14. useMemo                   useMemo
+15. useMemo                   useMemo
+16. useMemo                   useMemo
+17. useMemo                   useMemo
+18. useMemo                   useMemo
+19. useEffect                 useEffect
+20. useMemo                   useMemo
+21. useMemo                   useMemo
+22. undefined                 useEffect
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+    at SkillDetailPage (app\dashboard\skills\[skillId]\page.tsx:647:12)
+  645 |   }
+  646 |
+> 647 |   useEffect(() => {
+      |            ^
+  648 |     if (!progressStorageKey) return
+  649 |     const raw = localStorage.getItem(progressStorageKey)
+  650 |     if (!raw) { (app\dashboard\skills\[skillId]\page.tsx:647:12)
+[browser] Uncaught Error: Rendered more hooks than during the previous render.
+    at SkillDetailPage (app\dashboard\skills\[skillId]\page.tsx:647:12)
+  645 |   }
+  646 |
+> 647 |   useEffect(() => {
+      |            ^
+  648 |     if (!progressStorageKey) return
+  649 |     const raw = localStorage.getItem(progressStorageKey)
+  650 |     if (!raw) {
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] React has detected a change in the order of Hooks called by SkillDetailPage. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks
+
+   Previous render            Next render
+   ------------------------------------------------------
+1. useContext                 useContext
+2. useCallback                useCallback
+3. useCallback                useCallback
+4. useSyncExternalStore       useSyncExternalStore
+5. useDebugValue              useDebugValue
+6. useCallback                useCallback
+7. useCallback                useCallback
+8. useSyncExternalStore       useSyncExternalStore
+9. useDebugValue              useDebugValue
+10. useState                  useState
+11. useState                  useState
+12. useState                  useState
+13. useState                  useState
+14. useMemo                   useMemo
+15. useMemo                   useMemo
+16. useMemo                   useMemo
+17. useMemo                   useMemo
+18. useMemo                   useMemo
+19. useEffect                 useEffect
+20. useMemo                   useMemo
+21. useMemo                   useMemo
+22. undefined                 useEffect
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+    at SkillDetailPage (app\dashboard\skills\[skillId]\page.tsx:707:12)
+  705 |   }
+  706 |
+> 707 |   useEffect(() => {
+      |            ^
+  708 |     if (!progressStorageKey) return
+  709 |     const raw = localStorage.getItem(progressStorageKey)
+  710 |     if (!raw) { (app\dashboard\skills\[skillId]\page.tsx:707:12)
+[browser] Uncaught Error: Rendered more hooks than during the previous render.
+    at SkillDetailPage (app\dashboard\skills\[skillId]\page.tsx:707:12)
+  705 |   }
+  706 |
+> 707 |   useEffect(() => {
+      |            ^
+  708 |     if (!progressStorageKey) return
+  709 |     const raw = localStorage.getItem(progressStorageKey)
+  710 |     if (!raw) {
+[browser] React has detected a change in the order of Hooks called by SkillDetailPage. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks
+
+   Previous render            Next render
+   ------------------------------------------------------
+1. useContext                 useContext
+2. useCallback                useCallback
+3. useCallback                useCallback
+4. useSyncExternalStore       useSyncExternalStore
+5. useDebugValue              useDebugValue
+6. useCallback                useCallback
+7. useCallback                useCallback
+8. useSyncExternalStore       useSyncExternalStore
+9. useDebugValue              useDebugValue
+10. useState                  useState
+11. useState                  useState
+12. useState                  useState
+13. useState                  useState
+14. useMemo                   useMemo
+15. useMemo                   useMemo
+16. useMemo                   useMemo
+17. useMemo                   useMemo
+18. useMemo                   useMemo
+19. useEffect                 useEffect
+20. useMemo                   useMemo
+21. useMemo                   useMemo
+22. undefined                 useEffect
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+    at SkillDetailPage (app\dashboard\skills\[skillId]\page.tsx:707:12)
+  705 |   }
+  706 |
+> 707 |   useEffect(() => {
+      |            ^
+  708 |     if (!progressStorageKey) return
+  709 |     const raw = localStorage.getItem(progressStorageKey)
+  710 |     if (!raw) { (app\dashboard\skills\[skillId]\page.tsx:707:12)
+[browser] Uncaught Error: Rendered more hooks than during the previous render.
+    at SkillDetailPage (app\dashboard\skills\[skillId]\page.tsx:707:12)
+  705 |   }
+  706 |
+> 707 |   useEffect(() => {
+      |            ^
+  708 |     if (!progressStorageKey) return
+  709 |     const raw = localStorage.getItem(progressStorageKey)
+  710 |     if (!raw) {
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] Uncaught ReferenceError: normalizeSkillName is not defined
+    at buildDetailedCourse (app\dashboard\skills\[skillId]\page.tsx:685:20)
+    at buildLessons (app\dashboard\skills\[skillId]\page.tsx:989:26)
+    at SkillDetailPage.useMemo[lessons] (app\dashboard\skills\[skillId]\page.tsx:1161:42)
+    at SkillDetailPage (app\dashboard\skills\[skillId]\page.tsx:1161:26)
+  683 |
+  684 | function buildDetailedCourse(skill: Skill): DetailedCourse | null {
+> 685 |   const skillKey = normalizeSkillName(skill.name)
+      |                    ^
+  686 |
+  687 |   if (skillKey === 'html' || skillKey === 'html5') {
+  688 |     const baseCourse = buildHtmlCourse(skill)
+[browser] Uncaught ReferenceError: normalizeSkillName is not defined
+    at buildDetailedCourse (app\dashboard\skills\[skillId]\page.tsx:685:20)
+    at buildLessons (app\dashboard\skills\[skillId]\page.tsx:989:26)
+    at SkillDetailPage.useMemo[lessons] (app\dashboard\skills\[skillId]\page.tsx:1165:42)
+    at SkillDetailPage (app\dashboard\skills\[skillId]\page.tsx:1165:26)
+  683 |
+  684 | function buildDetailedCourse(skill: Skill): DetailedCourse | null {
+> 685 |   const skillKey = normalizeSkillName(skill.name)
+      |                    ^
+  686 |
+  687 |   if (skillKey === 'html' || skillKey === 'html5') {
+  688 |     const baseCourse = buildHtmlCourse(skill)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] Uncaught ReferenceError: normalizeSkillName is not defined
+    at buildDetailedCourse (app\dashboard\skills\[skillId]\page.tsx:685:20)
+    at buildLessons (app\dashboard\skills\[skillId]\page.tsx:989:26)
+    at SkillDetailPage.useMemo[lessons] (app\dashboard\skills\[skillId]\page.tsx:1165:42)
+    at SkillDetailPage (app\dashboard\skills\[skillId]\page.tsx:1165:26)
+  683 |
+  684 | function buildDetailedCourse(skill: Skill): DetailedCourse | null {
+> 685 |   const skillKey = normalizeSkillName(skill.name)
+      |                    ^
+  686 |
+  687 |   if (skillKey === 'html' || skillKey === 'html5') {
+  688 |     const baseCourse = buildHtmlCourse(skill)
+[browser] Uncaught ReferenceError: normalizeSkillName is not defined
+    at buildDetailedCourse (app\dashboard\skills\[skillId]\page.tsx:685:20)
+    at buildLessons (app\dashboard\skills\[skillId]\page.tsx:989:26)
+    at SkillDetailPage.useMemo[lessons] (app\dashboard\skills\[skillId]\page.tsx:1165:42)
+    at SkillDetailPage (app\dashboard\skills\[skillId]\page.tsx:1165:26)
+  683 |
+  684 | function buildDetailedCourse(skill: Skill): DetailedCourse | null {
+> 685 |   const skillKey = normalizeSkillName(skill.name)
+      |                    ^
+  686 |
+  687 |   if (skillKey === 'html' || skillKey === 'html5') {
+  688 |     const baseCourse = buildHtmlCourse(skill)
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] Uncaught ReferenceError: isAddingProject is not defined
+    at PortfolioPage (app\dashboard\portfolio\page.tsx:93:8)
+  91 |       </motion.div>
+  92 |
+> 93 |       {isAddingProject && (
+     |        ^
+  94 |         <GlassCard className="mb-8" delay={0}>
+  95 |           <GlassCardHeader>
+  96 |             <div className="flex items-center justify-between">
+⨯ ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+     ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:565:1]
+ 562 |       </GlassCard>
+ 563 |     </div>
+ 564 |   )
+ 565 | }
+     : ^
+     `----
+  x Expected '</', got 'jsx text'
+     ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:563:1]
+ 560 |               </div>
+ 561 |             </GlassCardContent>
+ 562 |           </GlassCard>
+ 563 | ,->     </div>
+ 564 | |     )
+ 565 | `-> }
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+     ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:565:1]
+ 562 |       </GlassCard>
+ 563 |     </div>
+ 564 |   )
+ 565 | }
+     : ^
+     `----
+  x Expected '</', got 'jsx text'
+     ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:563:1]
+ 560 |               </div>
+ 561 |             </GlassCardContent>
+ 562 |           </GlassCard>
+ 563 | ,->     </div>
+ 564 | |     )
+ 565 | `-> }
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx 
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+     ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:565:1]
+ 562 |       </GlassCard>
+ 563 |     </div>
+ 564 |   )
+ 565 | }
+     : ^
+     `----
+  x Expected '</', got 'jsx text'
+     ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:563:1]
+ 560 |               </div>
+ 561 |             </GlassCardContent>
+ 562 |           </GlassCard>
+ 563 | ,->     </div>
+ 564 | |     )
+ 565 | `-> }
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx 
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+     ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:565:1]
+ 562 |       </GlassCard>
+ 563 |     </div>
+ 564 |   )
+ 565 | }
+     : ^
+     `----
+  x Expected '</', got 'jsx text'
+     ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:563:1]
+ 560 |               </div>
+ 561 |             </GlassCardContent>
+ 562 |           </GlassCard>
+ 563 | ,->     </div>
+ 564 | |     )
+ 565 | `-> }
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx 
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+     ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:565:1]
+ 562 |       </GlassCard>
+ 563 |     </div>
+ 564 |   )
+ 565 | }
+     : ^
+     `----
+  x Expected '</', got 'jsx text'
+     ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:563:1]
+ 560 |               </div>
+ 561 |             </GlassCardContent>
+ 562 |           </GlassCard>
+ 563 | ,->     </div>
+ 564 | |     )
+ 565 | `-> }
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx 
+⨯ ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+     ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:565:1]
+ 562 |       </GlassCard>
+ 563 |     </div>
+ 564 |   )
+ 565 | }
+     : ^
+     `----
+  x Expected '</', got 'jsx text'
+     ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:563:1]
+ 560 |               </div>
+ 561 |             </GlassCardContent>
+ 562 |           </GlassCard>
+ 563 | ,->     </div>
+ 564 | |     )
+ 565 | `-> }
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx
+[browser] Uncaught ModuleBuildError: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+     ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:565:1]
+ 562 |       </GlassCard>
+ 563 |     </div>
+ 564 |   )
+ 565 | }
+     : ^
+     `----
+  x Expected '</', got 'jsx text'
+     ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:563:1]
+ 560 |               </div>
+ 561 |             </GlassCardContent>
+ 562 |           </GlassCard>
+ 563 | ,->     </div>
+ 564 | |     )
+ 565 | `-> }
+     `----
+
+
+Caused by:
+    Syntax Error
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+     ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:565:1]
+ 562 |       </GlassCard>
+ 563 |     </div>
+ 564 |   )
+ 565 | }
+     : ^
+     `----
+  x Expected '</', got 'jsx text'
+     ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:563:1]
+ 560 |               </div>
+ 561 |             </GlassCardContent>
+ 562 |           </GlassCard>
+ 563 | ,->     </div>
+ 564 | |     )
+ 565 | `-> }
+     `----
+
+Caused by:
+    Syntax Error 
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:86:1]
+ 83 |       
+ 84 |     </div>
+ 85 |   )
+ 86 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:84:1]
+ 81 |             
+ 82 |           
+ 83 |           
+ 84 | ,->     </div>
+ 85 | |     )
+ 86 | `-> }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx 
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:86:1]
+ 83 |       
+ 84 |     </div>
+ 85 |   )
+ 86 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:84:1]
+ 81 |             
+ 82 |           
+ 83 |           
+ 84 | ,->     </div>
+ 85 | |     )
+ 86 | `-> }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx 
+⨯ ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:86:1]
+ 83 |       
+ 84 |     </div>
+ 85 |   )
+ 86 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:84:1]
+ 81 |             
+ 82 |           
+ 83 |           
+ 84 | ,->     </div>
+ 85 | |     )
+ 86 | `-> }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx
+[browser] Uncaught ModuleBuildError: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:86:1]
+ 83 |       
+ 84 |     </div>
+ 85 |   )
+ 86 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:84:1]
+ 81 |             
+ 82 |           
+ 83 |           
+ 84 | ,->     </div>
+ 85 | |     )
+ 86 | `-> }
+    `----
+
+
+Caused by:
+    Syntax Error
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:86:1]
+ 83 |       
+ 84 |     </div>
+ 85 |   )
+ 86 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:84:1]
+ 81 |             
+ 82 |           
+ 83 |           
+ 84 | ,->     </div>
+ 85 | |     )
+ 86 | `-> }
+    `----
+
+Caused by:
+    Syntax Error 
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⨯ ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:35:1]
+ 32 |       
+ 33 |     </div>
+ 34 |   )
+ 35 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |             
+ 31 |           
+ 32 |           
+ 33 | ,->     </div>
+ 34 | |     )
+ 35 | `-> }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx
+[browser] Uncaught ModuleBuildError: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:35:1]
+ 32 |       
+ 33 |     </div>
+ 34 |   )
+ 35 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |             
+ 31 |           
+ 32 |           
+ 33 | ,->     </div>
+ 34 | |     )
+ 35 | `-> }
+    `----
+
+
+Caused by:
+    Syntax Error
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:35:1]
+ 32 |       
+ 33 |     </div>
+ 34 |   )
+ 35 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |             
+ 31 |           
+ 32 |           
+ 33 | ,->     </div>
+ 34 | |     )
+ 35 | `-> }
+    `----
+
+Caused by:
+    Syntax Error 
+[browser] Uncaught ModuleBuildError: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:35:1]
+ 32 |       
+ 33 |     </div>
+ 34 |   )
+ 35 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |             
+ 31 |           
+ 32 |           
+ 33 | ,->     </div>
+ 34 | |     )
+ 35 | `-> }
+    `----
+
+
+Caused by:
+    Syntax Error
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:35:1]
+ 32 |       
+ 33 |     </div>
+ 34 |   )
+ 35 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |             
+ 31 |           
+ 32 |           
+ 33 | ,->     </div>
+ 34 | |     )
+ 35 | `-> }
+    `----
+
+Caused by:
+    Syntax Error 
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⨯ ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:35:1]
+ 32 |       
+ 33 |     </div>
+ 34 |   )
+ 35 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |             
+ 31 |           
+ 32 |           
+ 33 | ,->     </div>
+ 34 | |     )
+ 35 | `-> }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx
+[browser] Uncaught ModuleBuildError: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:35:1]
+ 32 |       
+ 33 |     </div>
+ 34 |   )
+ 35 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |             
+ 31 |           
+ 32 |           
+ 33 | ,->     </div>
+ 34 | |     )
+ 35 | `-> }
+    `----
+
+
+Caused by:
+    Syntax Error
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:35:1]
+ 32 |       
+ 33 |     </div>
+ 34 |   )
+ 35 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |             
+ 31 |           
+ 32 |           
+ 33 | ,->     </div>
+ 34 | |     )
+ 35 | `-> }
+    `----
+
+Caused by:
+    Syntax Error 
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⨯ ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |       
+ 31 |     </div>
+ 32 |   )
+ 33 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:31:1]
+ 28 |             
+ 29 |           
+ 30 |           
+ 31 | ,->     </div>
+ 32 | |     )
+ 33 | `-> }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx
+[browser] Uncaught ModuleBuildError: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |       
+ 31 |     </div>
+ 32 |   )
+ 33 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:31:1]
+ 28 |             
+ 29 |           
+ 30 |           
+ 31 | ,->     </div>
+ 32 | |     )
+ 33 | `-> }
+    `----
+
+
+Caused by:
+    Syntax Error
+⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+⨯ ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |       
+ 31 |     </div>
+ 32 |   )
+ 33 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:31:1]
+ 28 |             
+ 29 |           
+ 30 |           
+ 31 | ,->     </div>
+ 32 | |     )
+ 33 | `-> }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx
+[browser] Uncaught ModuleBuildError: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |       
+ 31 |     </div>
+ 32 |   )
+ 33 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:31:1]
+ 28 |             
+ 29 |           
+ 30 |           
+ 31 | ,->     </div>
+ 32 | |     )
+ 33 | `-> }
+    `----
+
+
+Caused by:
+    Syntax Error
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |       
+ 31 |     </div>
+ 32 |   )
+ 33 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:31:1]
+ 28 |             
+ 29 |           
+ 30 |           
+ 31 | ,->     </div>
+ 32 | |     )
+ 33 | `-> }
+    `----
+
+Caused by:
+    Syntax Error 
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:29:1]
+ 26 |           </p>
+ 27 |         </div>
+ 28 |   )
+ 29 | }
+    : ^
+    `----
+  x Expected '</', got '<eof>'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:29:3]
+ 27 |         </div>
+ 28 |   )
+ 29 | }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx 
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:29:1]
+ 26 |           </p>
+ 27 |         </div>
+ 28 |   )
+ 29 | }
+    : ^
+    `----
+  x Expected '</', got '<eof>'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:29:3]
+ 27 |         </div>
+ 28 |   )
+ 29 | }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx 
+⨯ ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:29:1]
+ 26 |           </p>
+ 27 |         </div>
+ 28 |   )
+ 29 | }
+    : ^
+    `----
+  x Expected '</', got '<eof>'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:29:3]
+ 27 |         </div>
+ 28 |   )
+ 29 | }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:29:1]
+ 26 |           </p>
+ 27 |         </div>
+ 28 |   )
+ 29 | }
+    : ^
+    `----
+  x Expected '</', got '<eof>'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:29:3]
+ 27 |         </div>
+ 28 |   )
+ 29 | }
+    `----
+
+Caused by:
+    Syntax Error 
+[browser] Uncaught ModuleBuildError: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:29:1]
+ 26 |           </p>
+ 27 |         </div>
+ 28 |   )
+ 29 | }
+    : ^
+    `----
+  x Expected '</', got '<eof>'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:29:3]
+ 27 |         </div>
+ 28 |   )
+ 29 | }
+    `----
+
+
+Caused by:
+    Syntax Error
+[browser] Uncaught ModuleBuildError: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:29:1]
+ 26 |           </p>
+ 27 |         </div>
+ 28 |   )
+ 29 | }
+    : ^
+    `----
+  x Expected '</', got '<eof>'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:29:3]
+ 27 |         </div>
+ 28 |   )
+ 29 | }
+    `----
+
+
+Caused by:
+    Syntax Error
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:29:1]
+ 26 |           </p>
+ 27 |         </div>
+ 28 |   )
+ 29 | }
+    : ^
+    `----
+  x Expected '</', got '<eof>'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:29:3]
+ 27 |         </div>
+ 28 |   )
+ 29 | }
+    `----
+
+Caused by:
+    Syntax Error 
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:35:1]
+ 32 |       
+ 33 |     </div>
+ 34 |   )
+ 35 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |             
+ 31 |           
+ 32 |           
+ 33 | ,->     </div>
+ 34 | |     )
+ 35 | `-> }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx 
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:35:1]
+ 32 |       
+ 33 |     </div>
+ 34 |   )
+ 35 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |             
+ 31 |           
+ 32 |           
+ 33 | ,->     </div>
+ 34 | |     )
+ 35 | `-> }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx 
+⨯ ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:35:1]
+ 32 |       
+ 33 |     </div>
+ 34 |   )
+ 35 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |             
+ 31 |           
+ 32 |           
+ 33 | ,->     </div>
+ 34 | |     )
+ 35 | `-> }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx
+[browser] Uncaught ModuleBuildError: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:35:1]
+ 32 |       
+ 33 |     </div>
+ 34 |   )
+ 35 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |             
+ 31 |           
+ 32 |           
+ 33 | ,->     </div>
+ 34 | |     )
+ 35 | `-> }
+    `----
+
+
+Caused by:
+    Syntax Error
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:35:1]
+ 32 |       
+ 33 |     </div>
+ 34 |   )
+ 35 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:33:1]
+ 30 |             
+ 31 |           
+ 32 |           
+ 33 | ,->     </div>
+ 34 | |     )
+ 35 | `-> }
+    `----
+
+Caused by:
+    Syntax Error 
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:86:1]
+ 83 |       
+ 84 |     </div>
+ 85 |   )
+ 86 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:84:1]
+ 81 |             
+ 82 |           
+ 83 |           
+ 84 | ,->     </div>
+ 85 | |     )
+ 86 | `-> }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx 
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:86:1]
+ 83 |       
+ 84 |     </div>
+ 85 |   )
+ 86 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:84:1]
+ 81 |             
+ 82 |           
+ 83 |           
+ 84 | ,->     </div>
+ 85 | |     )
+ 86 | `-> }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx 
+⨯ ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:86:1]
+ 83 |       
+ 84 |     </div>
+ 85 |   )
+ 86 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:84:1]
+ 81 |             
+ 82 |           
+ 83 |           
+ 84 | ,->     </div>
+ 85 | |     )
+ 86 | `-> }
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/portfolio/page.tsx
+[browser] Uncaught ModuleBuildError: Module build failed (from ./node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:86:1]
+ 83 |       
+ 84 |     </div>
+ 85 |   )
+ 86 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:84:1]
+ 81 |             
+ 82 |           
+ 83 |           
+ 84 | ,->     </div>
+ 85 | |     )
+ 86 | `-> }
+    `----
+
+
+Caused by:
+    Syntax Error
+[browser] ./app/dashboard/portfolio/page.tsx
+Error:   x Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:86:1]
+ 83 |       
+ 84 |     </div>
+ 85 |   )
+ 86 | }
+    : ^
+    `----
+  x Expected '</', got 'jsx text'
+    ,-[D:\pathgrow-main\app\dashboard\portfolio\page.tsx:84:1]
+ 81 |             
+ 82 |           
+ 83 |           
+ 84 | ,->     </div>
+ 85 | |     )
+ 86 | `-> }
+    `----
+
+Caused by:
+    Syntax Error 
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
