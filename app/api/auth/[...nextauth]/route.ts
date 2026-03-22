@@ -16,6 +16,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   trustHost: true,
   secret: process.env.AUTH_SECRET,
+  basePath: "/api/auth",
 })
 
 export const { GET, POST } = handlers
