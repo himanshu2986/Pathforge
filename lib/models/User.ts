@@ -7,7 +7,6 @@ const UserSchema = new Schema(
     name: { type: String, required: true },
     avatar: { type: String, default: '' },
     role: { type: String, default: 'student', enum: ['student', 'admin'] },
-    githubUsername: { type: String, default: '' },
     resetToken: { type: String, required: false },
     resetTokenExpiry: { type: Date, required: false },
   },

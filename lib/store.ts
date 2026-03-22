@@ -8,7 +8,6 @@ export interface User {
   name: string
   avatar?: string
   role: 'student' | 'admin'
-  githubUsername?: string
   createdAt: string
 }
 
