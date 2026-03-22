@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 import { Rocket, Code2, Database, Layout, Brain, Shield, Terminal, Globe, Cpu } from 'lucide-react'
 import { MagneticButton } from '@/components/ui/magnetic-button'
 
@@ -83,6 +84,8 @@ const projectLevels = [
 ]
 
 export default function PracticeProjectsPage() {
+  const router = useRouter()
+
   return (
     <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto max-w-7xl">
@@ -150,7 +153,11 @@ export default function PracticeProjectsPage() {
                       </div>
 
                       <div className="relative z-10 mt-auto">
-                        <MagneticButton variant="primary" className="w-full">
+                        <MagneticButton 
+                          variant="primary" 
+                          className="w-full"
+                          onClick={() => router.push(`/projects/${project.title.toLowerCase().replace(/\s+/g, '-')}`)}
+                        >
                           Start Building
                         </MagneticButton>
                       </div>
@@ -174,7 +181,11 @@ export default function PracticeProjectsPage() {
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
             You don't have to stick to our list. Build whatever inspires you, connect it through your GitHub, and watch your PathForge score grow!
           </p>
-          <MagneticButton variant="primary" className="px-8 py-3 translate-x-0">
+          <MagneticButton 
+            variant="primary" 
+            className="px-8 py-3 translate-x-0"
+            onClick={() => router.push('/dashboard/portfolio')}
+          >
             Connect GitHub
           </MagneticButton>
         </motion.div>
