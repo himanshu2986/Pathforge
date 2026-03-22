@@ -153,14 +153,14 @@ export default function LoginPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <a
-                  href="/api/auth/signin?provider=github"
+                  href="/api/auth/signin/github"
                   className="flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all font-medium text-sm no-underline"
                 >
                   <Github className="w-4 h-4 text-gray-300" />
                   GitHub
                 </a>
                 <a
-                  href="/api/auth/signin?provider=google"
+                  href="/api/auth/signin/google"
                   className="flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all font-medium text-sm no-underline"
                 >
  asylum                  <svg className="w-4 h-4" viewBox="0 0 24 24">
