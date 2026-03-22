@@ -5,7 +5,7 @@ import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import clientPromise from "@/lib/mongodb-client"
 
 export const authConfig = {
-  adapter: MongoDBAdapter(clientPromise),
+  // adapter: MongoDBAdapter(clientPromise),
   providers: [
     GitHub({
       clientId: process.env.GITHUB_ID!,
