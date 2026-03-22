@@ -31,7 +31,7 @@ export function Hero() {
   }
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-24">
       {/* Background 3D Elements */}
       <Suspense fallback={null}>
         <ParticleField className="opacity-60" />
