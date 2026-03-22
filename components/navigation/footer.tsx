@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Zap, Github, Twitter, Linkedin } from 'lucide-react'
+import { Compass, Zap, Github, Twitter, Linkedin } from 'lucide-react'
 
 const footerLinks = {
   product: [
@@ -36,7 +36,7 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                <Zap className="w-6 h-6 text-primary-foreground" />
+                <Compass className="w-6 h-6 text-primary-foreground" />
               </div>
               <span className="text-xl font-bold gradient-text">PathForge</span>
             </Link>

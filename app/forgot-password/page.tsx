@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Zap, Mail, ArrowRight, ArrowLeft, CheckCircle } from 'lucide-react'
+import { Compass, Zap, Mail, ArrowRight, ArrowLeft, CheckCircle } from 'lucide-react'
 import { MagneticButton } from '@/components/ui/magnetic-button'
 import { GlassCard, GlassCardContent } from '@/components/ui/glass-card'
 
@@ -64,7 +64,7 @@ export default function ForgotPasswordPage() {
             transition={{ duration: 0.5 }}
             className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center"
           >
-            <Zap className="w-7 h-7 text-primary-foreground" />
+            <Compass className="w-7 h-7 text-primary-foreground" />
           </motion.div>
           <span className="text-2xl font-bold gradient-text">PathForge</span>
         </Link>

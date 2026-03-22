@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Zap } from 'lucide-react'
+import { Menu, X, Compass, Zap } from 'lucide-react'
 import { MagneticButton } from '@/components/ui/magnetic-button'
 import { useAuthStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
@@ -50,7 +50,7 @@ export function Header() {
               transition={{ duration: 0.5 }}
               className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center"
             >
-              <Zap className="w-6 h-6 text-primary-foreground" />
+              <Compass className="w-6 h-6 text-primary-foreground" />
             </motion.div>
             <span className="text-xl font-bold gradient-text">PathForge</span>
           </Link>

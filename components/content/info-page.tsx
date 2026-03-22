@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Zap } from 'lucide-react'
+import { Compass, Zap } from 'lucide-react'
 
 interface InfoPageProps {
   eyebrow: string
@@ -24,7 +24,7 @@ export function InfoPage({ eyebrow, title, description, sections }: InfoPageProp
       <div className="relative container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <Link href="/" className="mb-10 inline-flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent">
-            <Zap className="h-6 w-6 text-primary-foreground" />
+            <Compass className="h-6 w-6 text-primary-foreground" />
           </div>
           <span className="text-xl font-bold gradient-text">PathForge</span>
         </Link>

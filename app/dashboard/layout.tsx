@@ -13,7 +13,7 @@ import {
   LogOut,
   Menu,
   X,
-  Zap,
+  Compass, Zap, Compass, Shield,
   ChevronRight,
   User,
   Code2
@@ -88,7 +88,7 @@ export default function DashboardLayout({
         <div className="p-6 border-b border-sidebar-border">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <Zap className="w-6 h-6 text-primary-foreground" />
+              <Compass className="w-6 h-6 text-primary-foreground" />
             </div>
             <span className="text-xl font-bold gradient-text">PathForge</span>
           </Link>
@@ -97,7 +97,7 @@ export default function DashboardLayout({
         {/* Navigation */}
         <nav className="flex-1 p-4 overflow-y-auto">
           <ul className="space-y-1">
-            {[...navItems, ...(user?.role === 'admin' ? [{ href: '/admin', icon: Zap, label: 'Admin Command Center' }] : [])].map((item) => {
+            {[...navItems, ...(user?.role === 'admin' ? [{ href: '/admin', icon: Shield, label: 'Admin Command Center' }] : [])].map((item) => {
               const isActive = pathname === item.href
               return (
                 <li key={item.href}>
@@ -179,7 +179,7 @@ export default function DashboardLayout({
         <div className="flex items-center justify-between px-4 h-16">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <Zap className="w-5 h-5 text-primary-foreground" />
+              <Compass className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="text-lg font-bold gradient-text">PathForge</span>
           </Link>
@@ -214,7 +214,7 @@ export default function DashboardLayout({
               <div className="p-6 border-b border-sidebar-border">
                 <Link href="/" className="flex items-center gap-2">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                    <Zap className="w-6 h-6 text-primary-foreground" />
+                    <Compass className="w-6 h-6 text-primary-foreground" />
                   </div>
                   <span className="text-xl font-bold gradient-text">PathForge</span>
                 </Link>
@@ -222,7 +222,7 @@ export default function DashboardLayout({
               
               <nav className="p-4 overflow-y-auto flex-1 pb-20">
                 <ul className="space-y-1">
-                  {[...navItems, ...(user?.role === 'admin' ? [{ href: '/admin', icon: Zap, label: 'Admin Command Center' }] : [])].map((item) => {
+                  {[...navItems, ...(user?.role === 'admin' ? [{ href: '/admin', icon: Shield, label: 'Admin Command Center' }] : [])].map((item) => {
                     const isActive = pathname === item.href
                     return (
                       <li key={item.href}>

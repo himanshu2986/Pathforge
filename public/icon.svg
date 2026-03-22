@@ -1,45 +1,10 @@
-<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <style>
-    @media (prefers-color-scheme: light) {
-      .background { fill: #0a0a1a; }
-      .foreground { fill: #00d4ff; }
-      .accent { fill: #8b5cf6; }
-    }
-    @media (prefers-color-scheme: dark) {
-      .background { fill: #ffffff; }
-      .foreground { fill: #0a0a1a; }
-      .accent { fill: #00d4ff; }
-    }
-  </style>
-
-  <!-- Background circle -->
-  <circle class="background" cx="90" cy="90" r="90"/>
-
-  <!-- Path/Journey representation -->
-  <g transform="translate(45, 45)">
-    <!-- Curved path representing career journey -->
-    <path class="foreground" d="M15 75 Q45 25 75 35 Q105 45 135 15" stroke-width="8" stroke-linecap="round" fill="none" opacity="0.8"/>
-
-    <!-- AI/tech nodes along the path -->
-    <circle class="accent" cx="15" cy="75" r="6"/>
-    <circle class="accent" cx="75" cy="35" r="6"/>
-    <circle class="accent" cx="135" cy="15" r="6"/>
-
-    <!-- Growth arrow -->
-    <path class="foreground" d="M75 80 L75 50 M65 60 L75 50 L85 60" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-
-    <!-- AI brain/spark elements -->
-    <g transform="translate(45, 85)">
-      <!-- Neural network dots -->
-      <circle class="accent" cx="0" cy="0" r="2" opacity="0.7"/>
-      <circle class="accent" cx="10" cy="-5" r="2" opacity="0.7"/>
-      <circle class="accent" cx="20" cy="0" r="2" opacity="0.7"/>
-      <circle class="accent" cx="15" cy="8" r="2" opacity="0.7"/>
-
-      <!-- Connection lines -->
-      <line class="foreground" x1="0" y1="0" x2="10" y2="-5" stroke-width="1" opacity="0.5"/>
-      <line class="foreground" x1="10" y1="-5" x2="20" y2="0" stroke-width="1" opacity="0.5"/>
-      <line class="foreground" x1="15" y1="8" x2="10" y2="-5" stroke-width="1" opacity="0.5"/>
-    </g>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="url(#gradient)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00d4ff" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="10"/>
+  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
 </svg>
