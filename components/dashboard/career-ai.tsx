@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Sparkles, ArrowRight, BrainCircuit, Target, Lightbulb } from 'lucide-react'
 import { GlassCard, GlassCardContent, GlassCardHeader } from '@/components/ui/glass-card'
@@ -84,19 +85,21 @@ export function CareerAI() {
             </div>
           </div>
           
-          <div className="p-3 rounded-lg bg-accent/5 border border-accent/10">
+          <Link href="/dashboard/learning" className="block p-3 rounded-lg bg-accent/5 border border-accent/10 hover:bg-accent/10 transition-colors group">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[10px] uppercase font-bold text-accent tracking-wider mb-0.5">Recommended Next Step</p>
                 <p className="text-sm font-medium text-foreground">{recommendation.nextStep}</p>
               </div>
-              <ArrowRight className="w-4 h-4 text-accent" />
+              <ArrowRight className="w-4 h-4 text-accent group-hover:translate-x-1 transition-transform" />
             </div>
-          </div>
+          </Link>
 
-          <MagneticButton variant="ghost" className="w-full text-xs py-2 h-auto text-accent hover:bg-accent/10">
-            View Career Roadmap <ArrowRight className="ml-2 w-3 h-3" />
-          </MagneticButton>
+          <Link href="/dashboard/skills" className="block">
+            <MagneticButton variant="ghost" className="w-full text-xs py-2 h-auto text-accent hover:bg-accent/10">
+              View Career Roadmap <ArrowRight className="ml-2 w-3 h-3" />
+            </MagneticButton>
+          </Link>
         </div>
       </GlassCardContent>
     </GlassCard>
