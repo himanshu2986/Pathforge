@@ -7,6 +7,9 @@ export interface User {
   email: string
   name: string
   avatar?: string
+  bio?: string
+  location?: string
+  website?: string
   role: 'student' | 'admin'
   createdAt: string
 }

@@ -83,7 +83,7 @@ export function Hero() {
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
           >
             <MagneticButton variant="primary" size="lg" onClick={() => router.push('/signup')}>
-              Start Free Trial
+              Get Started
               <ArrowRight className="w-5 h-5" />
             </MagneticButton>
             <MagneticButton variant="secondary" size="lg" onClick={scrollToDemo}>

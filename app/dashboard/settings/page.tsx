@@ -34,9 +34,9 @@ export default function SettingsPage() {
   const [formData, setFormData] = useState({
     name: user?.name || '',
     email: user?.email || '',
-    bio: 'Passionate developer focused on building great user experiences.',
-    location: 'San Francisco, CA',
-    website: 'https://myportfolio.com',
+    bio: user?.bio || 'Passionate developer focused on building great user experiences.',
+    location: user?.location || 'San Francisco, CA',
+    website: user?.website || 'https://myportfolio.com',
   })
   
   const [notifications, setNotifications] = useState({
@@ -65,8 +65,20 @@ export default function SettingsPage() {
   
   const handleSave = async () => {
     setIsSaving(true)
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    updateUser({ name: formData.name })
+    
+    const updates: any = {
+      name: formData.name,
+      email: formData.email,
+      bio: formData.bio,
+      location: formData.location,
+      website: formData.website,
+    }
+
+    if (avatarPreview) {
+      updates.avatar = avatarPreview
+    }
+
+    await updateUser(updates)
     setIsSaving(false)
   }
 

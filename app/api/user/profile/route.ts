@@ -49,6 +49,9 @@ export async function PUT(req: Request) {
       email: updatedUser.email,
       name: updatedUser.name,
       avatar: updatedUser.avatar,
+      bio: updatedUser.bio,
+      location: updatedUser.location,
+      website: updatedUser.website,
       role: updatedUser.role,
       createdAt: updatedUser.createdAt.toISOString()
     };

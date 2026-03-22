@@ -32,7 +32,7 @@ export function CTA() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8"
           >
             <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm text-muted-foreground">Limited Time: First Month Free</span>
+            <span className="text-sm text-muted-foreground">Unlock Your Potential</span>
           </motion.div>
           
           {/* Heading */}
@@ -45,13 +45,13 @@ export function CTA() {
           
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 text-pretty">
             Join thousands of professionals who have accelerated their careers with PathForge. 
-            Start your free trial today and see the difference AI-powered learning makes.
+            Get started today and see the difference AI-powered learning makes.
           </p>
           
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <MagneticButton variant="primary" size="lg" onClick={() => router.push('/signup')}>
-              Start Free Trial
+              Get Started
               <ArrowRight className="w-5 h-5" />
             </MagneticButton>
             <MagneticButton variant="secondary" size="lg" onClick={() => router.push('/login')}>
@@ -67,7 +67,7 @@ export function CTA() {
             transition={{ delay: 0.4, duration: 0.5 }}
             className="mt-8 text-sm text-muted-foreground"
           >
-            No credit card required. Cancel anytime.
+            Join our community and start your journey today.
           </motion.p>
         </motion.div>
       </div>
