@@ -8,6 +8,7 @@ export interface User {
   name: string
   avatar?: string
   role: 'student' | 'admin'
+  githubUsername?: string
   createdAt: string
 }
 
@@ -36,6 +37,7 @@ export interface PortfolioProject {
   forks?: number
   lastViewed?: string
   category?: string
+  isVerified?: boolean
 }
 
 export interface LearningPath {
@@ -82,76 +84,93 @@ export const useAuthStore = create<AuthState>()(
       
       login: async (email: string, password: string) => {
         set({ isLoading: true })
-        
-        // Mock login - check localStorage for registered users
-        const users = JSON.parse(localStorage.getItem('pathforge_users') || '[]')
-        const user = users.find((u: User & { password: string }) => 
-          u.email === email && u.password === password
-        )
-        
-        if (user) {
-          const { password: _, ...userWithoutPassword } = user
-          set({ user: userWithoutPassword, isAuthenticated: true, isLoading: false })
-          useDashboardStore.getState().loadUserData(userWithoutPassword.id)
-          return true
-        }
-        
-        // Demo account
-        if (email === 'demo@pathforge.com' && password === 'demo123') {
-          const demoUser: User = {
-            id: 'demo-user',
-            email: 'demo@pathforge.com',
-            name: 'Demo User',
-            role: 'student',
-            createdAt: new Date().toISOString()
+        try {
+          // Demo account
+          if (email === 'demo@pathforge.com' && password === 'demo123') {
+            const demoUser: User = {
+              id: 'demo-user',
+              email: 'demo@pathforge.com',
+              name: 'Demo User',
+              role: 'student',
+              createdAt: new Date().toISOString()
+            }
+            set({ user: demoUser, isAuthenticated: true, isLoading: false })
+            useDashboardStore.getState().loadUserData(demoUser.id)
+            return true
           }
-          set({ user: demoUser, isAuthenticated: true, isLoading: false })
-          useDashboardStore.getState().loadUserData(demoUser.id)
-          return true
+
+          const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          })
+
+          if (response.ok) {
+            const data = await response.json()
+            set({ user: data.user, isAuthenticated: true, isLoading: false })
+            useDashboardStore.getState().loadUserData(data.user.id)
+            return true
+          }
+        } catch (error) {
+          console.error('Login error:', error)
         }
-        
         set({ isLoading: false })
         return false
       },
       
       signup: async (email: string, password: string, name: string) => {
         set({ isLoading: true })
-        
-        const users = JSON.parse(localStorage.getItem('pathforge_users') || '[]')
-        
-        // Check if user exists
-        if (users.some((u: User) => u.email === email)) {
-          set({ isLoading: false })
-          return false
+        try {
+          const response = await fetch('/api/auth/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password, name })
+          })
+
+          if (response.ok) {
+            const data = await response.json()
+            set({ user: data.user, isAuthenticated: true, isLoading: false })
+            useDashboardStore.getState().loadUserData(data.user.id)
+            return true
+          }
+        } catch (error) {
+          console.error('Signup error:', error)
         }
-        
-        const newUser: User & { password: string } = {
-          id: `user-${Date.now()}`,
-          email,
-          password,
-          name,
-          role: 'student',
-          createdAt: new Date().toISOString()
-        }
-        
-        users.push(newUser)
-        localStorage.setItem('pathforge_users', JSON.stringify(users))
-        
-        const { password: _, ...userWithoutPassword } = newUser
-        set({ user: userWithoutPassword, isAuthenticated: true, isLoading: false })
-        useDashboardStore.getState().loadUserData(userWithoutPassword.id)
-        return true
+        set({ isLoading: false })
+        return false
       },
       
-      logout: () => {
+      logout: async () => {
+        try {
+          await fetch('/api/auth/logout', { method: 'POST' })
+        } catch (error) {
+          console.error('Logout error:', error)
+        }
         set({ user: null, isAuthenticated: false })
         useDashboardStore.getState().clearUserData()
       },
       
-      updateUser: (updates: Partial<User>) => {
+      updateUser: async (updates: Partial<User>) => {
         const currentUser = get().user
         if (currentUser) {
+          // Optimistically update the UI instantly
           set({ user: { ...currentUser, ...updates } })
+          
+          // Send background request to actually save profile edits to MongoDB Database
+          try {
+            const response = await fetch('/api/user/profile', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(updates)
+            })
+            
+            if (response.ok) {
+              const data = await response.json()
+              set({ user: data.user })
+            }
+          } catch (error) {
+            console.error('Failed to update user profile to cloud database:', error)
+          }
         }
       }
     }),
@@ -319,9 +338,24 @@ const isSeededSampleData = (snapshot: DashboardSnapshot) =>
 
 const getDashboardStorageKey = (userId: string) => `pathforge-dashboard:${userId}`
 
-const saveDashboardData = (userId: string | null, snapshot: DashboardSnapshot) => {
-  if (!userId || typeof localStorage === 'undefined') return
-  localStorage.setItem(getDashboardStorageKey(userId), JSON.stringify(snapshot))
+const saveDashboardData = async (userId: string | null, snapshot: DashboardSnapshot) => {
+  if (!userId) return
+
+  // Save locally for instant UI
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem(getDashboardStorageKey(userId), JSON.stringify(snapshot))
+  }
+
+  // Sync to Cloud
+  try {
+    await fetch('/api/dashboard', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(snapshot)
+    })
+  } catch (error) {
+    console.error('Failed to sync dashboard to cloud:', error)
+  }
 }
 
 const setAndPersistDashboardState = (
@@ -349,33 +383,51 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
   ...createEmptyDashboardData(),
   currentUserId: null,
 
-  loadUserData: (userId) => {
+  loadUserData: async (userId) => {
+    // 1. Instant load from local storage
     const storedData = typeof localStorage !== 'undefined'
       ? localStorage.getItem(getDashboardStorageKey(userId))
       : null
 
-    const parsedData: DashboardSnapshot | null = storedData
-      ? JSON.parse(storedData)
-      : null
+    const parsedData: DashboardSnapshot | null = storedData ? JSON.parse(storedData) : null
 
-    const dashboardData: DashboardSnapshot = !parsedData
-      ? createInitialDashboardData(userId)
-      : userId !== 'demo-user' && isSeededSampleData(parsedData)
-        ? createEmptyDashboardData()
-        : sanitizeUserDashboardData(userId, parsedData)
-
-    if (
-      !storedData ||
-      (userId !== 'demo-user' && parsedData && isSeededSampleData(parsedData)) ||
-      (parsedData && JSON.stringify(parsedData) !== JSON.stringify(dashboardData))
-    ) {
-      saveDashboardData(userId, dashboardData)
+    if (parsedData) {
+      set({ currentUserId: userId, ...parsedData })
     }
 
-    set({
-      currentUserId: userId,
-      ...dashboardData,
-    })
+    // 2. Background sync from Cloud
+    try {
+      const response = await fetch('/api/dashboard')
+      if (response.ok) {
+        const cloudData = await response.json()
+        
+        // Exclude internal mongo IDs if exists, ensure valid structure
+        if (cloudData && Array.isArray(cloudData.skills)) {
+          const syncedData = {
+            skills: cloudData.skills || [],
+            portfolioProjects: cloudData.portfolioProjects || [],
+            learningPaths: cloudData.learningPaths || [],
+            internships: cloudData.internships || [],
+            portfolioScore: cloudData.portfolioScore || 0,
+            weeklyProgress: cloudData.weeklyProgress || 0,
+          }
+
+          set({ currentUserId: userId, ...syncedData })
+          
+          if (typeof localStorage !== 'undefined') {
+            localStorage.setItem(getDashboardStorageKey(userId), JSON.stringify(syncedData))
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch cloud dashboard data", error)
+    }
+
+    if (!parsedData && userId === 'demo-user') {
+      const initial = createInitialDashboardData(userId)
+      set({ currentUserId: userId, ...initial })
+      saveDashboardData(userId, initial)
+    }
   },
 
   clearUserData: () => {

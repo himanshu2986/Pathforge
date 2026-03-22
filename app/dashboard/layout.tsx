@@ -95,7 +95,7 @@ export default function DashboardLayout({
         {/* Navigation */}
         <nav className="flex-1 p-4">
           <ul className="space-y-1">
-            {navItems.map((item) => {
+            {[...navItems, ...(user?.role === 'admin' ? [{ href: '/admin', icon: Zap, label: 'Admin Command Center' }] : [])].map((item) => {
               const isActive = pathname === item.href
               return (
                 <li key={item.href}>
@@ -223,7 +223,7 @@ export default function DashboardLayout({
               
               <nav className="p-4">
                 <ul className="space-y-1">
-                  {navItems.map((item) => {
+                  {[...navItems, ...(user?.role === 'admin' ? [{ href: '/admin', icon: Zap, label: 'Admin Command Center' }] : [])].map((item) => {
                     const isActive = pathname === item.href
                     return (
                       <li key={item.href}>

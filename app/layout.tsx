@@ -48,6 +48,10 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
+import { Toaster } from 'sonner'
+
+import { AuthProvider } from '@/components/providers/auth-provider'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -59,8 +63,11 @@ export default function RootLayout({
         className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
-        {children}
-        <Analytics />
+        <AuthProvider>
+          {children}
+          <Toaster theme="dark" position="bottom-right" />
+          <Analytics />
+        </AuthProvider>
       </body>
     </html>
   )

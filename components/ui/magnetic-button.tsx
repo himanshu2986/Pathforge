@@ -57,6 +57,7 @@ export function MagneticButton({
   return (
     <motion.button
       ref={buttonRef}
+      suppressHydrationWarning
       className={cn(
         'relative rounded-lg font-medium transition-all duration-300',
         'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background',

@@ -1252,3 +1252,96 @@ Error: You forgot to add 'mini-css-extract-plugin' plugin (i.e. `{ plugins: [new
 [browser] ./node_modules/.pnpm/next@16.2.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/font/google/target.css?{"path":"app\\layout.tsx","import":"Geist_Mono","arguments":[{"subsets":["latin"],"variable":"--font-geist-mono"}],"variableName":"geistMono"}
 Error: You forgot to add 'mini-css-extract-plugin' plugin (i.e. `{ plugins: [new MiniCssExtractPlugin()] }`), please read https://github.com/webpack-contrib/mini-css-extract-plugin#getting-started 
 ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <ClientPageRoot Component={function SignupPage} serverProvidedParams={{...}}>
+      <SignupPage params={Promise} searchParams={Promise}>
+        <div className="min-h-scre...">
+          <div>
+          <div>
+          <div>
+          <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}} ...>
+            <div className="relative z..." style={{opacity:0, ...}} ref={function}>
+              <LinkComponent>
+              <GlassCard hover={false}>
+                <motion.div initial={{opacity:0,y:20}} whileInView={{opacity:1,y:0}} viewport={{once:true}} ...>
+                  <div className="relative r..." style={{opacity:0, ...}} ref={function}>
+                    <div>
+                    <GlassCardContent className="p-8">
+                      <div className="p-8">
+                        <div>
+                        <form onSubmit={function handleSubmit} className="space-y-5">
+                          <div>
+                            <label>
+                            <div className="relative">
+                              <User>
+                              <input
+                                id="name"
+                                type="text"
+                                value=""
+                                onChange={function onChange}
+                                className="w-full pl-10 pr-4 py-3 rounded-lg bg-input border border-border text-foregr..."
+                                placeholder="John Doe"
+-                               fdprocessedid="8jy20l"
+                              >
+                          <div>
+                            <label>
+                            <div className="relative">
+                              <Mail>
+                              <input
+                                id="email"
+                                type="email"
+                                value=""
+                                onChange={function onChange}
+                                className="w-full pl-10 pr-4 py-3 rounded-lg bg-input border border-border text-foregr..."
+                                placeholder="you@example.com"
+-                               fdprocessedid="gakzye"
+                              >
+                          <div>
+                            <label>
+                            <div className="relative">
+                              <Lock>
+                              <input
+                                id="password"
+                                type="password"
+                                value=""
+                                onChange={function onChange}
+                                className="w-full pl-10 pr-12 py-3 rounded-lg bg-input border border-border text-foreg..."
+                                placeholder="Create a strong password"
+-                               fdprocessedid="mtd8cb"
+                              >
+                              <button
+                                type="button"
+                                onClick={function onClick}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-..."
+-                               fdprocessedid="cw5504"
+                              >
+                            ...
+                          <div>
+                          <MagneticButton type="submit" variant="primary" className="w-full" disabled={false}>
+                            <motion.button ref={{current:null}} className="relative r..." animate={{x:0,y:0}} ...>
+                              <button
+                                className="relative rounded-lg font-medium transition-all duration-300 focus:outline-n..."
+                                onMouseMove={function handleMouseMove}
+                                onMouseLeave={function handleMouseLeave}
+                                type="submit"
+                                disabled={false}
+                                tabIndex={0}
+                                style={{}}
+                                ref={function}
+-                               fdprocessedid="yl2gi4"
+                              >
+                        ...
+ 
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy

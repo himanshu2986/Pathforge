@@ -24,11 +24,24 @@ export default function ForgotPasswordPage() {
     
     setIsLoading(true)
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    setIsLoading(false)
-    setIsSubmitted(true)
+    try {
+      const response = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      })
+
+      if (response.ok) {
+        setIsSubmitted(true)
+      } else {
+        const data = await response.json()
+        setError(data.message || 'Something went wrong. Try again.')
+      }
+    } catch (err) {
+      setError('A network error occurred.')
+    } finally {
+      setIsLoading(false)
+    }
   }
   
   return (

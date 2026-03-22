@@ -22,7 +22,8 @@ import {
 } from 'lucide-react'
 import { GlassCard, GlassCardContent, GlassCardHeader } from '@/components/ui/glass-card'
 import { MagneticButton } from '@/components/ui/magnetic-button'
-import { useDashboardStore } from '@/lib/store'
+import { toast } from 'sonner'
+import { useAuthStore, useDashboardStore } from '@/lib/store'
 import { 
   LineChart, 
   Line, 
@@ -51,6 +52,7 @@ const PortfolioHologram = dynamic(
 )
 
 export default function PortfolioPage() {
+  const { user } = useAuthStore()
   const {
     portfolioProjects,
     portfolioScore,
@@ -148,8 +150,13 @@ export default function PortfolioPage() {
         const likes = project.likes || 0
         const stars = project.stars || 0
         const forks = project.forks || 0
+        
+        // 90% Penalty Logic: If project is unverified, severely throttle its impact
+        const isVerified = (project as any).isVerified;
+        const penaltyMultiplier = isVerified ? 1.0 : 0.1;
+
         const engagement = Math.round(((likes + forks) / Math.max(1, views)) * 100)
-        const score = Math.round(views * 0.35 + stars * 12 + likes * 6 + forks * 4)
+        const score = Math.round((views * 0.01 + stars * 0.5 + likes * 0.2 + forks * 0.3) * penaltyMultiplier)
 
         return {
           name: project.title.length > 15 ? project.title.substring(0, 15) + '...' : project.title,
@@ -157,10 +164,26 @@ export default function PortfolioPage() {
           stars,
           engagement,
           score,
+          isVerified
         }
       })
       .sort((a, b) => b.views - a.views)
   }, [portfolioProjects])
+
+  // Recalculate global portfolio score when projects change
+  useEffect(() => {
+    if (portfolioProjects.length === 0) {
+      useDashboardStore.setState({ portfolioScore: 0 });
+      return;
+    }
+    
+    // Aggregated score logic: Base score on projects + weighted impact
+    const totalProjectPoints = projectPerformance.reduce((acc, curr) => acc + curr.score, 0);
+    const countBonus = portfolioProjects.length * 5;
+    const finalScore = Math.min(100, Math.round((totalProjectPoints / portfolioProjects.length) + countBonus));
+    
+    useDashboardStore.setState({ portfolioScore: finalScore });
+  }, [projectPerformance, portfolioProjects.length]);
 
   const technologyRadar = useMemo(() => {
     const techData: Record<string, number> = {}
@@ -201,11 +224,50 @@ export default function PortfolioPage() {
     })
   }, [portfolioProjects])
 
-  const handleSaveProject = () => {
+  const [isLoadingStats, setIsLoadingStats] = useState(false)
+
+  const fetchGithubStats = async (githubUrl: string) => {
+    try {
+      const res = await fetch(`/api/github/stats?repo=${encodeURIComponent(githubUrl)}`);
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (e) { console.error('GitHub Sync failed:', e); }
+    return null;
+  }
+
+  const handleSaveProject = async () => {
     const projectTitle = title.trim()
     const projectDescription = description.trim()
     const projectSkills = skillsInput.split(',').map((skill) => skill.trim()).filter(Boolean)
     if (!projectTitle || !projectDescription || projectSkills.length === 0) return
+
+    setIsLoadingStats(true)
+    let githubStats = { stars: 0, forks: 0, views: 0, lastViewed: new Date().toISOString(), isVerified: false };
+    
+    if (url.includes('github.com')) {
+      const fetched = await fetchGithubStats(url.trim());
+      if (fetched) {
+        // Extract owner from URL for identity check
+        const match = url.match(/github\.com\/([^/]+)/i);
+        const repoOwner = match ? match[1].toLowerCase() : "";
+        const userHandle = user?.githubUsername?.toLowerCase().trim() || "";
+        
+        // Identity Lock Policy: Match against the permanent GitHub Handle in profile
+        const isIdentityMatch = userHandle && repoOwner === userHandle;
+        
+        if (!isIdentityMatch) {
+          toast.error("SECURITY BLOCK: Identity Verification Failed", {
+            description: `You can only add projects owned by '${userHandle || 'your linked GitHub account'}'. Found owner: '${repoOwner}'.`,
+            duration: 8000
+          });
+          setIsLoadingStats(false);
+          return; // ABORT THE SAVE
+        }
+
+        githubStats = { ...fetched, isVerified: true };
+      }
+    }
 
     if (isEditingProject && editingProjectId) {
       updatePortfolioProject(editingProjectId, {
@@ -213,6 +275,7 @@ export default function PortfolioPage() {
         description: projectDescription,
         skills: projectSkills,
         url: url.trim() || undefined,
+        ...githubStats
       })
     } else {
       addPortfolioProject({
@@ -222,11 +285,8 @@ export default function PortfolioPage() {
         skills: projectSkills,
         url: url.trim() || undefined,
         createdAt: new Date().toISOString(),
-        views: 0,
-        likes: 0,
-        stars: 0,
-        forks: 0,
-        lastViewed: new Date().toISOString(),
+        ...githubStats,
+        likes: Math.floor(githubStats.stars * 0.2), // Estimate likes from stars
       })
     }
 
@@ -237,6 +297,7 @@ export default function PortfolioPage() {
     setIsAddingProject(false)
     setIsEditingProject(false)
     setEditingProjectId(null)
+    setIsLoadingStats(false)
   }
   
   return (
@@ -328,8 +389,8 @@ export default function PortfolioPage() {
               >
                 Cancel
               </button>
-              <MagneticButton variant="primary" onClick={handleSaveProject}>
-                {isEditingProject ? 'Update Project' : 'Save Project'}
+              <MagneticButton variant="primary" onClick={handleSaveProject} disabled={isLoadingStats}>
+                {isLoadingStats ? 'Syncing GitHub...' : (isEditingProject ? 'Update Project' : 'Save Project')}
               </MagneticButton>
             </div>
           </GlassCardContent>

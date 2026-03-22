@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Search, 
@@ -29,11 +29,41 @@ const typeColors = {
 }
 
 export default function InternshipsPage() {
-  const { internships, applyToInternship } = useDashboardStore()
+  const { internships, applyToInternship, setInternships } = useDashboardStore()
   const [searchQuery, setSearchQuery] = useState('')
   const [activeFilter, setActiveFilter] = useState('All')
   const [selectedInternship, setSelectedInternship] = useState<string | null>(null)
   
+  useEffect(() => {
+    const fetchGlobalJobs = async () => {
+      try {
+        const res = await fetch('/api/admin/internships');
+        if (res.ok) {
+          const global = await res.json();
+          // Merge global postings with user's applied status natively
+          const merged = global.map((gJob: any) => {
+            const match = internships.find(i => i.id === gJob._id || i.company === gJob.company);
+            return {
+              id: gJob._id,
+              company: gJob.company,
+              role: gJob.role,
+              location: gJob.location,
+              type: gJob.type,
+              matchScore: gJob.matchScore || 85,
+              skills: gJob.skills || [],
+              deadline: gJob.deadline,
+              applied: match ? match.applied : false
+            };
+          });
+          
+          if (JSON.stringify(merged) !== JSON.stringify(internships)) {
+            setInternships(merged);
+          }
+        }
+      } catch (err) { }
+    };
+    fetchGlobalJobs();
+  }, []);
   const filteredInternships = internships.filter(internship => {
     const matchesSearch = 
       internship.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
