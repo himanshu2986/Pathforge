@@ -58,7 +58,10 @@ export async function POST(req: Request) {
     });
 
     // Send Verification Email
-    const verificationUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/auth/verify?token=${verificationToken}&email=${email}`;
+    const protocol = req.headers.get('x-forwarded-proto') || 'http';
+    const host = req.headers.get('host') || 'localhost:3000';
+    const baseUrl = `${protocol}://${host}`;
+    const verificationUrl = `${baseUrl}/api/auth/verify?token=${verificationToken}&email=${email}`;
 
     const mailOptions = {
       from: `"Pathforge" <${process.env.EMAIL_USER}>`,

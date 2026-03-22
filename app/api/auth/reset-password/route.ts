@@ -36,7 +36,10 @@ export async function POST(req: Request) {
       },
     });
 
-    const resetUrl = `${process.env.NEXTAUTH_URL}/reset-password?token=${token}&email=${email}`;
+    const protocol = req.headers.get('x-forwarded-proto') || 'http';
+    const host = req.headers.get('host') || 'localhost:3000';
+    const baseUrl = `${protocol}://${host}`;
+    const resetUrl = `${baseUrl}/reset-password?token=${token}&email=${email}`;
 
     const mailOptions = {
       from: `"PathForge Support" <${process.env.EMAIL_USER}>`,

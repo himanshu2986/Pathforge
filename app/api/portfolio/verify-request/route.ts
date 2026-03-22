@@ -49,7 +49,10 @@ export async function POST(req: Request) {
       { $set: { 'portfolioProjects.$.verificationToken': verificationToken } }
     );
 
-    const verificationUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/portfolio/verify?userId=${userId}&projectId=${projectId}&token=${verificationToken}`;
+    const protocol = req.headers.get('x-forwarded-proto') || 'http';
+    const host = req.headers.get('host') || 'localhost:3000';
+    const baseUrl = `${protocol}://${host}`;
+    const verificationUrl = `${baseUrl}/api/portfolio/verify?userId=${userId}&projectId=${projectId}&token=${verificationToken}`;
 
     const mailOptions = {
       from: `"Pathforge Verification" <${process.env.EMAIL_USER}>`,
