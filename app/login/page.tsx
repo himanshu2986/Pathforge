@@ -143,13 +143,6 @@ export default function LoginPage() {
               </MagneticButton>
             </form>
             
-            {/* Demo credentials */}
-            <div className="mt-6 p-4 rounded-lg bg-muted/50 border border-border">
-              <p className="text-xs text-muted-foreground text-center mb-2">Demo Credentials</p>
-              <p className="text-xs text-foreground text-center font-mono">
-                demo@pathforge.com / demo123
-              </p>
-            </div>
             
             {/* Sign up link */}
             <p className="mt-6 text-center text-muted-foreground">

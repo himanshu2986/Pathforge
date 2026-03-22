@@ -87,19 +87,6 @@ export const useAuthStore = create<AuthState>()(
       login: async (email: string, password: string) => {
         set({ isLoading: true })
         try {
-          // Demo account
-          if (email === 'demo@pathforge.com' && password === 'demo123') {
-            const demoUser: User = {
-              id: 'demo-user',
-              email: 'demo@pathforge.com',
-              name: 'Demo User',
-              role: 'student',
-              createdAt: new Date().toISOString()
-            }
-            set({ user: demoUser, isAuthenticated: true, isLoading: false })
-            useDashboardStore.getState().loadUserData(demoUser.id)
-            return true
-          }
 
           const response = await fetch('/api/auth/login', {
             method: 'POST',
