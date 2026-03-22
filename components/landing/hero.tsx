@@ -97,7 +97,7 @@ export function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
-            className="flex flex-wrap justify-center gap-8 sm:gap-16"
+            className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-8 sm:gap-16"
           >
             {stats.map((stat, i) => (
               <motion.div

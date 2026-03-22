@@ -132,8 +132,10 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
+  html, body {
     @apply bg-background text-foreground;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 }
 
