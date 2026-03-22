@@ -155,7 +155,7 @@ export default function InternshipsPage() {
           />
         </div>
         
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {filters.map((filter) => (
             <button
               key={filter}
@@ -199,16 +199,16 @@ export default function InternshipsPage() {
                       <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
                         <Building2 className="w-7 h-7 text-primary" />
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-semibold text-foreground truncate">{internship.role}</h3>
+                      <div className="flex-1 min-w-0 overflow-hidden">
+                        <div className="flex items-center gap-2 mb-1 min-w-0">
+                          <h3 className="font-semibold text-foreground truncate min-w-0 flex-1">{internship.role}</h3>
                           {internship.applied && (
-                            <span className="px-2 py-0.5 text-xs rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                            <span className="shrink-0 px-2 py-0.5 text-xs rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
                               Applied
                             </span>
                           )}
                         </div>
-                        <p className="text-sm text-muted-foreground">{internship.company}</p>
+                        <p className="text-sm text-muted-foreground truncate">{internship.company}</p>
                       </div>
                     </div>
                     
