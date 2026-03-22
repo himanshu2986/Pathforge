@@ -1,98 +1,106 @@
-# 🚀 Pathforge Atlas: The Future of Career Navigation
+<div align="center">
+  <img src="./public/icon.svg" width="100" height="100" alt="PathForge Logo">
+  
+  # 🏆 PathForge: AI-Powered Career Navigation
+  
+  **Transform your learning journey into a professional career with AI-driven insights, 250+ practice projects, and smart internship matchmaking.**
+  
+  [![Next.js 15](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+  [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-blue?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+  [![Framer Motion](https://img.shields.io/badge/Framer_Motion-11-purple?style=for-the-badge&logo=framer)](https://www.framer.com/motion/)
+  [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-![Pathforge Banner](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
-![Mongoose](https://img.shields.io/badge/MongoDB-Atlas-green?style=for-the-badge&logo=mongodb)
-![Tailwind](https://img.shields.io/badge/Architecture-3D_Glassmorphism-blue?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
-
-**Pathforge Atlas** is a high-performance, AI-driven career development platform designed to bridge the gap between learning and employment. It combines advanced portfolio analytics, automated skill tracking, and AI-powered roadmaps into a stunning 3D Glassmorphic interface.
+  [Live Demo](https://pathforge-jet.vercel.app/) • [Report Bug](https://github.com/himanshu2986/Pathforge/issues) • [Request Feature](https://github.com/himanshu2986/Pathforge/issues)
+</div>
 
 ---
 
-## ✨ Key Features
+## 🌟 Overview
 
-### 👤 **Intelligent Identity**
-- **Email Verified Profiles**: High-security user onboarding with professional, branded email templates.
-- **Enhanced Biometrics**: Securely manage your bio, location, social links, and Cloudinary-hosted avatars.
-- **Security First**: Full JWT authentication, bcrypt password hashing, and secure password reset workflows.
+**PathForge** is a premium, high-performance career development platform designed for the next generation of engineers. It bridges the gap between passive learning and active production by providing a 3D glassmorphic ecosystem where users can track skills, build industry-level projects, and get matched with internships based on real-time performance analytics.
 
-### 📊 **Portfolio Command Center**
-- **GitHub Auto-Fill Engine**: Automatically sync projects via URL. Pathforge Atlas pulls descriptions, stars, and language-based skills instantly.
-- **Verification of Ownership**: Verify your projects via email to unlock 100% of their scoring impact on your global profile.
-- **Real-Time Analytics**: Track views, stars, and engagement trends with interactive Recharts visualizations.
+## ✨ Core Features
+
+### 🛠️ **The Practice Lab (250+ Projects)**
+- **Curated Difficulty Tiers**: 50 projects each across Beginner, Intermediate, Advanced, Smart India Hackathon, and Google Solutions Challenge levels.
+- **Dynamic Content Engine**: Each project features automated requirement parsing, dynamic skill tags, and categorized difficulty mapping.
+- **Start Building Workflow**: Seamless transition from project discovery to GitHub-linked development.
 
 ### 🧠 **AI Career Intelligence**
-- **Dynamic Roadmaps**: An AI engine that analyzes your existing skills and projects to recommend your *Next Logical Learning Goal*.
-- **Interactive Modules**: Step-by-step learning paths with module tracking, progress persistence, and built-in "Mark as Done" functionality.
+- **Personalized Roadmaps**: AI-driven learning paths tailored to your specific career aspirations and existing skill gaps.
+- **Skill Radar**: Interactive visualizations of your technical proficiency across multiple domains.
+- **Progress Persistence**: Real-time tracking of module completion and learning milestones.
 
-### 🏢 **Global Internship Hub**
-- **AI Matching**: Opportunities are automatically scored based on your profile's skill alignment.
-- **Apply & Trace**: Manage your applications and deadlines from a unified board.
+### 💼 **Internship Matchmaking Hub**
+- **Match Score Algorithm**: High-precision matching that calculates your alignment with global job postings based on verified skills.
+- **One-Click Application**: Streamlined flow to discover and track internship opportunities.
+- **Status Dashboard**: Unified view of your application pipeline and approaching deadlines.
 
-### ⚙️ **Admin Command Center**
-- **System-Wide Analytics**: Monitor user growth, project counts, and platform performance.
-- **Content Management**: Admins can directly manage global internships and learning paths from the UI.
-- **Permission Control**: Scalable role management (Admin, User) with banning and promotion capabilities.
+### 📊 **Developer Portfolio Analytics**
+- **GitHub Sync**: Automatically import your repositories to build a stunning, glassmorphic portfolio instantly.
+- **Verification Engine**: Prove ownership of your code to boost your global ranking.
+- **Interactive Charts**: Visualize repo engagement, star trends, and language distribution using Recharts.
 
 ---
 
-## 🛠️ Technology Stack
+## 🛠️ Tech Stack
 
-| Category | Tech |
+| Layer | Technologies |
 | --- | --- |
-| **Frontend** | Next.js 15, React 19, Framer Motion, Tailwind CSS, Recharts |
+| **Frontend** | Next.js 15 (App Router), React 19, TypeScript |
+| **Styling** | Tailwind CSS 4.0, Glassmorphism UI, Framer Motion (Animations) |
+| **3D Elements** | React Three Fiber, Three.js (Particle Fields) |
 | **Backend** | Next.js API Routes, Node.js |
 | **Database** | MongoDB Atlas, Mongoose ODM |
-| **Storage/Media** | Cloudinary (Signed Uploads) |
-| **Email** | Nodemailer (Premium HTML Templates) |
-| **Authentication** | JSON Web Tokens (JWT), bcrypjs, Zod |
-| **Components** | Radix UI, Lucide Icons, Glassmorphism Design System |
+| **Icons** | Lucide React (Compass-based branding) |
+| **Deployment** | Vercel (Edge Functions) |
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quick Start
 
-### 1. **Clone the Repository**
+### 1. Prerequisites
+- Node.js 18.x or higher
+- MongoDB Atlas account
+- GitHub OAuth credentials
+
+### 2. Clone and Install
 ```bash
-git clone https://github.com/your-username/pathforge.git
-cd pathforge
-```
-
-### 2. **Environment Configuration**
-Create a `.env` file in the root directory and add:
-```env
-MONGODB_URI=your_mongodb_uri
-JWT_SECRET=your_jwt_secret
-EMAIL_USER=your_gmail
-EMAIL_PASS=your_app_password
-CLOUDINARY_CLOUD_NAME=your_name
-CLOUDINARY_API_KEY=your_key
-CLOUDINARY_API_SECRET=your_secret
-```
-
-### 3. **Install Dependencies**
-```bash
+git clone https://github.com/himanshu2986/Pathforge.git
+cd Pathforge
 npm install --legacy-peer-deps
 ```
 
-### 4. **Run Development Server**
+### 3. Environment Setup
+Create a `.env` file in the root directory:
+```env
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_signing_secret
+NEXTAUTH_URL=http://localhost:3000
+GITHUB_ID=your_github_client_id
+GITHUB_SECRET=your_github_client_secret
+```
+
+### 4. Run Development
 ```bash
 npm run dev
 ```
+Open [http://localhost:3000](http://localhost:3000) to see the magic in action.
 
 ---
 
 ## 🎨 Design Philosophy
-Pathforge Atlas is built on **Glassmorphism 2.0**. It uses dynamic gradients, backdrop-filters, and high-frequency animations (Framer Motion) to create an interface that feels alive. The **3D Hologram** in the dashboard provides a physical representation of your career score, making growth tangible.
+PathForge utilizes **Glassmorphism 2.0**—a design language focused on transparency, frosted surfaces, and vibrant glowing accents. Combined with **React Three Fiber** for a living 3D particle background, the platform provides an immersive "Control Center" feel for developers.
+
+## 🤝 Connect with the Developer
+Developed by **Himanshu Thakur**.
+
+- [LinkedIn](https://www.linkedin.com/in/himanshu-thakur-113813266)
+- [Twitter / X](https://x.com/HimanshuTh50485)
+- [GitHub](https://github.com/himanshu2986)
 
 ---
 
-## 📜 License
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
----
-
-## 🤝 Support
-For any questions or professional collaboration, please reach out via GitHub or the integrated Contact Center.
-
-**Built with ❤️ for the Next Generation of Developers.**
+<div align="center">
+  Built with 💙 for the Future of Professional Learning.
+</div>
