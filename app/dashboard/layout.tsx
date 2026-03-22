@@ -15,13 +15,15 @@ import {
   X,
   Zap,
   ChevronRight,
-  User
+  User,
+  Code2
 } from 'lucide-react'
 import { useAuthStore, useDashboardStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
 
 const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Overview' },
+  { href: '/projects', icon: Code2, label: 'Practice Projects' },
   { href: '/dashboard/skills', icon: Route, label: 'Skills Roadmap' },
   { href: '/dashboard/portfolio', icon: PieChart, label: 'Portfolio Analytics' },
   { href: '/dashboard/internships', icon: Briefcase, label: 'Internships' },
