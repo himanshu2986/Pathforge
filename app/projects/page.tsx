@@ -2,136 +2,13 @@
 
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import { Rocket, Code2, Database, Layout, Brain, Shield, Terminal, Globe, Cpu, HeartPulse, Leaf, Users, CloudRain } from 'lucide-react'
+import { Rocket, Code2, Database, Layout, Brain, Shield, Terminal, Globe, Cpu, HeartPulse, Leaf, Users, CloudRain, Activity, BarChart, Bell } from 'lucide-react'
 import { MagneticButton } from '@/components/ui/magnetic-button'
+import { projectLevels } from '@/lib/projectsData'
 
-const projectLevels = [
-  {
-    level: "Beginner",
-    description: "Perfect for getting started with core concepts.",
-    color: "from-green-500 to-emerald-700",
-    projects: [
-      {
-        title: "Personal Portfolio",
-        desc: "Build a static portfolio to showcase your skills. Learn HTML, CSS, and basic responsive design.",
-        icon: Layout,
-        tags: ["HTML", "CSS", "Responsive"],
-      },
-      {
-        title: "To-Do Application",
-        desc: "Create a task manager with local storage to understand state and simple CRUD operations.",
-        icon: Terminal,
-        tags: ["JavaScript", "DOM", "Local Storage"],
-      },
-      {
-        title: "Weather Dashboard",
-        desc: "Fetch real-time data from a public API and display it dynamically in a clean UI.",
-        icon: Globe,
-        tags: ["API", "Async/Await", "JSON"],
-      }
-    ]
-  },
-  {
-    level: "Intermediate",
-    description: "Take your skills to the next level with full-stack challenges.",
-    color: "from-primary to-accent",
-    projects: [
-      {
-        title: "E-Commerce Bookstore",
-        desc: "Build a complete online store with a shopping cart, product catalog, and checkout flow.",
-        icon: Code2,
-        tags: ["React", "State Management", "Routing"],
-      },
-      {
-        title: "Real-time Chat App",
-        desc: "Develop a messaging application using WebSockets for instant communication.",
-        icon: Rocket,
-        tags: ["Node.js", "Socket.io", "Express"],
-      },
-      {
-        title: "Blog CMS",
-        desc: "Create a Content Management System to write, edit, and publish markdown blog posts.",
-        icon: Database,
-        tags: ["Next.js", "MongoDB", "Auth"],
-      }
-    ]
-  },
-  {
-    level: "Advanced",
-    description: "Complex architectures and advanced system design for seasoned developers.",
-    color: "from-orange-500 to-red-600",
-    projects: [
-      {
-        title: "AI-Powered SaaS",
-        desc: "Develop a micro-SaaS application utilizing OpenAI APIs with subscription billing.",
-        icon: Brain,
-        tags: ["Stripe", "AI", "Serverless"],
-      },
-      {
-        title: "End-to-End Encrypted Vault",
-        desc: "Build a secure password and file manager with client-side encryption algorithms.",
-        icon: Shield,
-        tags: ["Cryptography", "Web3", "Security"],
-      },
-      {
-        title: "Distributed Task Queue",
-        desc: "Create a highly available background job processing system with Redis and workers.",
-        icon: Cpu,
-        tags: ["Redis", "Architecture", "Docker"],
-      }
-    ]
-  },
-  {
-    level: "Smart India Hackathon",
-    description: "Real-world problem statements inspired by India's biggest nationwide hackathon.",
-    color: "from-blue-600 to-indigo-800",
-    projects: [
-      {
-        title: "Blockchain Patient Records",
-        desc: "Determine transparent and secure interoperability of e-health records between multiple hospitals.",
-        icon: HeartPulse,
-        tags: ["Solidity", "Next.js", "Web3"],
-      },
-      {
-        title: "Agri-Tech Crop Predictor",
-        desc: "Implement a machine learning model to predict local crop yields via real-time satellite weather mapping.",
-        icon: Leaf,
-        tags: ["React", "FastAPI", "Python"],
-      },
-      {
-        title: "AI Traffic Controller",
-        desc: "Develop dynamic traffic light management algorithms utilizing live CCTV feeds to reduce city congestion.",
-        icon: Cpu,
-        tags: ["OpenCV", "TensorFlow", "Node.js"],
-      }
-    ]
-  },
-  {
-    level: "Google Solutions",
-    description: "Tackle the 17 UN Sustainable Development Goals using leading Google Cloud technologies.",
-    color: "from-red-500 via-yellow-500 to-blue-500",
-    projects: [
-      {
-        title: "Eco-Tracking Dashboard",
-        desc: "A gamified platform to log daily carbon footprint metrics and suggest local, eco-friendly transit alternatives.",
-        icon: Globe,
-        tags: ["Firebase", "React", "GCP"],
-      },
-      {
-        title: "Accessible Edu Portal",
-        desc: "A multilingual learning management system tailored precisely for visually impaired students using Speech AI.",
-        icon: Users,
-        tags: ["Google TTS", "Next.js", "a11y"],
-      },
-      {
-        title: "Smart Water IoT Grid",
-        desc: "An analytical dashboard that maps and tracks real-time water quality sensors across distinct city nodes.",
-        icon: CloudRain,
-        tags: ["Flutter", "Firebase RTDB", "IoT"],
-      }
-    ]
-  }
-]
+const iconMap: Record<string, any> = {
+  Rocket, Code2, Database, Layout, Brain, Shield, Terminal, Globe, Cpu, HeartPulse, Leaf, Users, CloudRain, Activity, BarChart, Bell
+}
 
 export default function PracticeProjectsPage() {
   const router = useRouter()
@@ -171,8 +48,8 @@ export default function PracticeProjectsPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {levelGroup.projects.map((project, pIdx) => {
-                  const Icon = project.icon
+                {levelGroup.projects.map((project: any, pIdx: number) => {
+                  const Icon = iconMap[project.iconName] || Code2
                   return (
                     <motion.div
                       key={project.title}
@@ -195,7 +72,7 @@ export default function PracticeProjectsPage() {
                       </p>
                       
                       <div className="flex flex-wrap gap-2 mb-6 relative z-10">
-                        {project.tags.map(tag => (
+                        {project.tags.map((tag: string) => (
                           <span key={tag} className="text-xs px-3 py-1 rounded-full bg-secondary/30 text-secondary-foreground border border-secondary/50">
                             {tag}
                           </span>
