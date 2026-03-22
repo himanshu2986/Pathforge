@@ -358,12 +358,35 @@ export default function PortfolioPage() {
               </div>
               <div>
                 <label className="mb-2 block text-sm font-medium text-foreground">Project URL</label>
-                <input
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  placeholder="https://github.com/you/project"
-                  className="w-full rounded-lg bg-input border border-border px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                />
+                <div className="relative">
+                  <input
+                    value={url}
+                    onChange={async (e) => {
+                      const newUrl = e.target.value;
+                      setUrl(newUrl);
+                      if (newUrl.includes('github.com') && newUrl.length > 25) {
+                        const fetched = await fetchGithubStats(newUrl);
+                        if (fetched) {
+                          if (fetched.title && !title) setTitle(fetched.title);
+                          if (fetched.description && !description) setDescription(fetched.description);
+                          if (fetched.skills && fetched.skills.length > 0 && !skillsInput) {
+                            setSkillsInput(fetched.skills.join(', '));
+                          }
+                          toast.success('GitHub Data Synced!', {
+                            description: 'We have pre-filled the project details for you.'
+                          });
+                        }
+                      }
+                    }}
+                    placeholder="https://github.com/you/project"
+                    className="w-full rounded-lg bg-input border border-border px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                  {isLoadingStats && (
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="md:col-span-2">
                 <label className="mb-2 block text-sm font-medium text-foreground">Description</label>

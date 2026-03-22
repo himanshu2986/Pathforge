@@ -27,11 +27,31 @@ export async function GET(req: Request) {
     }
 
     const data = await res.json();
+    
+    // Fetch languages for a more complete skills list
+    const langRes = await fetch(`https://api.github.com/repos/${repoPath}/languages`, {
+      headers: {
+        'Accept': 'application/vnd.github.v3+json',
+        ...(process.env.GITHUB_TOKEN ? { 'Authorization': `token ${process.env.GITHUB_TOKEN}` } : {})
+      }
+    });
+    const languages = langRes.ok ? await langRes.json() : {};
+    
+    // Combine primary language, topics, and top languages
+    const skills = Array.from(new Set([
+      data.language,
+      ...data.topics,
+      ...Object.keys(languages).slice(0, 3)
+    ])).filter(Boolean);
+
     return NextResponse.json({
       stars: data.stargazers_count,
       forks: data.forks_count,
-      views: data.watchers_count * 5, // Watchers is a proxy, multiply for "views"
-      lastViewed: new Date().toISOString()
+      views: data.watchers_count * 5, 
+      lastViewed: new Date().toISOString(),
+      skills,
+      description: data.description,
+      title: data.name
     });
   } catch (error: any) {
     return NextResponse.json({ message: error.message }, { status: 500 });
