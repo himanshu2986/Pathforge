@@ -1,3 +1,5 @@
+'use client'
+
 import { motion } from 'framer-motion'
 import { Rocket, Code2, Database, Layout, Brain, Shield, Terminal, Globe, Cpu } from 'lucide-react'
 import { MagneticButton } from '@/components/ui/magnetic-button'
