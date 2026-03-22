@@ -45,7 +45,6 @@ export async function POST(req: Request) {
       name: user.name,
       avatar: user.avatar,
       role: user.role,
-      githubUsername: user.githubUsername,
       createdAt: user.createdAt.toISOString()
     };
 
