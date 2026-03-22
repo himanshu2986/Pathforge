@@ -18,9 +18,8 @@ const FloatingIcons = dynamic(
 )
 
 const stats = [
-  { value: '50K+', label: 'Active Learners' },
+  { value: '85+', label: 'Active Learners' },
   { value: '95%', label: 'Success Rate' },
-  { value: '500+', label: 'Partner Companies' },
 ]
 
 export function Hero() {
