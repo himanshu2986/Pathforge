@@ -22,9 +22,9 @@ const footerLinks = {
 }
 
 const socialLinks = [
-  { icon: Github, href: 'https://github.com', label: 'GitHub' },
-  { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
-  { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
+  { icon: Github, href: 'https://github.com/himanshu2986', label: 'GitHub' },
+  { icon: Twitter, href: 'https://x.com/HimanshuTh50485', label: 'Twitter' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/in/himanshu-thakur-113813266', label: 'LinkedIn' },
 ]
 
 export function Footer() {
