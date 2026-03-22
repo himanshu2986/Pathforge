@@ -82,7 +82,7 @@ export default function InternshipsPage() {
     : 0
   
   return (
-    <div className="p-6 lg:p-8">
+    <div className="p-4 lg:p-8 w-full max-w-full overflow-x-hidden">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
@@ -184,61 +184,62 @@ export default function InternshipsPage() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ delay: i * 0.05 }}
               layout
+              className="min-w-0 w-full"
             >
               <GlassCard 
                 hover 
                 className={cn(
-                  'cursor-pointer transition-all',
+                  'cursor-pointer transition-all w-full min-w-0',
                   selectedInternship === internship.id && 'ring-2 ring-primary'
                 )}
               >
-                <GlassCardContent className="p-6">
+                <GlassCardContent className="p-4 sm:p-6">
                   <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                     {/* Company Info */}
                     <div className="flex items-center gap-4 flex-1">
                       <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
                         <Building2 className="w-7 h-7 text-primary" />
                       </div>
-                      <div className="flex-1 min-w-0 overflow-hidden">
+                      <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1 min-w-0">
-                          <h3 className="font-semibold text-foreground truncate min-w-0 flex-1">{internship.role}</h3>
+                          <h3 className="font-semibold text-foreground text-base sm:text-lg truncate flex-1 min-w-0">{internship.role}</h3>
                           {internship.applied && (
-                            <span className="shrink-0 px-2 py-0.5 text-xs rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                            <span className="shrink-0 px-2 py-0.5 text-[10px] sm:text-xs rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
                               Applied
                             </span>
                           )}
                         </div>
-                        <p className="text-sm text-muted-foreground truncate">{internship.company}</p>
+                        <p className="text-xs sm:text-sm text-muted-foreground truncate">{internship.company}</p>
                       </div>
                     </div>
                     
                     {/* Details */}
-                    <div className="flex flex-wrap items-center gap-3 lg:gap-6">
-                      <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                        <MapPin className="w-4 h-4" />
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                      <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                        <MapPin className="w-3.5 h-3.5" />
                         {internship.location}
                       </div>
                       
                       <span className={cn(
-                        'px-3 py-1 text-xs rounded-full border capitalize',
+                        'px-2 py-0.5 text-[10px] sm:text-xs rounded-full border capitalize whitespace-nowrap',
                         typeColors[internship.type]
                       )}>
                         {internship.type}
                       </span>
                       
-                      <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                        <Clock className="w-4 h-4" />
+                      <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                        <Clock className="w-3.5 h-3.5" />
                         {new Date(internship.deadline).toLocaleDateString()}
                       </div>
                     </div>
                     
                     {/* Match Score */}
-                    <div className="flex items-center gap-4 lg:w-48">
-                      <div className="flex-1">
+                    <div className="flex items-center gap-4 w-full lg:w-48 min-w-0">
+                      <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs text-muted-foreground">Match</span>
+                          <span className="text-[10px] sm:text-xs text-muted-foreground">Match</span>
                           <span className={cn(
-                            'text-sm font-semibold',
+                            'text-xs sm:text-sm font-semibold',
                             internship.matchScore >= 80 ? 'text-emerald-500' :
                             internship.matchScore >= 60 ? 'text-yellow-500' : 'text-orange-500'
                           )}>
@@ -247,28 +248,31 @@ export default function InternshipsPage() {
                         </div>
                         <Progress 
                           value={internship.matchScore} 
-                          className="h-1.5"
+                          className="h-1 sm:h-1.5"
                         />
                       </div>
                       
-                      {!internship.applied ? (
-                        <MagneticButton 
-                          variant="primary" 
-                          size="sm"
-                          onClick={() => applyToInternship(internship.id)}
-                        >
-                          Apply
-                        </MagneticButton>
-                      ) : (
-                        <a
-                          href={`https://www.google.com/search?q=${encodeURIComponent(`${internship.company} ${internship.role}`)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2 text-muted-foreground hover:text-primary transition-colors"
-                        >
-                          <ExternalLink className="w-5 h-5" />
-                        </a>
-                      )}
+                      <div className="shrink-0">
+                        {!internship.applied ? (
+                          <MagneticButton 
+                            variant="primary" 
+                            size="sm"
+                            className="h-8 px-4 text-xs"
+                            onClick={() => applyToInternship(internship.id)}
+                          >
+                            Apply
+                          </MagneticButton>
+                        ) : (
+                          <a
+                            href={`https://www.google.com/search?q=${encodeURIComponent(`${internship.company} ${internship.role}`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-1.5 text-muted-foreground hover:text-primary transition-colors"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
                   

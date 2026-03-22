@@ -299,7 +299,7 @@ export default function DashboardLayout({
       </AnimatePresence>
       
       {/* Main Content */}
-      <main className="flex-1 lg:pt-0 pt-16 overflow-auto">
+      <main className="flex-1 lg:pt-0 pt-16 overflow-auto w-full max-w-[100vw] overflow-x-hidden">
         <motion.div
           key={pathname}
           initial={{ opacity: 0, y: 10 }}
