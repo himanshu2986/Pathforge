@@ -154,7 +154,7 @@ export default function LoginPage() {
               <div className="grid grid-cols-2 gap-4">
                 <button
                   type="button"
-                  onClick={() => signIn('github', { callbackUrl: '/dashboard' })}
+                  onClick={() => signIn('github')}
                   className="flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all font-medium text-sm"
                 >
                   <Github className="w-4 h-4 text-gray-300" />
@@ -162,7 +162,7 @@ export default function LoginPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+                  onClick={() => signIn('google')}
                   className="flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all font-medium text-sm"
                 >
                    <svg className="w-4 h-4" viewBox="0 0 24 24">
