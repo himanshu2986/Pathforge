@@ -190,6 +190,7 @@ interface DashboardState {
   setLearningPaths: (paths: LearningPath[]) => void
   setInternships: (internships: Internship[]) => void
   applyToInternship: (id: string) => void
+  toggleLearningModule: (pathId: string, moduleId: string) => void
 }
 
 interface DashboardSnapshot {
@@ -452,5 +453,15 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
     internships: state.internships.map(i => 
       i.id === id ? { ...i, applied: true } : i
     )
+  })),
+  toggleLearningModule: (pathId, moduleId) => setAndPersistDashboardState(set, (state) => ({
+    learningPaths: state.learningPaths.map((path) => {
+      if (path.id !== pathId) return path
+      const newModules = path.modules.map((m) =>
+        m.id === moduleId ? { ...m, completed: !m.completed } : m
+      )
+      const progress = Math.round((newModules.filter(m => m.completed).length / newModules.length) * 100)
+      return { ...path, modules: newModules, progress }
+    })
   })),
 }))

@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense, useMemo } from 'react'
+import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { 
@@ -16,6 +17,7 @@ import {
 import { GlassCard, GlassCardContent, GlassCardHeader } from '@/components/ui/glass-card'
 import { useAuthStore, useDashboardStore } from '@/lib/store'
 import { Progress } from '@/components/ui/progress'
+import { CareerAI } from '@/components/dashboard/career-ai'
 
 const PortfolioHologram = dynamic(
   () => import('@/components/3d/portfolio-hologram'),
@@ -142,11 +144,15 @@ function LearningProgress() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 + i * 0.1 }}
               >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-foreground">{path.title}</span>
-                  <span className="text-sm text-primary">{path.progress}%</span>
-                </div>
-                <Progress value={path.progress} className="h-2" />
+                <Link href={`/dashboard/learning/${path.id}`} className="block group">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                      {path.title}
+                    </span>
+                    <span className="text-sm text-primary">{path.progress}%</span>
+                  </div>
+                  <Progress value={path.progress} className="h-2" />
+                </Link>
               </motion.li>
             ))}
           </ul>
@@ -277,26 +283,32 @@ export default function DashboardOverview() {
       </div>
       
       {/* Main Content */}
-      <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
-        {/* Portfolio Hologram */}
-        <GlassCard className="lg:col-span-1" delay={0.2}>
-          <GlassCardHeader>
-            <h3 className="text-lg font-semibold text-foreground">Portfolio Score</h3>
-          </GlassCardHeader>
-          <GlassCardContent className="h-[300px]">
-            <Suspense fallback={
-              <div className="h-full flex items-center justify-center">
-                <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-              </div>
-            }>
-              <PortfolioHologram score={portfolioScore} />
-            </Suspense>
-          </GlassCardContent>
-        </GlassCard>
+      <div className="grid lg:grid-cols-4 gap-6 lg:gap-8">
+        {/* Left Column: Intelligence Sidebar */}
+        <div className="lg:col-span-1 space-y-6 lg:space-y-8">
+          {/* Portfolio Hologram */}
+          <GlassCard delay={0.2}>
+            <GlassCardHeader>
+              <h3 className="text-lg font-semibold text-foreground">Portfolio Score</h3>
+            </GlassCardHeader>
+            <GlassCardContent className="h-[250px]">
+              <Suspense fallback={
+                <div className="h-full flex items-center justify-center">
+                  <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                </div>
+              }>
+                <PortfolioHologram score={portfolioScore} />
+              </Suspense>
+            </GlassCardContent>
+          </GlassCard>
+
+          {/* AI Career Advice */}
+          <CareerAI />
+        </div>
         
-        {/* Right Column */}
-        <div className="lg:col-span-2 grid gap-6">
-          <div className="grid sm:grid-cols-2 gap-6">
+        {/* Right Column: Activity & Roadmap */}
+        <div className="lg:col-span-3 grid gap-6 lg:gap-8">
+          <div className="grid sm:grid-cols-2 gap-6 lg:gap-8">
             <RecentActivity />
             <LearningProgress />
           </div>

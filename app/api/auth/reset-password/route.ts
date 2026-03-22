@@ -41,22 +41,20 @@ export async function POST(req: Request) {
     const baseUrl = `${protocol}://${host}`;
     const resetUrl = `${baseUrl}/reset-password?token=${token}&email=${email}`;
 
+    const { getBrandedEmail } = await import('@/lib/utils/email-template');
+
     const mailOptions = {
-      from: `"PathForge Support" <${process.env.EMAIL_USER}>`,
+      from: `"Pathforge Atlas" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: 'Password Reset Request - PathForge',
-      html: `
-        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
-          <h2 style="color: #00d4ff; text-align: center;">Reset Your Password</h2>
-          <p>Hello ${user.name},</p>
-          <p>We received a request to reset your password for your PathForge account. Click the button below to choose a new password:</p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${resetUrl}" style="background-color: #00d4ff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">Reset Password</a>
-          </div>
-          <p>If you didn't request this, you can safely ignore this email. The link will expire in 1 hour.</p>
-          <p>Best regards,<br>The PathForge Team</p>
-        </div>
-      `,
+      subject: 'Reset Your Password - Pathforge Atlas',
+      html: getBrandedEmail({
+        title: 'Need a New Password?',
+        greeting: user.name,
+        body: 'We received a request to reset your Pathforge account password. If you initiated this request, please click the button below to set a new password. This link will expire in 1 hour for your security.',
+        buttonText: 'Reset My Password',
+        buttonUrl: resetUrl,
+        footerText: 'If you did not request a password reset, you can safely ignore this email. No changes will be made to your account.'
+      }),
     };
 
     await transporter.sendMail(mailOptions);

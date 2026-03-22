@@ -54,22 +54,20 @@ export async function POST(req: Request) {
     const baseUrl = `${protocol}://${host}`;
     const verificationUrl = `${baseUrl}/api/portfolio/verify?userId=${userId}&projectId=${projectId}&token=${verificationToken}`;
 
+    const { getBrandedEmail } = await import('@/lib/utils/email-template');
+
     const mailOptions = {
-      from: `"Pathforge Verification" <${process.env.EMAIL_USER}>`,
+      from: `"Pathforge Atlas" <${process.env.EMAIL_USER}>`,
       to: user.email,
-      subject: `Verify Your Project: ${projectTitle}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
-          <h1 style="color: #4F46E5; text-align: center;">Project Verification</h1>
-          <p>You recently added the project <strong>${projectTitle}</strong> to your Hub. To verify your ownership and boost your score, please click the link below.</p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${verificationUrl}" style="background-color: #4F46E5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">Verify Project Ownership</a>
-          </div>
-          <p>Verified projects contribute 100% to your profile score, while unverified projects are limited to 10%.</p>
-          <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-          <p style="font-size: 12px; color: #666; text-align: center;">&copy; 2026 Pathforge Atlas. All rights reserved.</p>
-        </div>
-      `,
+      subject: `Verify Ownership: ${projectTitle}`,
+      html: getBrandedEmail({
+        title: 'Ready for Your Career Verification?',
+        greeting: user.name,
+        body: `You recently added <strong>${projectTitle}</strong> to your Hub. Verifying ownership proves your identity and boosts your profile's authenticity. Once verified, this project's views and stars will contribute 100% to your Portfolio Score.`,
+        buttonText: 'Verify Project Ownership',
+        buttonUrl: verificationUrl,
+        footerText: 'This verification helps us maintain a secure and trustworthy community for all users.'
+      }),
     };
 
     await transporter.sendMail(mailOptions);

@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useMemo, useState, useEffect, useCallback } from 'react'
+import { Suspense, useMemo, useState, useEffect, useCallback, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { 
@@ -18,7 +18,8 @@ import {
   Target,
   Award,
   Code,
-  Zap
+  Zap,
+  Camera
 } from 'lucide-react'
 import { GlassCard, GlassCardContent, GlassCardHeader } from '@/components/ui/glass-card'
 import { MagneticButton } from '@/components/ui/magnetic-button'
@@ -68,6 +69,11 @@ export default function PortfolioPage() {
   const [description, setDescription] = useState('')
   const [skillsInput, setSkillsInput] = useState('')
   const [url, setUrl] = useState('')
+  
+  // Project Image States
+  const [projectImagePreview, setProjectImagePreview] = useState<string | null>(null)
+  const projectImageInputRef = useRef<HTMLInputElement>(null)
+  const [isSaving, setIsSaving] = useState(false)
 
 
 
@@ -242,13 +248,31 @@ export default function PortfolioPage() {
     const projectSkills = skillsInput.split(',').map((skill) => skill.trim()).filter(Boolean)
     if (!projectTitle || !projectDescription || projectSkills.length === 0) return
 
-    setIsLoadingStats(true)
+    setIsSaving(true)
     let githubStats = { stars: 0, forks: 0, views: 0, lastViewed: new Date().toISOString(), isVerified: false };
     
     if (url.includes('github.com')) {
       const fetched = await fetchGithubStats(url.trim());
       if (fetched) {
-        githubStats = { ...fetched, isVerified: false }; // Always start with false for email verification
+        githubStats = { ...fetched, isVerified: false }; 
+      }
+    }
+
+    // Upload image to Cloudinary if exists
+    let finalImageUrl = undefined
+    if (projectImagePreview) {
+      try {
+        const uploadRes = await fetch('/api/upload/cloudinary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: projectImagePreview, folder: 'projects' })
+        })
+        if (uploadRes.ok) {
+          const uploadData = await uploadRes.json()
+          finalImageUrl = uploadData.url
+        }
+      } catch (e) {
+        console.error('Project image upload failed:', e)
       }
     }
 
@@ -260,6 +284,7 @@ export default function PortfolioPage() {
         description: projectDescription,
         skills: projectSkills,
         url: url.trim() || undefined,
+        imageUrl: finalImageUrl,
         ...githubStats
       })
     } else {
@@ -269,38 +294,36 @@ export default function PortfolioPage() {
         description: projectDescription,
         skills: projectSkills,
         url: url.trim() || undefined,
+        imageUrl: finalImageUrl,
         createdAt: new Date().toISOString(),
         ...githubStats,
-        likes: Math.floor(githubStats.stars * 0.2), // Estimate likes from stars
+        likes: Math.floor(githubStats.stars * 0.2), 
       })
     }
 
-    // Trigger Email Verification for Project Ownership
+    // Trigger Email Verification
     try {
       await fetch('/api/portfolio/verify-request', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          projectId: newProjectId, 
-          projectTitle 
-        })
+        body: JSON.stringify({ projectId: newProjectId, projectTitle })
       });
       toast.success('Project saved!', {
-        description: 'Please check your email to verify ownership and unlock full scoring impact.'
+        description: 'Please check your email to verify ownership.'
       });
     } catch (e) {
-      console.error('Failed to send verification email:', e);
-      toast.error('Project saved, but verification email failed to send.');
+      toast.error('Project saved, but verification email failed.');
     }
 
     setTitle('')
     setDescription('')
     setSkillsInput('')
     setUrl('')
+    setProjectImagePreview(null)
     setIsAddingProject(false)
     setIsEditingProject(false)
     setEditingProjectId(null)
-    setIsLoadingStats(false)
+    setIsSaving(false)
   }
   
   return (
@@ -347,6 +370,41 @@ export default function PortfolioPage() {
           </GlassCardHeader>
           <GlassCardContent>
             <div className="grid gap-4 md:grid-cols-2">
+              <div className="md:col-span-2">
+                <label className="mb-2 block text-sm font-medium text-foreground">Project Cover Image</label>
+                <div 
+                  onClick={() => projectImageInputRef.current?.click()}
+                  className="w-full h-40 rounded-xl bg-input border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 transition-colors group relative overflow-hidden"
+                >
+                  {projectImagePreview ? (
+                    <>
+                      <img src={projectImagePreview} alt="Project Preview" className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                        <Camera className="w-8 h-8 text-white" />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <Camera className="w-8 h-8 text-muted-foreground mb-2 group-hover:text-primary transition-colors" />
+                      <p className="text-xs text-muted-foreground">Click to upload project thumbnail</p>
+                    </>
+                  )}
+                  <input
+                    ref={projectImageInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (file) {
+                        const reader = new FileReader()
+                        reader.onload = () => setProjectImagePreview(typeof reader.result === 'string' ? reader.result : null)
+                        reader.readAsDataURL(file)
+                      }
+                    }}
+                    className="hidden"
+                  />
+                </div>
+              </div>
               <div>
                 <label className="mb-2 block text-sm font-medium text-foreground">Project Title</label>
                 <input

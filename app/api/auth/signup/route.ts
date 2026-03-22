@@ -63,22 +63,20 @@ export async function POST(req: Request) {
     const baseUrl = `${protocol}://${host}`;
     const verificationUrl = `${baseUrl}/api/auth/verify?token=${verificationToken}&email=${email}`;
 
+    const { getBrandedEmail } = await import('@/lib/utils/email-template');
+    
     const mailOptions = {
-      from: `"Pathforge" <${process.env.EMAIL_USER}>`,
+      from: `"Pathforge Atlas" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: 'Verify Your Email - Pathforge',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
-          <h2 style="color: #4F46E5; text-align: center;">Welcome to Pathforge, ${name}!</h2>
-          <p>Thank you for signing up. Please verify your email address to activate your account and access your personalized learning dashboard.</p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${verificationUrl}" style="background-color: #4F46E5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">Verify Email Address</a>
-          </div>
-          <p>If you did not sign up for an account, you can safely ignore this email.</p>
-          <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-          <p style="font-size: 12px; color: #666; text-align: center;">&copy; 2026 Pathforge Atlas. All rights reserved.</p>
-        </div>
-      `,
+      subject: 'Verify Your Email - Pathforge Atlas',
+      html: getBrandedEmail({
+        title: 'Welcome to the Future of Career Advancement',
+        greeting: name,
+        body: 'Thank you for choosing Pathforge Atlas as your career navigator. Please verify your email address to unlock your personalized learning journey and start building your future today.',
+        buttonText: 'Verify Email Address',
+        buttonUrl: verificationUrl,
+        footerText: 'If you did not sign up for a Pathforge account, please ignore this message.'
+      }),
     };
 
     await transporter.sendMail(mailOptions);

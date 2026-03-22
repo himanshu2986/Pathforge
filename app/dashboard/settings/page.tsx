@@ -66,20 +66,41 @@ export default function SettingsPage() {
   const handleSave = async () => {
     setIsSaving(true)
     
-    const updates: any = {
-      name: formData.name,
-      email: formData.email,
-      bio: formData.bio,
-      location: formData.location,
-      website: formData.website,
-    }
+    try {
+      let finalAvatar = user?.avatar
 
-    if (avatarPreview) {
-      updates.avatar = avatarPreview
-    }
+      // If there's a new avatar preview, upload it to Cloudinary first
+      if (avatarPreview && avatarPreview !== user?.avatar) {
+        const uploadRes = await fetch('/api/upload/cloudinary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: avatarPreview, folder: 'avatars' })
+        })
+        
+        if (uploadRes.ok) {
+          const uploadData = await uploadRes.json()
+          finalAvatar = uploadData.url
+        } else {
+          throw new Error('Failed to upload avatar to cloud')
+        }
+      }
 
-    await updateUser(updates)
-    setIsSaving(false)
+      const updates: any = {
+        name: formData.name,
+        email: formData.email,
+        bio: formData.bio,
+        location: formData.location,
+        website: formData.website,
+        avatar: finalAvatar
+      }
+
+      await updateUser(updates)
+      import('sonner').then(({ toast }) => toast.success('Profile updated successfully!'))
+    } catch (error: any) {
+      import('sonner').then(({ toast }) => toast.error(error.message || 'Failed to save changes'))
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
