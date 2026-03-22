@@ -209,7 +209,7 @@ export default function DashboardLayout({
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="lg:hidden fixed left-0 top-0 bottom-0 z-50 w-72 bg-sidebar border-r border-sidebar-border"
+              className="lg:hidden fixed left-0 top-0 bottom-0 z-50 w-72 bg-sidebar border-r border-sidebar-border flex flex-col"
             >
               <div className="p-6 border-b border-sidebar-border">
                 <Link href="/" className="flex items-center gap-2">

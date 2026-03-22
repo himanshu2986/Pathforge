@@ -23,11 +23,11 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
           
           <div className="relative z-10">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 mb-8">
+              <div className="w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg">
                 <Rocket className="w-8 h-8 text-primary-foreground" />
               </div>
-              <h1 className="text-3xl md:text-5xl font-bold">{title}</h1>
+              <h1 className="text-3xl md:text-5xl font-bold leading-tight">{title}</h1>
             </div>
             
             <p className="text-xl text-muted-foreground mb-10 leading-relaxed">
@@ -55,10 +55,12 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
               </section>
               
               <div className="pt-8 border-t border-border mt-12 flex flex-col sm:flex-row gap-4">
-                <MagneticButton variant="primary" className="flex-1 flex justify-center items-center gap-2">
-                  <Github className="w-5 h-5" />
-                  Submit Github URL
-                </MagneticButton>
+                <Link href="/dashboard/portfolio" className="w-full sm:w-auto outline-none">
+                  <MagneticButton variant="primary" className="w-full flex justify-center items-center gap-2 px-8 py-3">
+                    <Github className="w-5 h-5" />
+                    Submit Github URL
+                  </MagneticButton>
+                </Link>
               </div>
             </div>
           </div>

@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import { Rocket, Code2, Database, Layout, Brain, Shield, Terminal, Globe, Cpu } from 'lucide-react'
+import { Rocket, Code2, Database, Layout, Brain, Shield, Terminal, Globe, Cpu, HeartPulse, Leaf, Users, CloudRain } from 'lucide-react'
 import { MagneticButton } from '@/components/ui/magnetic-button'
 
 const projectLevels = [
@@ -78,6 +78,56 @@ const projectLevels = [
         desc: "Create a highly available background job processing system with Redis and workers.",
         icon: Cpu,
         tags: ["Redis", "Architecture", "Docker"],
+      }
+    ]
+  },
+  {
+    level: "Smart India Hackathon",
+    description: "Real-world problem statements inspired by India's biggest nationwide hackathon.",
+    color: "from-blue-600 to-indigo-800",
+    projects: [
+      {
+        title: "Blockchain Patient Records",
+        desc: "Determine transparent and secure interoperability of e-health records between multiple hospitals.",
+        icon: HeartPulse,
+        tags: ["Solidity", "Next.js", "Web3"],
+      },
+      {
+        title: "Agri-Tech Crop Predictor",
+        desc: "Implement a machine learning model to predict local crop yields via real-time satellite weather mapping.",
+        icon: Leaf,
+        tags: ["React", "FastAPI", "Python"],
+      },
+      {
+        title: "AI Traffic Controller",
+        desc: "Develop dynamic traffic light management algorithms utilizing live CCTV feeds to reduce city congestion.",
+        icon: Cpu,
+        tags: ["OpenCV", "TensorFlow", "Node.js"],
+      }
+    ]
+  },
+  {
+    level: "Google Solutions",
+    description: "Tackle the 17 UN Sustainable Development Goals using leading Google Cloud technologies.",
+    color: "from-red-500 via-yellow-500 to-blue-500",
+    projects: [
+      {
+        title: "Eco-Tracking Dashboard",
+        desc: "A gamified platform to log daily carbon footprint metrics and suggest local, eco-friendly transit alternatives.",
+        icon: Globe,
+        tags: ["Firebase", "React", "GCP"],
+      },
+      {
+        title: "Accessible Edu Portal",
+        desc: "A multilingual learning management system tailored precisely for visually impaired students using Speech AI.",
+        icon: Users,
+        tags: ["Google TTS", "Next.js", "a11y"],
+      },
+      {
+        title: "Smart Water IoT Grid",
+        desc: "An analytical dashboard that maps and tracks real-time water quality sensors across distinct city nodes.",
+        icon: CloudRain,
+        tags: ["Flutter", "Firebase RTDB", "IoT"],
       }
     ]
   }
