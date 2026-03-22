@@ -4,17 +4,28 @@ import jwt from 'jsonwebtoken';
 import dbConnect from '@/lib/mongodb';
 import User from '@/lib/models/User';
 
+import { z } from 'zod';
+
+const loginSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(1, 'Password is required'),
+});
+
 export async function POST(req: Request) {
   try {
     await dbConnect();
-    const { email, password } = await req.json();
+    const body = await req.json();
 
-    if (!email || !password) {
+    // Validate input
+    const validation = loginSchema.safeParse(body);
+    if (!validation.success) {
       return NextResponse.json(
-        { message: 'Missing email or password' },
+        { message: validation.error.errors[0].message },
         { status: 400 }
       );
     }
+
+    const { email, password } = validation.data;
 
     const user = await User.findOne({ email });
     if (!user) {
@@ -29,6 +40,13 @@ export async function POST(req: Request) {
       return NextResponse.json(
         { message: 'Invalid credentials' },
         { status: 401 }
+      );
+    }
+
+    if (!user.isVerified) {
+      return NextResponse.json(
+        { message: 'Your email is not verified. Please check your inbox for the verification link.' },
+        { status: 403 }
       );
     }
 

@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Zap, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { MagneticButton } from '@/components/ui/magnetic-button'
@@ -11,29 +11,49 @@ import { useAuthStore } from '@/lib/store'
 
 import { signIn } from 'next-auth/react'
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const successParam = searchParams.get('verified')
   const { login, isLoading } = useAuthStore()
   
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
-  
+  const [success, setSuccess] = useState('')
+
+  useEffect(() => {
+    if (successParam === 'true') {
+      setSuccess('Email verified successfully! You can now sign in.')
+    } else if (successParam === 'already') {
+      setSuccess('Your email is already verified.')
+    }
+  }, [successParam])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setSuccess('')
     
     if (!email || !password) {
       setError('Please fill in all fields')
       return
     }
     
-    const success = await login(email, password)
-    if (success) {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    })
+
+    if (res.ok) {
+      const data = await res.json()
+      useAuthStore.getState().login(email, password) // This calls the store login which fetch again, but it's simpler for now
       router.push('/dashboard')
     } else {
-      setError('Invalid email or password')
+      const data = await res.json()
+      setError(data.message || 'Invalid email or password')
     }
   }
   
@@ -130,6 +150,17 @@ export default function LoginPage() {
                   {error}
                 </motion.p>
               )}
+
+              {/* Success message */}
+              {success && (
+                <motion.p
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-emerald-500 text-sm text-center bg-emerald-500/10 py-2 rounded-lg border border-emerald-500/20"
+                >
+                  {success}
+                </motion.p>
+              )}
               
               {/* Submit */}
               <MagneticButton
@@ -155,5 +186,13 @@ export default function LoginPage() {
         </GlassCard>
       </motion.div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   )
 }

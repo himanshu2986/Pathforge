@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
+import crypto from 'crypto';
 import dbConnect from '@/lib/mongodb';
 import User from '@/lib/models/User';
-import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 
 export async function POST(req: Request) {
@@ -10,68 +10,57 @@ export async function POST(req: Request) {
     const { email } = await req.json();
 
     if (!email) {
-      return NextResponse.json({ message: 'Email required' }, { status: 400 });
+      return NextResponse.json({ message: 'Email is required' }, { status: 400 });
     }
 
     const user = await User.findOne({ email });
-    
     if (!user) {
-      return NextResponse.json({ message: 'If an account with that email exists, we sent a reset link to it.' }, { status: 200 });
+      // For security reasons, don't reveal if the user exists
+      return NextResponse.json({ message: 'If an account exists, a reset link has been sent.' }, { status: 200 });
     }
 
-    // Generate a secure reset token
-    const resetToken = crypto.randomBytes(32).toString('hex');
-    
-    // Set token to expire in 15 minutes
-    const tokenExpiry = new Date();
-    tokenExpiry.setMinutes(tokenExpiry.getMinutes() + 15);
+    // Generate reset token
+    const token = crypto.randomBytes(32).toString('hex');
+    const expiry = new Date(Date.now() + 3600000); // 1 hour from now
 
-    user.resetToken = resetToken;
-    user.resetTokenExpiry = tokenExpiry;
+    user.resetToken = token;
+    user.resetTokenExpiry = expiry;
     await user.save();
 
-    // In a production app you would use process.env.NEXT_PUBLIC_APP_URL instead of localhost!
-    const resetLink = `http://localhost:3000/reset-password?token=${resetToken}&email=${encodeURIComponent(user.email)}`;
-
-    // Connect to your Gmail Account securely
+    // Send email
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
+        pass: process.env.EMAIL_PASS,
+      },
     });
 
-    // Structure the beautiful HTML Email it will send!
+    const resetUrl = `${process.env.NEXTAUTH_URL}/reset-password?token=${token}&email=${email}`;
+
     const mailOptions = {
-      from: `"Pathforge Support" <${process.env.EMAIL_USER}>`,
-      to: user.email,
-      subject: 'Reset Your Pathforge Password',
+      from: `"PathForge Support" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: 'Password Reset Request - PathForge',
       html: `
-        <div style="font-family: Arial, sans-serif; background-color: #0d0f1a; color: #fff; max-width: 600px; margin: 0 auto; padding: 30px; border-radius: 12px; border: 1px solid #ffffff15;">
-          <h1 style="color: #00d4ff; font-size: 24px;">PathForge Password Reset</h1>
-          <p style="color: #b0b5c1; font-size: 16px; line-height: 1.5;">We received a request to reset the password for your PathForge account. If this was you, please click the secure button below to choose a new password.</p>
-          
-          <div style="text-align: center; margin: 40px 0;">
-            <a href="${resetLink}" style="display: inline-block; padding: 14px 28px; background-color: #00d4ff; color: #0d0f1a; text-decoration: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-              Reset Password
-            </a>
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
+          <h2 style="color: #00d4ff; text-align: center;">Reset Your Password</h2>
+          <p>Hello ${user.name},</p>
+          <p>We received a request to reset your password for your PathForge account. Click the button below to choose a new password:</p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${resetUrl}" style="background-color: #00d4ff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">Reset Password</a>
           </div>
-          
-          <p style="margin-top: 30px; font-size: 14px; color: #6b7280; text-align: center;">This link will expire in exactly 15 minutes. If you did not request this, your account is perfectly safe, and you can simply ignore this email.</p>
+          <p>If you didn't request this, you can safely ignore this email. The link will expire in 1 hour.</p>
+          <p>Best regards,<br>The PathForge Team</p>
         </div>
-      `
+      `,
     };
 
-    // Actually send it
     await transporter.sendMail(mailOptions);
 
-    return NextResponse.json({ 
-      message: 'If an account with that email exists, we sent a reset link to it.' 
-    }, { status: 200 });
-
+    return NextResponse.json({ message: 'Reset link sent successfully' }, { status: 200 });
   } catch (error: any) {
-    console.error('Email sending error:', error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    console.error('Forgot password error:', error);
+    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }

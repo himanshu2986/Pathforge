@@ -117,9 +117,7 @@ export const useAuthStore = create<AuthState>()(
           })
 
           if (response.ok) {
-            const data = await response.json()
-            set({ user: data.user, isAuthenticated: true, isLoading: false })
-            useDashboardStore.getState().loadUserData(data.user.id)
+            set({ isLoading: false })
             return true
           }
         } catch (error) {
@@ -412,11 +410,6 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
       console.error("Failed to fetch cloud dashboard data", error)
     }
 
-    if (!parsedData && userId === 'demo-user') {
-      const initial = createInitialDashboardData(userId)
-      set({ currentUserId: userId, ...initial })
-      saveDashboardData(userId, initial)
-    }
   },
 
   clearUserData: () => {

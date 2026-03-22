@@ -24,6 +24,8 @@ const PortfolioProjectSchema = new Schema({
   stars: Number,
   forks: Number,
   lastViewed: String,
+  isVerified: { type: Boolean, default: false },
+  verificationToken: String,
   category: String,
 });
 

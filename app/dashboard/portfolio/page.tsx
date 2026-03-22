@@ -248,28 +248,13 @@ export default function PortfolioPage() {
     if (url.includes('github.com')) {
       const fetched = await fetchGithubStats(url.trim());
       if (fetched) {
-        // Extract owner from URL for identity check
-        const match = url.match(/github\.com\/([^/]+)/i);
-        const repoOwner = match ? match[1].toLowerCase() : "";
-        const userHandle = user?.githubUsername?.toLowerCase().trim() || "";
-        
-        // Identity Lock Policy: Match against the permanent GitHub Handle in profile
-        const isIdentityMatch = userHandle && repoOwner === userHandle;
-        
-        if (!isIdentityMatch) {
-          toast.error("SECURITY BLOCK: Identity Verification Failed", {
-            description: `You can only add projects owned by '${userHandle || 'your linked GitHub account'}'. Found owner: '${repoOwner}'.`,
-            duration: 8000
-          });
-          setIsLoadingStats(false);
-          return; // ABORT THE SAVE
-        }
-
-        githubStats = { ...fetched, isVerified: true };
+        githubStats = { ...fetched, isVerified: false }; // Always start with false for email verification
       }
     }
 
+    let newProjectId = `project-${Date.now()}`;
     if (isEditingProject && editingProjectId) {
+      newProjectId = editingProjectId;
       updatePortfolioProject(editingProjectId, {
         title: projectTitle,
         description: projectDescription,
@@ -279,7 +264,7 @@ export default function PortfolioPage() {
       })
     } else {
       addPortfolioProject({
-        id: `project-${Date.now()}`,
+        id: newProjectId,
         title: projectTitle,
         description: projectDescription,
         skills: projectSkills,
@@ -288,6 +273,24 @@ export default function PortfolioPage() {
         ...githubStats,
         likes: Math.floor(githubStats.stars * 0.2), // Estimate likes from stars
       })
+    }
+
+    // Trigger Email Verification for Project Ownership
+    try {
+      await fetch('/api/portfolio/verify-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          projectId: newProjectId, 
+          projectTitle 
+        })
+      });
+      toast.success('Project saved!', {
+        description: 'Please check your email to verify ownership and unlock full scoring impact.'
+      });
+    } catch (e) {
+      console.error('Failed to send verification email:', e);
+      toast.error('Project saved, but verification email failed to send.');
     }
 
     setTitle('')
@@ -745,6 +748,11 @@ export default function PortfolioPage() {
                     <div>
                       <h4 className="font-medium text-foreground group-hover:text-primary transition-colors">
                         {project.title}
+                        <span className={`ml-2 px-1.5 py-0.5 rounded-full text-[10px] uppercase font-bold ${
+                          (project as any).isVerified ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'
+                        }`}>
+                          {(project as any).isVerified ? 'Verified' : 'Unverified'}
+                        </span>
                       </h4>
                     </div>
                     <div className="flex items-center gap-2">

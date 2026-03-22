@@ -71,11 +71,11 @@ export default function AdvancedAdminDashboard() {
   }
 
   const [editingUser, setEditingUser] = useState<any>(null)
-  const [editForm, setEditForm] = useState({ name: '', email: '', githubUsername: '' })
+  const [editForm, setEditForm] = useState({ name: '', email: '' })
   
   const openEditModal = (u: any) => {
     setEditingUser(u)
-    setEditForm({ name: u.name, email: u.email, githubUsername: u.githubUsername || '' })
+    setEditForm({ name: u.name, email: u.email })
   }
 
   const handleUpdateUserDetails = async (e: React.FormEvent) => {
@@ -108,6 +108,26 @@ export default function AdvancedAdminDashboard() {
         toast.success(`Access Revoked: ${name} removed from Atlas Nodes.`);
         setAllUsers(prev => prev.filter(u => u._id !== id));
         fetchStats();
+      }
+    }
+  }
+
+  const handleDeleteInternship = async (id: string) => {
+    if (confirm("Delete this internship from global access?")) {
+      const res = await fetch(`/api/admin/internships/${id}`, { method: 'DELETE' })
+      if (res.ok) {
+         toast.success("Internship purged successfully.");
+         fetchInternships();
+      }
+    }
+  }
+
+  const handleDeletePath = async (id: string) => {
+    if (confirm("Delete this learning path from global access?")) {
+      const res = await fetch(`/api/admin/learning-paths/${id}`, { method: 'DELETE' })
+      if (res.ok) {
+         toast.success("Learning path purged successfully.");
+         fetchPaths();
       }
     }
   }
@@ -379,7 +399,7 @@ export default function AdvancedAdminDashboard() {
                           <p className="text-[10px] font-black uppercase text-gray-600">Sync Status</p>
                           <p className="text-xs font-bold text-emerald-500">OPTIMAL</p>
                        </div>
-                       <button onClick={()=>setInternships(p=>p.filter(x=>x._id!==j._id))} className="p-4 bg-red-500/10 text-red-500 rounded-2xl hover:bg-red-500/20 active:scale-90 transition-all">
+                       <button onClick={()=>handleDeleteInternship(j._id)} className="p-4 bg-red-500/10 text-red-500 rounded-2xl hover:bg-red-500/20 active:scale-90 transition-all">
                         <Trash2 className="w-5 h-5" />
                        </button>
                     </div>
@@ -414,9 +434,12 @@ export default function AdvancedAdminDashboard() {
                <h3 className="text-xl font-bold text-gray-500 uppercase tracking-widest mb-4">Live Matrix Postings ({learningPaths.length})</h3>
                <div className="flex flex-wrap gap-4 justify-center">
                   {learningPaths.map(p => (
-                    <motion.div key={p._id} initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="px-6 py-4 bg-white/5 border border-white/10 rounded-2xl hover:border-purple-500/50 transition-all cursor-pointer">
+                    <motion.div key={p._id} initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="px-6 py-4 bg-white/5 border border-white/10 rounded-2xl hover:border-purple-500/50 transition-all relative group/item">
                        <p className="font-bold">{p.title}</p>
                        <p className="text-[10px] uppercase text-gray-500 font-black mt-1">Status: Published</p>
+                       <button onClick={() => handleDeletePath(p._id)} className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover/item:opacity-100 transition-opacity">
+                          <Trash2 className="w-4 h-4" />
+                       </button>
                     </motion.div>
                   ))}
                </div>
@@ -521,10 +544,6 @@ export default function AdvancedAdminDashboard() {
                          <div>
                             <label className="text-[10px] font-black text-gray-500 uppercase ml-1">Node Address (Email)</label>
                             <input value={editForm.email} onChange={e=>setEditForm({...editForm, email:e.target.value})} className="w-full mt-2 p-4 bg-white/5 border border-white/10 rounded-2xl focus:border-primary outline-none transition-all" />
-                         </div>
-                         <div>
-                            <label className="text-[10px] font-black text-gray-500 uppercase ml-1">GitHub Handle (Identity Sync)</label>
-                            <input value={editForm.githubUsername} onChange={e=>setEditForm({...editForm, githubUsername:e.target.value})} placeholder="e.g. Python-World" className="w-full mt-2 p-4 bg-white/5 border border-white/10 rounded-2xl focus:border-primary outline-none transition-all" />
                          </div>
                          <div className="flex gap-4 pt-4">
                             <button type="button" onClick={() => setEditingUser(null)} className="flex-1 py-4 bg-white/5 rounded-2xl font-bold text-xs uppercase hover:bg-white/10 transition-all">Abort</button>
