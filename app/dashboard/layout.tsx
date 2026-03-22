@@ -13,7 +13,7 @@ import {
   LogOut,
   Menu,
   X,
-  Compass, Zap, Compass, Shield,
+  Compass, Zap, Shield,
   ChevronRight,
   User,
   Code2
