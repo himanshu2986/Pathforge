@@ -20,8 +20,12 @@ export async function GET(req: Request) {
       return NextResponse.json({ message: 'Invalid or expired token' }, { status: 401 });
     }
 
+    const protocol = req.headers.get('x-forwarded-proto') || 'http';
+    const host = req.headers.get('host') || 'localhost:3000';
+    const baseUrl = `${protocol}://${host}`;
+
     if (user.isVerified) {
-      return NextResponse.redirect(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/login?verified=already`);
+      return NextResponse.redirect(`${baseUrl}/login?verified=already`);
     }
 
     // Mark as verified
@@ -30,7 +34,7 @@ export async function GET(req: Request) {
     await user.save();
 
     // Redirect to login with success message
-    return NextResponse.redirect(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/login?verified=true`);
+    return NextResponse.redirect(`${baseUrl}/login?verified=true`);
   } catch (error: any) {
     console.error('Verification error:', error);
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });

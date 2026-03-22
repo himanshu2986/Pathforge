@@ -35,8 +35,9 @@ export async function GET(req: Request) {
       }
     );
 
-    // Redirect to dashboard with success message
-    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    const protocol = req.headers.get('x-forwarded-proto') || 'http';
+    const host = req.headers.get('host') || 'localhost:3000';
+    const baseUrl = `${protocol}://${host}`;
     return NextResponse.redirect(`${baseUrl}/dashboard/portfolio?projectVerified=true`);
   } catch (error: any) {
     console.error('Project verification error:', error);
