@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Rocket, Code2, Database, Layout, Brain, Shield, Terminal, Globe, Cpu, HeartPulse, Leaf, Users, CloudRain, Activity, BarChart, Bell } from 'lucide-react'
 import { MagneticButton } from '@/components/ui/magnetic-button'
@@ -12,6 +13,11 @@ const iconMap: Record<string, any> = {
 
 export default function PracticeProjectsPage() {
   const router = useRouter()
+  const [expandedLevels, setExpandedLevels] = useState<Record<string, boolean>>({})
+
+  const toggleLevel = (level: string) => {
+    setExpandedLevels(prev => ({ ...prev, [level]: !prev[level] }))
+  }
 
   return (
     <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 lg:px-8">
@@ -48,7 +54,7 @@ export default function PracticeProjectsPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {levelGroup.projects.map((project: any, pIdx: number) => {
+                {(expandedLevels[levelGroup.level] ? levelGroup.projects : levelGroup.projects.slice(0, 3)).map((project: any, pIdx: number) => {
                   const Icon = iconMap[project.iconName] || Code2
                   return (
                     <motion.div
@@ -92,6 +98,21 @@ export default function PracticeProjectsPage() {
                   )
                 })}
               </div>
+
+              {!expandedLevels[levelGroup.level] && levelGroup.projects.length > 3 && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="mt-12 flex justify-center"
+                >
+                  <MagneticButton 
+                    variant="secondary" 
+                    onClick={() => toggleLevel(levelGroup.level)}
+                  >
+                    See more {levelGroup.level} projects
+                  </MagneticButton>
+                </motion.div>
+              )}
             </motion.div>
           ))}
         </div>
