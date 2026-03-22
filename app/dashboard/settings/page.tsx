@@ -8,7 +8,9 @@ import {
   Shield, 
   Palette,
   Save,
-  Camera
+  Camera,
+  MapPin,
+  Loader2
 } from 'lucide-react'
 import { GlassCard, GlassCardContent, GlassCardHeader } from '@/components/ui/glass-card'
 import { MagneticButton } from '@/components/ui/magnetic-button'
@@ -29,6 +31,7 @@ export default function SettingsPage() {
   const [selectedTheme, setSelectedTheme] = useState<'dark' | 'light' | 'system'>('dark')
   const [selectedAccent, setSelectedAccent] = useState('#00d4ff')
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
+  const [isLocating, setIsLocating] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   
   const [formData, setFormData] = useState({
@@ -63,6 +66,52 @@ export default function SettingsPage() {
     root.style.setProperty('--gradient-start', selectedAccent)
   }, [selectedAccent])
   
+  const detectLocation = () => {
+    if (!navigator.geolocation) {
+      import('sonner').then(({ toast }) => toast.error('Geolocation is not supported by your browser'))
+      return
+    }
+    setIsLocating(true)
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+            { headers: { 'Accept-Language': 'en' } }
+          )
+          const data = await res.json()
+          const city =
+            data.address?.city ||
+            data.address?.town ||
+            data.address?.village ||
+            data.address?.county ||
+            ''
+          const country = data.address?.country || ''
+          const locationStr = [city, country].filter(Boolean).join(', ')
+          setFormData((prev) => ({ ...prev, location: locationStr }))
+          import('sonner').then(({ toast }) => toast.success('Location detected!'))
+        } catch {
+          import('sonner').then(({ toast }) => toast.error('Failed to fetch location details'))
+        } finally {
+          setIsLocating(false)
+        }
+      },
+      (error) => {
+        setIsLocating(false)
+        const messages: Record<number, string> = {
+          1: 'Location permission denied. Please allow access in your browser settings.',
+          2: 'Location unavailable. Try again.',
+          3: 'Location request timed out.',
+        }
+        import('sonner').then(({ toast }) =>
+          toast.error(messages[error.code] || 'Could not detect location')
+        )
+      },
+      { timeout: 10000 }
+    )
+  }
+
   const handleSave = async () => {
     setIsSaving(true)
     
@@ -237,12 +286,26 @@ export default function SettingsPage() {
                       <label className="block text-sm font-medium text-foreground mb-2">
                         Location
                       </label>
-                      <input
-                        type="text"
-                        value={formData.location}
-                        onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                        className="w-full px-4 py-3 rounded-lg bg-input border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors"
-                      />
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={formData.location}
+                          onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                          placeholder="e.g. Mumbai, India"
+                          className="w-full px-4 py-3 pr-12 rounded-lg bg-input border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors"
+                        />
+                        <button
+                          type="button"
+                          onClick={detectLocation}
+                          disabled={isLocating}
+                          title="Auto-detect my location"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {isLocating
+                            ? <Loader2 className="w-5 h-5 animate-spin" />
+                            : <MapPin className="w-5 h-5" />}
+                        </button>
+                      </div>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
