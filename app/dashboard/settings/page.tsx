@@ -130,7 +130,8 @@ export default function SettingsPage() {
           const uploadData = await uploadRes.json()
           finalAvatar = uploadData.url
         } else {
-          throw new Error('Failed to upload avatar to cloud')
+          const errData = await uploadRes.json().catch(() => ({}))
+          throw new Error(errData.message || 'Failed to upload avatar to cloud')
         }
       }
 
@@ -156,11 +157,24 @@ export default function SettingsPage() {
     const file = e.target.files?.[0]
     if (!file) return
 
-    const reader = new FileReader()
-    reader.onload = () => {
-      setAvatarPreview(typeof reader.result === 'string' ? reader.result : null)
+    const img = new Image()
+    const objectUrl = URL.createObjectURL(file)
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl)
+      const MAX = 400
+      const scale = Math.min(MAX / img.width, MAX / img.height, 1)
+      const width = Math.round(img.width * scale)
+      const height = Math.round(img.height * scale)
+      const canvas = document.createElement('canvas')
+      canvas.width = width
+      canvas.height = height
+      const ctx = canvas.getContext('2d')!
+      ctx.drawImage(img, 0, 0, width, height)
+      // Compress to JPEG at 80% quality — keeps payload small
+      const compressed = canvas.toDataURL('image/jpeg', 0.8)
+      setAvatarPreview(compressed)
     }
-    reader.readAsDataURL(file)
+    img.src = objectUrl
   }
   
   return (

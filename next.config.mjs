@@ -21,6 +21,9 @@ const nextConfig = {
 
   experimental: {
     optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
   },
 
   webpack: (config, { dev, isServer }) => {
