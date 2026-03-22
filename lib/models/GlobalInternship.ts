@@ -9,6 +9,9 @@ const GlobalInternshipSchema = new Schema(
     matchScore: { type: Number, default: 85 },
     skills: [String],
     deadline: { type: String, required: true },
+    description: { type: String },
+    stipend: { type: String },
+    requirements: { type: String },
   },
   {
     timestamps: true,
