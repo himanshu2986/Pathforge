@@ -36,15 +36,26 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async session({ session, user }: any) {
+    async session({ session, token }: any) {
       if (session.user) {
-        (session.user as any).id = user.id;
-        (session.user as any).role = user.role;
-        (session.user as any).githubUsername = user.githubUsername;
+        (session.user as any).id = token.sub;
+        (session.user as any).role = token.role || "student";
+        (session.user as any).githubUsername = token.githubUsername;
       }
       return session;
     },
+    async jwt({ token, user, profile }: any) {
+      if (user) {
+        token.role = (user as any).role;
+        token.githubUsername = (user as any).githubUsername;
+      }
+      if (profile && (profile as any).login) {
+        token.githubUsername = (profile as any).login;
+      }
+      return token;
+    },
   },
+  session: { strategy: "jwt" },
   pages: {
     signIn: '/login',
   },
