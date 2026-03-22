@@ -1,12 +1,30 @@
 import Link from 'next/link'
-import { ArrowLeft, Rocket, Github } from 'lucide-react'
+import { ArrowLeft, Rocket, Github, Code2, Database, Layout, Brain, Shield, Terminal, Globe, Cpu, HeartPulse, Leaf, Users, CloudRain, Activity, BarChart, Bell } from 'lucide-react'
 import { MagneticButton } from '@/components/ui/magnetic-button'
+import { projectLevels } from '@/lib/projectsData'
+
+const iconMap: Record<string, any> = {
+  Rocket, Code2, Database, Layout, Brain, Shield, Terminal, Globe, Cpu, HeartPulse, Leaf, Users, CloudRain, Activity, BarChart, Bell
+}
 
 export default async function ProjectDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   
-  // Format slug back to nice title
-  const title = slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+  const decodedSlug = decodeURIComponent(slug).toLowerCase()
+  
+  let targetProject: any = null
+  for (const group of projectLevels) {
+    const found = group.projects.find((p: any) => p.title.toLowerCase().replace(/\s+/g, '-') === decodedSlug)
+    if (found) {
+      targetProject = found
+      break
+    }
+  }
+
+  const title = targetProject ? targetProject.title : slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+  const desc = targetProject ? targetProject.desc : "This is a practice workspace for your project. To get started, set up a local repository on your machine, initialize your favorite framework, and bring your ideas to life!"
+  const tags = targetProject ? targetProject.tags : []
+  const Icon = targetProject && iconMap[targetProject.iconName] ? iconMap[targetProject.iconName] : Rocket
 
   return (
     <div className="min-h-screen pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-background">
@@ -25,13 +43,22 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
           <div className="relative z-10">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 mb-8">
               <div className="w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg">
-                <Rocket className="w-8 h-8 text-primary-foreground" />
+                <Icon className="w-8 h-8 text-primary-foreground" />
               </div>
-              <h1 className="text-3xl md:text-5xl font-bold leading-tight">{title}</h1>
+              <div>
+                <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-2">{title}</h1>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {tags.map((tag: string) => (
+                    <span key={tag} className="text-xs px-3 py-1 rounded-full bg-secondary/30 text-secondary-foreground border border-secondary/50">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
             
             <p className="text-xl text-muted-foreground mb-10 leading-relaxed">
-              This is a practice workspace for the <strong>{title}</strong> project. To get started, set up a local repository on your machine, initialize your favorite framework, and bring your ideas to life!
+              {desc}
             </p>
             
             <div className="space-y-8">
