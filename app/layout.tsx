@@ -64,9 +64,11 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <AuthProvider>
-          {children}
-          <Toaster theme="dark" position="bottom-right" />
-          <Analytics />
+          <div className="flex flex-col min-h-screen overflow-x-hidden w-full relative">
+            {children}
+            <Toaster theme="dark" position="bottom-right" />
+            <Analytics />
+          </div>
         </AuthProvider>
       </body>
     </html>
