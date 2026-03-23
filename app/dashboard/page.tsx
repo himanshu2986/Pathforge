@@ -27,6 +27,7 @@ import { Progress } from '@/components/ui/progress'
 import { CareerAI } from '@/components/dashboard/career-ai'
 import { SkillGalaxy } from '@/components/dashboard/skill-galaxy'
 import { JobMatchmaker } from '@/components/dashboard/job-matchmaker'
+import { CareerMentorAI } from '@/components/dashboard/career-mentor-ai'
 import { toast } from 'sonner'
 
 const PortfolioHologram = dynamic(

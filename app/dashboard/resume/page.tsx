@@ -429,45 +429,81 @@ export default function UltimateResumeStudioPage() {
     switch (activeStep) {
       case 0:
         return (
-          <div className="space-y-8">
-             <div className="grid grid-cols-2 gap-4">
-                {[
-                  { id: 'professional', name: 'Elite Professional', desc: 'Classic Corporate', icon: FileText },
-                  { id: 'tech', name: 'Software Engineer', desc: 'Modern Tech Header', icon: Cpu },
-                  { id: 'creative', name: 'Artisan / Designer', desc: 'Bold Layout', icon: PenTool },
-                  { id: 'maverick', name: 'The Maverick', desc: 'Asymmetric Modern', icon: Zap },
-                  { id: 'swiss', name: 'Swiss Precision', desc: 'Grid Typography', icon: Grid },
-                  { id: 'minimal', name: 'Minimalist', desc: 'Clean White Space', icon: Layers },
-                  { id: 'elegant', name: 'Heritage', desc: 'Serif / Traditional', icon: BookOpen },
-                ].map(t => (
-                  <button 
-                    key={t.id} 
+          <div className="space-y-10">
+            {/* Section title */}
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Choose your visual identity — you can always change it later.</p>
+
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { id: 'professional', name: 'Elite Professional', desc: 'Classic Corporate', icon: FileText, gradient: 'from-blue-50 to-indigo-50', accent: '#3b82f6' },
+                { id: 'tech', name: 'Software Engineer', desc: 'Modern Tech Header', icon: Cpu, gradient: 'from-slate-800 to-slate-950', accent: '#22d3ee', dark: true },
+                { id: 'creative', name: 'Artisan / Designer', desc: 'Bold Layout', icon: PenTool, gradient: 'from-purple-50 to-fuchsia-50', accent: '#a855f7' },
+                { id: 'maverick', name: 'The Maverick', desc: 'Asymmetric Modern', icon: Zap, gradient: 'from-orange-50 to-amber-50', accent: '#f97316' },
+                { id: 'swiss', name: 'Swiss Precision', desc: 'Grid Typography', icon: Grid, gradient: 'from-slate-50 to-gray-100', accent: '#334155' },
+                { id: 'minimal', name: 'Minimalist', desc: 'Clean White Space', icon: Layers, gradient: 'from-emerald-50 to-teal-50', accent: '#10b981' },
+                { id: 'elegant', name: 'Heritage', desc: 'Serif / Traditional', icon: BookOpen, gradient: 'from-amber-50 to-yellow-50', accent: '#d97706' },
+              ].map(t => {
+                const isActive = activeTemplate === t.id
+                return (
+                  <button
+                    key={t.id}
                     onClick={() => setActiveTemplate(t.id as TemplateType)}
                     className={cn(
-                      "p-5 rounded-2xl border-2 text-left transition-all flex items-start gap-4 hover:border-pink-500/50",
-                      activeTemplate === t.id ? "bg-pink-50 border-pink-600 shadow-md" : "bg-slate-50 border-slate-100"
+                      "group relative p-0 rounded-2xl border-2 text-left transition-all overflow-hidden hover:shadow-xl",
+                      isActive ? "border-pink-500 shadow-xl ring-4 ring-pink-500/10" : "border-slate-100 hover:border-slate-200"
                     )}
+                    style={isActive ? { borderColor: t.accent } : {}}
                   >
-                     <div className={cn("p-3 rounded-xl", activeTemplate === t.id ? "bg-pink-600 text-white" : "bg-white text-slate-400")}>
-                        <t.icon className="w-6 h-6" />
-                     </div>
-                     <div>
-                        <h4 className="text-xs font-black uppercase text-slate-900">{t.name}</h4>
-                        <p className="text-[10px] text-slate-400 mt-0.5">{t.desc}</p>
-                     </div>
+                    {/* Mini preview swatch */}
+                    <div className={cn("h-20 w-full bg-gradient-to-br flex items-end justify-end p-3", t.gradient)}>
+                      <div className="w-8 h-8 rounded-xl flex items-center justify-center shadow-lg" style={{ backgroundColor: isActive ? t.accent : '#e2e8f0' }}>
+                        <t.icon className={cn("w-4 h-4", isActive ? 'text-white' : 'text-slate-400')} />
+                      </div>
+                    </div>
+                    {/* Label */}
+                    <div className="p-4 bg-white">
+                      <h4 className="text-[11px] font-black uppercase text-slate-800 tracking-wider">{t.name}</h4>
+                      <p className="text-[10px] text-slate-400 mt-0.5 font-medium">{t.desc}</p>
+                    </div>
+                    {/* Active badge */}
+                    {isActive && (
+                      <div className="absolute top-2 left-2 px-2 py-1 rounded-full text-[8px] font-black uppercase tracking-widest text-white shadow-md" style={{ backgroundColor: t.accent }}>
+                        Selected ✓
+                      </div>
+                    )}
                   </button>
+                )
+              })}
+            </div>
+
+            {/* Accent Color Picker */}
+            <div className="relative rounded-3xl p-8 text-white overflow-hidden" style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)' }}>
+              <div className="absolute top-0 right-0 w-48 h-48 rounded-full blur-3xl" style={{ backgroundColor: `${primaryColor}20` }} />
+              <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full blur-2xl bg-pink-600/10" />
+              <h4 className="text-xl font-black mb-1 relative">Personalize Your Brand</h4>
+              <p className="text-sm text-slate-400 mb-6 relative">Select your signature accent color to stand out.</p>
+              <div className="flex gap-3 relative">
+                {[
+                  { hex: '#0ea5e9', label: 'Sky' },
+                  { hex: '#ec4899', label: 'Pink' },
+                  { hex: '#f59e0b', label: 'Amber' },
+                  { hex: '#10b981', label: 'Emerald' },
+                  { hex: '#6366f1', label: 'Indigo' },
+                  { hex: '#1e293b', label: 'Slate' },
+                ].map(({ hex, label }) => (
+                  <div key={hex} className="flex flex-col items-center gap-1.5">
+                    <button
+                      onClick={() => setPrimaryColor(hex)}
+                      className={cn("w-10 h-10 rounded-full border-4 transition-all hover:scale-110 shadow-lg",
+                        primaryColor === hex ? "border-white scale-110 ring-2 ring-white/30" : "border-transparent opacity-70 hover:opacity-100"
+                      )}
+                      style={{ backgroundColor: hex }}
+                    />
+                    <span className="text-[8px] font-bold tracking-widest uppercase" style={{ color: primaryColor === hex ? '#fff' : '#64748b' }}>{label}</span>
+                  </div>
                 ))}
-             </div>
-             <div className="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-pink-600/20 blur-3xl rounded-full" />
-                <h4 className="text-xl font-black mb-2">Personalize Your Brand</h4>
-                <p className="text-sm text-slate-400 mb-6">Select your signature accent color to stand out.</p>
-                <div className="flex gap-3">
-                   {['#0ea5e9', '#ec4899', '#f59e0b', '#10b981', '#6366f1', '#1e293b'].map(c => (
-                     <button key={c} onClick={() => setPrimaryColor(c)} className={cn("w-10 h-10 rounded-full border-2 transition-all", primaryColor === c ? "border-white scale-110 shadow-lg" : "border-transparent text-white/20")} style={{ backgroundColor: c }} />
-                   ))}
-                </div>
-             </div>
+              </div>
+            </div>
           </div>
         )
       case 1:
@@ -803,52 +839,75 @@ export default function UltimateResumeStudioPage() {
           `}</style>
        
           {/* Left Sidebar Navigation */}
-           <aside className="fixed left-0 top-0 bottom-0 w-[300px] bg-[#002d5b] text-white flex flex-col pt-12 pb-8 px-8 shrink-0 z-50 overflow-y-auto">
-             <div className="flex items-center gap-4 mb-14 px-2">
-                <div className="w-10 h-10 bg-pink-600 rounded-xl flex items-center justify-center shadow-lg shadow-pink-900/40"><Zap className="w-6 h-6 text-white" /></div>
-                <h1 className="text-xl font-black tracking-tight">Pathforge Studio</h1>
+           <aside className="fixed left-0 top-0 bottom-0 w-[300px] text-white flex flex-col pt-12 pb-8 px-8 shrink-0 z-50 overflow-y-auto" style={{ background: 'linear-gradient(180deg, #060c1a 0%, #0a0e1f 60%, #0d1228 100%)' }}>
+             {/* Logo */}
+             <div className="flex items-center gap-3 mb-12 px-1">
+               <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-lg" style={{ background: 'linear-gradient(135deg, #ec4899, #8b5cf6)' }}>
+                 <div className="absolute inset-0 flex items-center justify-center"><Zap className="w-5 h-5 text-white" /></div>
+               </div>
+               <div>
+                 <h1 className="text-base font-black tracking-tight leading-none">Pathforge</h1>
+                 <p className="text-[9px] font-bold text-white/30 uppercase tracking-widest mt-0.5">Resume Studio</p>
+               </div>
              </div>
 
-             <nav className="flex-1 space-y-2 relative">
-                {steps.map((s, idx) => (
-                  <button 
-                    key={idx} 
-                    onClick={() => setActiveStep(idx)} 
-                    className={cn(
-                      "w-full flex items-center gap-4 px-4 py-4 rounded-xl transition-all relative group",
-                      activeStep === idx ? "bg-white/10 text-white shadow-inner" : "text-white/40 hover:text-white hover:bg-white/5"
-                    )}
-                  >
-                     {/* Connector Line */}
-                     {idx < steps.length - 1 && (
-                       <div className="absolute left-7 top-10 w-[2px] h-10 bg-white/10" />
-                     )}
+             {/* Strength badge */}
+             <div className="mb-8 p-4 rounded-2xl border border-white/5 bg-white/5">
+               <div className="flex justify-between items-center mb-2">
+                 <span className="text-[9px] font-black uppercase tracking-widest text-white/40">Resume Strength</span>
+                 <span className="text-sm font-black" style={{ color: resumeStrength >= 80 ? '#10b981' : resumeStrength >= 50 ? '#f59e0b' : '#ec4899' }}>{resumeStrength}%</span>
+               </div>
+               <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                 <motion.div
+                   initial={{ width: 0 }}
+                   animate={{ width: `${resumeStrength}%` }}
+                   transition={{ type: 'spring', stiffness: 80 }}
+                   className="h-full rounded-full"
+                   style={{ background: resumeStrength >= 80 ? 'linear-gradient(90deg,#10b981,#06b6d4)' : resumeStrength >= 50 ? 'linear-gradient(90deg,#f59e0b,#f97316)' : 'linear-gradient(90deg,#ec4899,#8b5cf6)' }}
+                 />
+               </div>
+             </div>
 
+             <nav className="flex-1 space-y-1 relative">
+               {steps.map((s, idx) => {
+                 const isActive = activeStep === idx
+                 const isDone = activeStep > idx
+                 return (
+                   <button
+                     key={idx}
+                     onClick={() => setActiveStep(idx)}
+                     className={cn(
+                       "w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all relative group text-left",
+                       isActive ? "bg-white/10 text-white" : "text-white/40 hover:text-white/70 hover:bg-white/5"
+                     )}
+                   >
+                     {/* connector */}
+                     {idx < steps.length - 1 && (
+                       <div className="absolute left-[27px] top-[46px] w-px h-6 bg-white/10" />
+                     )}
+                     {/* step indicator */}
                      <div className={cn(
-                       "w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black border-2 transition-all shrink-0",
-                       activeStep === idx ? "bg-pink-600 border-pink-600 text-white scale-110 shadow-[0_0_15px_rgba(236,72,153,0.4)]" : activeStep > idx ? "bg-emerald-500 border-emerald-500 text-white" : "border-white/20 bg-transparent text-white/40"
+                       "w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-black shrink-0 border transition-all",
+                       isActive
+                         ? "border-pink-500 bg-pink-600 text-white shadow-[0_0_12px_rgba(236,72,153,0.5)]"
+                         : isDone
+                         ? "border-emerald-500 bg-emerald-500 text-white"
+                         : "border-white/10 bg-white/5 text-white/30"
                      )}>
-                        {activeStep > idx ? <CheckCircle2 className="w-4 h-4" /> : idx + 1}
+                       {isDone ? <CheckCircle2 className="w-3.5 h-3.5" /> : idx + 1}
                      </div>
-                     <span className={cn("text-xs font-bold tracking-wide transition-all", activeStep === idx ? "translate-x-1" : "")}>{s.label}</span>
-                  </button>
-                ))}
+                     <div className="min-w-0">
+                       <span className={cn("text-[11px] font-bold tracking-wide block", isActive && "text-white")}>{s.label}</span>
+                     </div>
+                     {/* active glow pill */}
+                     {isActive && <div className="ml-auto w-1.5 h-6 rounded-full bg-pink-500 shadow-[0_0_8px_rgba(236,72,153,0.8)]" />}
+                   </button>
+                 )
+               })}
              </nav>
 
-             {/* Progress Bar / Completeness */}
-             <div className="mt-12 pt-8 border-t border-white/10">
-                <div className="flex justify-between items-center mb-3">
-                    <span className="text-xs font-bold text-pink-500">{resumeStrength}%</span>
-                 </div>
-                 <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                    <motion.div initial={{ width: 0 }} animate={{ width: `${resumeStrength}%` }} className="h-full bg-pink-600 shadow-[0_0_10px_rgba(236,72,153,0.6)]" />
-                 </div>
-             </div>
-
-             <div className="mt-auto pt-8 flex flex-col gap-4 text-[10px] font-bold text-white/20 uppercase tracking-widest px-2">
-                <a href="#" className="hover:text-white/40 transition-colors">Terms of Use</a>
-                <a href="#" className="hover:text-white/40 transition-colors">Privacy Policy</a>
-                <p className="mt-4">© 2026 PATHFORGE v2.0</p>
+             <div className="pt-6 border-t border-white/5 text-[9px] font-bold text-white/15 uppercase tracking-widest space-y-2 px-1">
+               <p>© 2026 Pathforge Studio v2</p>
              </div>
           </aside>
 
@@ -859,11 +918,16 @@ export default function UltimateResumeStudioPage() {
               <main className="flex-1 overflow-y-auto custom-scrollbar p-12 lg:p-20 bg-white min-w-0">
                  <div className="max-w-3xl mx-auto h-full flex flex-col">
                     <header className="mb-10">
-                       <button onClick={() => setActiveStep(p => Math.max(0, p - 1))} className={cn("text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-all flex items-center gap-2 mb-4", activeStep === 0 && "opacity-0 pointer-events-none")}>
+                       <button onClick={() => setActiveStep(p => Math.max(0, p - 1))} className={cn("text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-all flex items-center gap-2 mb-5", activeStep === 0 && "opacity-0 pointer-events-none")}>
                          <ChevronLeft className="w-4 h-4" /> Go Back
                        </button>
-                       <h2 className="text-3xl font-black tracking-tight text-slate-900 mb-4">{steps[activeStep].label}</h2>
-                       <div className="h-1 w-20 bg-pink-600 rounded-full" />
+                       <div className="flex items-center gap-3 mb-2">
+                         <div className="w-2 h-8 rounded-full" style={{ background: 'linear-gradient(180deg,#ec4899,#8b5cf6)' }} />
+                         <h2 className="text-3xl font-black tracking-tight text-slate-900">{steps[activeStep].label}</h2>
+                       </div>
+                       <p className="text-xs text-slate-400 pl-5">
+                         Step {activeStep + 1} of {steps.length}
+                       </p>
                     </header>
 
                    <div className="flex-1">
@@ -874,28 +938,30 @@ export default function UltimateResumeStudioPage() {
                       </AnimatePresence>
                    </div>
 
-                   <footer className="mt-12 py-10 border-t border-slate-100 flex justify-between items-center bg-white sticky bottom-0 z-20">
-                      <div className="flex gap-4">
-                         <button onClick={() => window.print()} className="px-8 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 border-slate-200 text-slate-400 hover:bg-slate-50 hover:text-slate-900 transition-all flex items-center gap-2">
-                            <Download className="w-4 h-4" /> Download PDF
+                   <footer className="mt-12 py-8 border-t border-slate-100 flex justify-between items-center bg-white sticky bottom-0 z-20">
+                      <div className="flex gap-3">
+                         <button onClick={() => window.print()} className="px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 border-slate-200 text-slate-500 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 transition-all flex items-center gap-2">
+                            <Download className="w-4 h-4" /> PDF
                          </button>
-                         <button className="px-8 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 border-slate-200 text-slate-400 hover:bg-slate-50 hover:text-slate-900 transition-all">
-                            Preview Only
+                         <button className="px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 border-slate-100 text-slate-400 hover:bg-slate-50 transition-all">
+                            Preview
                          </button>
                       </div>
                       
                       {activeStep < steps.length - 1 && (
                         <button 
                           onClick={() => setActiveStep(p => p + 1)} 
-                          className="px-12 py-5 bg-pink-600 text-white text-[12px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-pink-600/20 hover:scale-105 hover:shadow-pink-600/40 active:scale-95 transition-all flex items-center gap-3"
+                          className="group px-10 py-4 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl active:scale-95 transition-all flex items-center gap-3"
+                          style={{ background: 'linear-gradient(135deg, #ec4899, #8b5cf6)', boxShadow: '0 8px 30px rgba(236,72,153,0.35)' }}
                         >
-                           Next: {steps[activeStep + 1].label} <ChevronRight className="w-5 h-5" />
+                           Next: {steps[activeStep + 1].label}
+                           <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </button>
                       )}
                       {activeStep === steps.length - 1 && (
                         <button 
-                          onClick={() => toast.success("RESUME FINALIZED & SYNCED!")}
-                          className="px-12 py-5 bg-indigo-600 text-white text-[12px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-indigo-600/20 hover:scale-105 transition-all flex items-center gap-3"
+                          onClick={() => toast.success("Resume Finalized & Synced! 🎉")}
+                          className="px-10 py-4 bg-emerald-600 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-emerald-600/20 hover:scale-105 transition-all flex items-center gap-3"
                         >
                            Finalize Resume <CheckCircle2 className="w-5 h-5" />
                         </button>
@@ -906,10 +972,16 @@ export default function UltimateResumeStudioPage() {
 
              {/* Small Sticky Preview (Right) */}
               <div className="w-[450px] border-l border-slate-100 bg-[#f1f5f9] flex shrink-0 relative overflow-hidden hidden xl:flex flex-col">
-                 <div className="p-6 bg-white border-b border-slate-100 flex items-center justify-between sticky top-0 z-20">
-                    <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2"><Palette className="w-4 h-4" /> Preview Matrix</h3>
-                   <div className="flex gap-1">
-                      {['sans', 'serif', 'mono'].map(f => <button key={f} onClick={() => setFontFamily(f)} className={cn("w-12 py-1.5 rounded-md text-[8px] font-black border transition-all", fontFamily === f ? "bg-slate-900 text-white border-slate-900" : "bg-white border-slate-200 text-slate-400")}>{f.toUpperCase()}</button>)}
+                 <div className="p-5 bg-white border-b border-slate-100 flex items-center justify-between sticky top-0 z-20">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-pink-500 to-indigo-500 flex items-center justify-center">
+                        <Palette className="w-3.5 h-3.5 text-white" />
+                      </div>
+                      <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-700">Live Preview</h3>
+                      {isSaving && <span className="text-[8px] font-bold text-slate-300 uppercase tracking-widest animate-pulse">Saving…</span>}
+                    </div>
+                   <div className="flex gap-1 p-1 bg-slate-100 rounded-lg">
+                      {['sans', 'serif', 'mono'].map(f => <button key={f} onClick={() => setFontFamily(f)} className={cn("px-3 py-1 rounded-md text-[8px] font-black border transition-all", fontFamily === f ? "bg-white text-slate-800 border-slate-200 shadow-sm" : "border-transparent text-slate-400 hover:text-slate-600")}>{f.toUpperCase()}</button>)}
                    </div>
                 </div>
                 
