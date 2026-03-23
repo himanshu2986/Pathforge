@@ -282,7 +282,8 @@ export default function UltimateResumeStudioPage() {
             ].map(t => (
               <button
                 key={t.id}
-                onClick={() => { setActiveTemplate(t.id as TemplateType); setActiveStep(1); toast.success(`${t.name} Loaded`) }}
+                onClick={() => { setActiveTemplate(t.id as TemplateType); toast.success(`${t.name} Selected`) }}
+
                 className={cn(
                   "flex flex-col group gap-3 text-left transition-all",
                   activeTemplate === t.id ? "scale-[1.05]" : "opacity-70 hover:opacity-100"
