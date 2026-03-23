@@ -103,7 +103,8 @@ export default function UltimateResumeStudioPage() {
       website: user?.website || '',
       github: '',
       summary: user?.bio || '',
-      photo: user?.avatarUrl || ''
+      photo: user?.avatar || ''
+
     },
     experience: [],
     education: [],

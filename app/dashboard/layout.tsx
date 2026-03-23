@@ -26,7 +26,8 @@ import { cn } from '@/lib/utils'
 const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Overview' },
   { href: '/dashboard/skills', icon: Route, label: 'Skills Roadmap' },
-  { href: '/projects', icon: Code2, label: 'Practice Projects' },
+  { href: '/projects', icon: Code2, label: 'Project Lab' },
+
   { href: '/dashboard/portfolio', icon: PieChart, label: 'Portfolio Analytics' },
   { href: '/dashboard/resume', icon: FileText, label: 'Resume Builder' },
   { href: '/dashboard/internships', icon: Briefcase, label: 'Internships' },
