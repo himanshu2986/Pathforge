@@ -623,7 +623,7 @@ export default function UltimateResumeStudioPage() {
           `}</style>
        
           {/* Left Sidebar Navigation */}
-          <aside className="w-[300px] bg-[#002d5b] text-white flex flex-col pt-12 pb-8 px-8 shrink-0 relative overflow-y-auto">
+           <aside className="fixed left-0 top-0 bottom-0 w-[300px] bg-[#002d5b] text-white flex flex-col pt-12 pb-8 px-8 shrink-0 z-50 overflow-y-auto">
              <div className="flex items-center gap-4 mb-14 px-2">
                 <div className="w-10 h-10 bg-pink-600 rounded-xl flex items-center justify-center shadow-lg shadow-pink-900/40"><Zap className="w-6 h-6 text-white" /></div>
                 <h1 className="text-xl font-black tracking-tight">Pathforge Studio</h1>
@@ -674,18 +674,18 @@ export default function UltimateResumeStudioPage() {
           </aside>
 
           {/* Main Content Area */}
-          <div className="flex-1 flex flex-col relative h-full">
-             
-             {/* Dynamic Form Area (Left) */}
-             <main className="flex-1 overflow-y-auto custom-scrollbar p-12 lg:p-20 bg-white">
-                <div className="max-w-3xl mx-auto h-full flex flex-col">
-                   <header className="mb-12">
-                      <button onClick={() => setActiveStep(p => Math.max(0, p - 1))} className={cn("text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-all flex items-center gap-2 mb-6", activeStep === 0 && "opacity-0 pointer-events-none")}>
-                        <ChevronLeft className="w-4 h-4" /> Go Back
-                      </button>
-                      <h2 className="text-4xl font-black tracking-tight text-slate-900 mb-4">{steps[activeStep].label}</h2>
-                      <div className="h-1 w-20 bg-pink-600 rounded-full" />
-                   </header>
+           <div className="flex-1 flex flex-row relative h-full ml-[300px]">
+              
+              {/* Dynamic Form Area (Left) */}
+              <main className="flex-1 overflow-y-auto custom-scrollbar p-12 lg:p-20 bg-white min-w-0">
+                 <div className="max-w-3xl mx-auto h-full flex flex-col">
+                    <header className="mb-10">
+                       <button onClick={() => setActiveStep(p => Math.max(0, p - 1))} className={cn("text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-all flex items-center gap-2 mb-4", activeStep === 0 && "opacity-0 pointer-events-none")}>
+                         <ChevronLeft className="w-4 h-4" /> Go Back
+                       </button>
+                       <h2 className="text-3xl font-black tracking-tight text-slate-900 mb-4">{steps[activeStep].label}</h2>
+                       <div className="h-1 w-20 bg-pink-600 rounded-full" />
+                    </header>
 
                    <div className="flex-1">
                       <AnimatePresence mode="wait">
@@ -726,9 +726,9 @@ export default function UltimateResumeStudioPage() {
              </main>
 
              {/* Small Sticky Preview (Right) */}
-             <div className="w-[450px] border-l border-slate-100 bg-[#f1f5f9] relative overflow-hidden hidden xl:flex flex-col">
-                <div className="p-6 bg-white border-b border-slate-100 flex items-center justify-between">
-                   <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2"><Palette className="w-4 h-4" /> Real-time Preview</h3>
+              <div className="w-[450px] border-l border-slate-100 bg-[#f1f5f9] flex shrink-0 relative overflow-hidden hidden xl:flex flex-col">
+                 <div className="p-6 bg-white border-b border-slate-100 flex items-center justify-between sticky top-0 z-20">
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2"><Palette className="w-4 h-4" /> Preview Matrix</h3>
                    <div className="flex gap-1">
                       {['sans', 'serif', 'mono'].map(f => <button key={f} onClick={() => setFontFamily(f)} className={cn("w-12 py-1.5 rounded-md text-[8px] font-black border transition-all", fontFamily === f ? "bg-slate-900 text-white border-slate-900" : "bg-white border-slate-200 text-slate-400")}>{f.toUpperCase()}</button>)}
                    </div>
