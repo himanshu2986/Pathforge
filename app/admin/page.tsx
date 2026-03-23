@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   ShieldAlert, Plus, Save, Activity, Users, User as UserIcon,
-  Briefcase, Globe, Trash2, Edit2, CheckCircle,
+  Briefcase, Globe, Trash2, Edit2, CheckCircle, Award,
   MapPin, Clock, Building2, UserCircle, BookOpen, Layers,
   BarChart3, Settings, Search, Filter, ShieldCheck, ChevronRight
 } from 'lucide-react'
@@ -258,7 +258,7 @@ export default function AdvancedAdminDashboard() {
               {[
                 { l: "Nodes Online", v: stats.totalUsers, i: Users, d: "+12% growth", c: "text-blue-400", bg: "from-blue-500/10" },
                 { l: "Live Routings", v: internships.length, i: Globe, d: "Active sync", c: "text-indigo-400", bg: "from-indigo-500/10" },
-                { l: "Publish Matrix", v: learningPaths.length, i: BookOpen, d: "Global Dist", c: "text-purple-400", bg: "from-purple-500/10" },
+                { l: "Certificates", v: 142, i: Award, d: "Verified", c: "text-amber-400", bg: "from-amber-500/10" },
                 { l: "Core Load", v: "14%", i: Activity, d: "Stable", c: "text-emerald-400", bg: "from-emerald-500/10" }
               ].map((s, i) => (
                 <motion.div key={i} whileHover={{ y: -5 }}>
@@ -339,10 +339,20 @@ export default function AdvancedAdminDashboard() {
                         </div>
                       ))}
                    </div>
-                   <div className="mt-8 pt-8 border-t border-white/5">
-                      <div className="text-xs text-center text-gray-500 font-mono">ENCRYPTED AT REST: AES-256</div>
-                   </div>
-                </div>
+                    <div className="mt-8 pt-8 border-t border-white/5">
+                        <h4 className="text-[10px] font-black uppercase text-gray-500 mb-4">COHORT DISTRIBUTION</h4>
+                        <div className="flex gap-1 h-2 rounded-full overflow-hidden">
+                           <div className="h-full bg-indigo-500 w-[45%]" />
+                           <div className="h-full bg-blue-500 w-[30%]" />
+                           <div className="h-full bg-purple-500 w-[25%]" />
+                        </div>
+                        <div className="mt-4 flex justify-between text-[8px] font-black text-gray-400 uppercase">
+                           <span>Web Dev (45%)</span>
+                           <span>AI/ML (30%)</span>
+                           <span>Security (25%)</span>
+                        </div>
+                    </div>
+                 </div>
               </GlassCard>
             </div>
           </motion.div>

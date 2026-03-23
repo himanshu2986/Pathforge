@@ -35,6 +35,13 @@ const LearningPathModuleSchema = new Schema({
   completed: Boolean,
   content: { type: String, default: '' },
   example: { type: String, default: '' },
+  quiz: [
+    {
+      question: String,
+      options: [String],
+      answer: Number
+    }
+  ],
 });
 
 const LearningPathSchema = new Schema({

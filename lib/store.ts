@@ -53,6 +53,11 @@ export interface LearningPath {
     completed: boolean
     content?: string
     example?: string
+    quiz?: {
+      question: string
+      options: string[]
+      answer: number
+    }[]
   }[]
 }
 
@@ -193,6 +198,7 @@ interface DashboardState {
   setInternships: (internships: Internship[]) => void
   applyToInternship: (id: string) => void
   toggleLearningModule: (pathId: string, moduleId: string) => void
+  addCertificate: (certificate: { id: string; title: string; date: string }) => void
 }
 
 interface DashboardSnapshot {
@@ -456,14 +462,43 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
       i.id === id ? { ...i, applied: true } : i
     )
   })),
-  toggleLearningModule: (pathId, moduleId) => setAndPersistDashboardState(set, (state) => ({
-    learningPaths: state.learningPaths.map((path) => {
+  toggleLearningModule: (pathId: string, moduleId: string) => setAndPersistDashboardState(set, (state) => {
+    let nextSkills = [...state.skills]
+    const nextLearningPaths = state.learningPaths.map((path) => {
       if (path.id !== pathId) return path
       const newModules = path.modules.map((m) =>
         m.id === moduleId ? { ...m, completed: !m.completed } : m
       )
+      
+      const moduleJustCompleted = newModules.find(m => m.id === moduleId)?.completed
+      const moduleTitle = path.modules.find(m => m.id === moduleId)?.title || ''
+      
+      if (moduleJustCompleted) {
+        // Sync skills based on module keywords
+        nextSkills = state.skills.map(skill => {
+          const keywords = [moduleTitle, path.title, ...moduleTitle.split(' ')]
+          const isRelated = keywords.some(k => skill.name.toLowerCase().includes(k.toLowerCase()) || k.toLowerCase().includes(skill.name.toLowerCase()))
+          
+          if (isRelated) {
+            return {
+              ...skill,
+              level: Math.min(100, skill.level + 8),
+              lastUpdated: new Date().toISOString()
+            }
+          }
+          return skill
+        })
+      }
+
       const progress = Math.round((newModules.filter(m => m.completed).length / newModules.length) * 100)
       return { ...path, modules: newModules, progress }
     })
+    return {
+      learningPaths: nextLearningPaths,
+      skills: nextSkills // Note: The actual skill update happens above, we just need to re-pass the correctly mapped array
+    }
+  }),
+  addCertificate: (cert) => setAndPersistDashboardState(set, (state) => ({
+    // Placeholder if we had a certificates array, for now just show success toast in UI
   })),
 }))
