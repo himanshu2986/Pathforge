@@ -16,41 +16,18 @@ import {
   Compass, Zap, Shield,
   ChevronRight,
   User,
-  Code2,
-  GraduationCap,
-  HelpCircle,
-  Database,
-  Rocket,
-  Mic,
-  FileText,
-  Cpu,
-  Search,
-  Users,
-  Headset
+  Code2
 } from 'lucide-react'
-
-
 import { useAuthStore, useDashboardStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
 
 const navItems = [
   { href: '/dashboard', icon: LayoutDashboard, label: 'Overview' },
-  { href: '/dashboard/learning', icon: GraduationCap, label: 'Placement Preparation' },
-  { href: '/dashboard/test-series', icon: HelpCircle, label: 'Test Series', hasSubmenu: true },
-  { href: '/dashboard/skills', icon: Code2, label: 'DSA Training' },
-  { href: '/dashboard/sql-training', icon: Database, label: 'SQL Training' },
-  { href: '/dashboard/project-labs', icon: Rocket, label: 'Project Labs' },
-  { href: '/dashboard/mock-interview', icon: Mic, label: 'Mock Interview', hasSubmenu: true },
-  { href: '/dashboard/resume', icon: FileText, label: 'Resume' },
-  { href: '/dashboard/git-mastery', icon: Cpu, label: 'Git Mastery', hasSubmenu: true },
-  { href: '/dashboard/market-radar', icon: Search, label: 'Market Radar' },
-  { href: '/dashboard/mentors', icon: Users, label: 'Mentors', hasSubmenu: true },
-  { href: '/dashboard/internships', icon: Briefcase, label: 'Placement Drives' },
-  { href: '/dashboard/support', icon: Headset, label: 'Help & Support' },
+  { href: '/dashboard/skills', icon: Route, label: 'Skills Roadmap' },
+  { href: '/projects', icon: Code2, label: 'Practice Projects' },
+  { href: '/dashboard/portfolio', icon: PieChart, label: 'Portfolio Analytics' },
+  { href: '/dashboard/internships', icon: Briefcase, label: 'Internships' },
 ]
-
-
-
 
 const bottomNavItems = [
   { href: '/dashboard/settings', icon: Settings, label: 'Settings' },
@@ -133,13 +110,8 @@ export default function DashboardLayout({
                         : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground'
                     )}
                   >
-                    <item.icon className={cn('w-5 h-5', isActive ? 'text-emerald-600' : 'text-slate-400')} />
+                    <item.icon className={cn('w-5 h-5', isActive && 'text-primary')} />
                     <span>{item.label}</span>
-                    {('hasSubmenu' in item && item.hasSubmenu) && (
-                      <ChevronRight className={cn("ml-auto w-4 h-4 transition-transform", isActive && "rotate-90")} />
-                    )}
-
-
                     {isActive && (
                       <motion.div
                         layoutId="activeIndicator"
@@ -178,9 +150,8 @@ export default function DashboardLayout({
                       className={cn(
                         'flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
                         isActive
-                          ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400 font-medium'
-                          : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-colors duration-200'
-
+                          ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                          : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground'
                       )}
                     >
                       <item.icon className="w-5 h-5" />
@@ -260,19 +231,14 @@ export default function DashboardLayout({
                           onClick={() => setIsSidebarOpen(false)}
                           className={cn(
                             'flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
-                              isActive
-                                ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400 font-medium'
-                                : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-colors duration-200'
-
+                            isActive
+                              ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                              : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground'
                           )}
                         >
-                          <item.icon className={cn('w-5 h-5', isActive ? 'text-emerald-600' : 'text-slate-400')} />
+                          <item.icon className={cn('w-5 h-5', isActive && 'text-primary')} />
                           <span>{item.label}</span>
-                          {('hasSubmenu' in item && item.hasSubmenu) && (
-                            <ChevronRight className={cn("ml-auto w-4 h-4 transition-transform", isActive && "rotate-90")} />
-                          )}
-
-
+                          <ChevronRight className="ml-auto w-4 h-4" />
                         </Link>
                       </li>
                     )
