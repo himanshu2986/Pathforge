@@ -220,12 +220,26 @@ export default function UltimateResumeStudioPage() {
   // Handlers
   const handleAIImproveSummary = () => {
     toast.promise(new Promise(resolve => setTimeout(resolve, 2000)), {
-      loading: 'Analyzing your profile...',
+      loading: 'Synthesizing Professional Identity...',
       success: () => {
-        setResumeData(p => ({ ...p, personalInfo: { ...p.personalInfo, summary: `Highly accomplished ${p.experience[0]?.role || 'Professional'} with ${p.experience.length * 3}+ years of experience driving excellence at ${p.experience[0]?.company || 'leading firms'}. Expert in ${p.skills.slice(0, 3).map(s => s.name).join(', ')}.` } }))
-        return 'AI Optimization Complete!'
+        setResumeData(p => ({ ...p, personalInfo: { ...p.personalInfo, summary: `Visionary ${p.experience[0]?.role || 'Professional'} with a proven track record of architecting scalable solutions and spearheading high-impact initiatives. Expertly proficient in ${p.skills.slice(0, 3).map(s => s.name).join(', ')}, dedicated to optimizing mission-critical architectures and driving operational excellence in complex, fast-paced environments.` } }))
+        return 'Identity Matrix Optimized!'
       },
       error: 'AI Node Offline'
+    })
+  }
+
+  const handleAIImproveBullet = (expIdx: number, bulletIdx: number) => {
+    const current = resumeData.experience[expIdx].bullets[bulletIdx];
+    toast.promise(new Promise(resolve => setTimeout(resolve, 1500)), {
+      loading: 'Quantifying Impact...',
+      success: () => {
+        const n = [...resumeData.experience];
+        n[expIdx].bullets[bulletIdx] = `Architected and deployed high-performance solutions for ${n[expIdx].company}, resulting in a 25% increase in operational efficiency and successfully reducing latency across core service nodes.`;
+        setResumeData(p => ({ ...p, experience: n }));
+        return 'Bullet Optimized with Metrics!';
+      },
+      error: 'Refinement Failed'
     })
   }
 
@@ -259,6 +273,25 @@ export default function UltimateResumeStudioPage() {
                  <div className="h-1 w-full bg-gray-700 mt-1" />
               </div>
             </div>
+          </div>
+        )}
+        {id === 'maverick' && (
+          <div className="h-full bg-slate-50 flex gap-2 p-2">
+             <div className="w-1/3 h-full" style={{ backgroundColor: color, opacity: 0.1 }} />
+             <div className="flex-1 space-y-2 mt-4">
+                <div className="h-2 w-full bg-slate-900" />
+                <div className="h-1 w-2/3 bg-slate-300" />
+                <div className="h-1 w-full bg-slate-100" />
+             </div>
+          </div>
+        )}
+        {id === 'swiss' && (
+          <div className="h-full bg-white grid grid-cols-2 gap-2 p-2 pt-6">
+             <div className="col-span-2 h-4 bg-slate-900" />
+             <div className="h-10 border border-slate-100 bg-slate-50" />
+             <div className="h-10 border border-slate-100 bg-slate-50" />
+             <div className="h-10 border border-slate-100 bg-slate-50" />
+             <div className="h-10 border border-slate-100 bg-slate-50" />
           </div>
         )}
         {id === 'creative' && (
@@ -402,6 +435,8 @@ export default function UltimateResumeStudioPage() {
                   { id: 'professional', name: 'Elite Professional', desc: 'Classic Corporate', icon: FileText },
                   { id: 'tech', name: 'Software Engineer', desc: 'Modern Tech Header', icon: Cpu },
                   { id: 'creative', name: 'Artisan / Designer', desc: 'Bold Layout', icon: PenTool },
+                  { id: 'maverick', name: 'The Maverick', desc: 'Asymmetric Modern', icon: Zap },
+                  { id: 'swiss', name: 'Swiss Precision', desc: 'Grid Typography', icon: Grid },
                   { id: 'minimal', name: 'Minimalist', desc: 'Clean White Space', icon: Layers },
                   { id: 'elegant', name: 'Heritage', desc: 'Serif / Traditional', icon: BookOpen },
                 ].map(t => (
@@ -540,9 +575,12 @@ export default function UltimateResumeStudioPage() {
                         <div className="space-y-3">
                            {exp.bullets.map((bullet, bi) => (
                              <div key={bi} className="flex gap-3 items-center group/bullet">
-                                <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-                                <input value={bullet} onChange={e => { const n = [...resumeData.experience]; n[i].bullets[bi] = e.target.value; setResumeData(p => ({ ...p, experience: n })) }} className="flex-1 bg-white rounded-xl p-4 text-xs font-medium border-2 border-transparent focus:border-slate-900 outline-none transition-all" placeholder="Briefly describe a major win or responsibility..." />
-                                <button onClick={() => { const n = [...resumeData.experience]; n[i].bullets = n[i].bullets.filter((_, idx) => idx !== bi); setResumeData(p => ({ ...p, experience: n })) }} className="opacity-0 group-hover/bullet:opacity-100 p-2 text-slate-300 hover:text-red-500 transition-all"><Trash2 className="w-3.5 h-3.5" /></button>
+                                 <div className="w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0" />
+                                 <input value={bullet} onChange={e => { const n = [...resumeData.experience]; n[i].bullets[bi] = e.target.value; setResumeData(p => ({ ...p, experience: n })) }} className="flex-1 bg-white rounded-xl p-4 text-xs font-medium border-2 border-transparent focus:border-slate-900 outline-none transition-all" placeholder="Briefly describe a major win or responsibility..." />
+                                 <div className="flex items-center gap-1 opacity-0 group-hover/bullet:opacity-100 transition-all">
+                                    <button onClick={() => handleAIImproveBullet(i, bi)} className="p-2 text-pink-500 hover:bg-pink-50 rounded-lg transition-all" title="AI Optimization"><Sparkles className="w-4 h-4" /></button>
+                                    <button onClick={() => { const n = [...resumeData.experience]; n[i].bullets = n[i].bullets.filter((_, idx) => idx !== bi); setResumeData(p => ({ ...p, experience: n })) }} className="p-2 text-slate-300 hover:text-red-500 transition-all"><Trash2 className="w-3.5 h-3.5" /></button>
+                                 </div>
                              </div>
                            ))}
                         </div>
@@ -925,32 +963,96 @@ export default function UltimateResumeStudioPage() {
                                  </div>
                               </div>
                             )}
-
-                            {/* TECH / CYBER VARIANT PREVIEWS */}
-                            {activeTemplate !== 'professional' && (
-                              <div className={cn("min-h-full p-12 flex flex-col transition-all", activeTemplate === 'tech' ? "bg-slate-900 text-white" : activeTemplate === 'cyber' ? "bg-black text-pink-500 font-mono border-4 border-pink-500/20" : "bg-white text-slate-900")}>
-                                 <div className="w-full aspect-square max-w-[80px] rounded-2xl bg-slate-100 flex items-center justify-center mb-6 overflow-hidden">
-                                    {resumeData.personalInfo.photo ? <img src={resumeData.personalInfo.photo} className="w-full h-full object-cover" /> : <User className="w-8 h-8 text-slate-300" />}
-                                 </div>
-                                 <h2 className="text-3xl font-black uppercase tracking-tighter mb-2" style={{ color: activeTemplate === 'cyber' ? primaryColor : 'inherit' }}>{resumeData.personalInfo.name}</h2>
-                                 <p className={cn("text-xs font-bold uppercase tracking-widest mb-8", activeTemplate === 'tech' ? "text-primary" : "text-slate-400")}>{resumeData.experience[0]?.role || 'Professional Identity'}</p>
-                                 <div className="space-y-8">
-                                    <section>
-                                       <h4 className="text-[8px] font-black uppercase tracking-widest mb-3 opacity-50">Overview</h4>
-                                       <p className="text-[10px] leading-relaxed opacity-70">{resumeData.personalInfo.summary}</p>
-                                    </section>
-                                    <section>
-                                       <h4 className="text-[8px] font-black uppercase tracking-widest mb-4 opacity-50">Core Arsenal</h4>
-                                       <div className="flex flex-wrap gap-2">
-                                          {resumeData.skills.slice(0, 8).map(s => <span key={s.name} className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-[7px] font-black uppercase">{s.name}</span>)}
+                             {/* TECH / CYBER / MAVERICK / SWISS VARIANT PREVIEWS */}
+                             {activeTemplate !== 'professional' && (
+                               <div className={cn(
+                                 "min-h-full p-12 flex flex-col transition-all", 
+                                 activeTemplate === 'tech' ? "bg-slate-900 text-white" : 
+                                 activeTemplate === 'cyber' ? "bg-black text-pink-500 font-mono border-4 border-pink-500/20" : 
+                                 activeTemplate === 'maverick' ? "bg-slate-50 text-slate-900 flex-row gap-12" :
+                                 activeTemplate === 'swiss' ? "bg-white text-black font-sans grid grid-cols-12 gap-8" :
+                                 "bg-white text-slate-900"
+                               )}>
+                                  {activeTemplate === 'maverick' ? (
+                                    <>
+                                       <div className="w-1/3 border-r border-slate-200 pr-8 space-y-10">
+                                          <div className="w-24 h-24 rounded-3xl bg-slate-900 flex items-center justify-center mb-6 overflow-hidden">
+                                             {resumeData.personalInfo.photo ? <img src={resumeData.personalInfo.photo} className="w-full h-full object-cover" /> : <User className="w-10 h-10 text-white" />}
+                                          </div>
+                                          <section className="space-y-6">
+                                             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Tactical Skills</h4>
+                                             <div className="flex flex-col gap-2">
+                                                {resumeData.skills.slice(0, 10).map(s => <div key={s.name} className="flex justify-between items-center text-[9px] font-bold"><span>{s.name}</span><div className="w-12 h-1 bg-slate-200 rounded-full"><div className="h-full bg-slate-900" style={{ width: `${s.level}%` }} /></div></div>)}
+                                             </div>
+                                          </section>
                                        </div>
-                                    </section>
-                                 </div>
-                                 <div className="mt-auto pt-10 text-center">
-                                    <span className="px-5 py-2 bg-pink-600/10 text-pink-600 rounded-full text-[8px] font-black uppercase tracking-widest border border-pink-600/20">{activeTemplate} engine</span>
-                                 </div>
-                              </div>
-                            )}
+                                       <div className="flex-1 space-y-12">
+                                          <header>
+                                             <h2 className="text-4xl font-black uppercase tracking-tighter mb-2" style={{ color: primaryColor }}>{resumeData.personalInfo.name}</h2>
+                                             <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">{resumeData.experience[0]?.role || 'Professional Identity'}</p>
+                                          </header>
+                                          <section>
+                                             <h4 className="text-[10px] font-black uppercase tracking-widest mb-6 py-2 border-b-2 border-slate-900 w-fit">Combat Record / Experience</h4>
+                                             <div className="space-y-8">
+                                                {resumeData.experience.map(e => <div key={e.id} className="space-y-2"><div className="flex justify-between font-black text-[10px]"><span>{e.company}</span><span className="text-slate-300">{e.period}</span></div><p className="text-[9px] font-bold text-slate-400 italic">{e.role}</p><div className="space-y-1">{e.bullets.map((b, i) => b && <p key={i} className="text-[9px] text-slate-600 leading-relaxed">• {b}</p>)}</div></div>)}
+                                             </div>
+                                          </section>
+                                       </div>
+                                    </>
+                                  ) : activeTemplate === 'swiss' ? (
+                                    <>
+                                       <header className="col-span-12 border-b-4 border-black pb-8 flex justify-between items-end">
+                                          <h2 className="text-5xl font-black uppercase leading-none tracking-tighter">{resumeData.personalInfo.name}</h2>
+                                          <div className="text-[8px] font-black uppercase leading-tight text-right">
+                                             <div>{resumeData.personalInfo.location}</div>
+                                             <div style={{ color: primaryColor }}>{resumeData.personalInfo.email}</div>
+                                          </div>
+                                       </header>
+                                       <div className="col-span-12 grid grid-cols-12 gap-8 mt-4">
+                                          <div className="col-span-4 space-y-12">
+                                             <section>
+                                                <h4 className="text-[10px] font-black uppercase mb-4">Core Competency</h4>
+                                                <div className="flex flex-wrap gap-2">
+                                                   {resumeData.skills.map(s => <span key={s.name} className="px-2 py-1 bg-black text-white text-[8px] font-black uppercase">{s.name}</span>)}
+                                                </div>
+                                             </section>
+                                          </div>
+                                          <div className="col-span-8 space-y-12 border-l border-slate-100 pl-8">
+                                             <section>
+                                                <h4 className="text-[10px] font-black uppercase mb-6">Experience Protocol</h4>
+                                                <div className="space-y-10">
+                                                   {resumeData.experience.map(e => <div key={e.id} className="grid grid-cols-4 gap-4"><div className="text-[9px] font-black uppercase">{e.period}</div><div className="col-span-3 space-y-3"><div className="font-black text-[11px] leading-none uppercase">{e.company} / {e.role}</div><p className="text-[10px] font-medium leading-relaxed text-slate-500">{e.bullets[0]}</p></div></div>)}
+                                                </div>
+                                             </section>
+                                          </div>
+                                       </div>
+                                    </>
+                                  ) : (
+                                    <>
+                                       <div className="w-full aspect-square max-w-[80px] rounded-2xl bg-slate-100 flex items-center justify-center mb-6 overflow-hidden">
+                                          {resumeData.personalInfo.photo ? <img src={resumeData.personalInfo.photo} className="w-full h-full object-cover" /> : <User className="w-8 h-8 text-slate-300" />}
+                                       </div>
+                                       <h2 className="text-3xl font-black uppercase tracking-tighter mb-2" style={{ color: activeTemplate === 'cyber' ? primaryColor : 'inherit' }}>{resumeData.personalInfo.name}</h2>
+                                       <p className={cn("text-xs font-bold uppercase tracking-widest mb-8", activeTemplate === 'tech' ? "text-primary" : "text-slate-400")}>{resumeData.experience[0]?.role || 'Professional Identity'}</p>
+                                       <div className="space-y-8">
+                                          <section>
+                                             <h4 className="text-[8px] font-black uppercase tracking-widest mb-3 opacity-50">Overview</h4>
+                                             <p className="text-[10px] leading-relaxed opacity-70">{resumeData.personalInfo.summary}</p>
+                                          </section>
+                                          <section>
+                                             <h4 className="text-[8px] font-black uppercase tracking-widest mb-4 opacity-50">Core Arsenal</h4>
+                                             <div className="flex flex-wrap gap-2">
+                                                {resumeData.skills.slice(0, 8).map(s => <span key={s.name} className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-[7px] font-black uppercase">{s.name}</span>)}
+                                             </div>
+                                          </section>
+                                       </div>
+                                       <div className="mt-auto pt-10 text-center">
+                                          <span className="px-5 py-2 bg-pink-600/10 text-pink-600 rounded-full text-[8px] font-black uppercase tracking-widest border border-pink-600/20">{activeTemplate} engine</span>
+                                       </div>
+                                    </>
+                                  )}
+                               </div>
+                             )}
                          </div>
                       </div>
                    </div>
