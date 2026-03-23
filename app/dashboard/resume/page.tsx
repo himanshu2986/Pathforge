@@ -11,7 +11,6 @@ import {
   GraduationCap, 
   Code2, 
   Layout,
-  Printer,
   ChevronRight,
   ChevronLeft,
   CheckCircle2,
@@ -23,8 +22,12 @@ import {
   Palette,
   Sparkles,
   LayoutTemplate,
+  Camera,
   Layers,
-  Award
+  Award,
+  Zap,
+  Star,
+  BookOpen
 } from 'lucide-react'
 import { GlassCard, GlassCardContent, GlassCardHeader } from '@/components/ui/glass-card'
 import { MagneticButton } from '@/components/ui/magnetic-button'
@@ -42,6 +45,7 @@ interface ResumeData {
     website: string
     github: string
     summary: string
+    photo?: string
   }
   experience: {
     id: string
@@ -55,36 +59,34 @@ interface ResumeData {
     school: string
     degree: string
     period: string
-    description: string
   }[]
-  skills: string[]
+  skills: { name: string, level: number }[]
   projects: {
     id: string
     title: string
     description: string
     skills: string[]
-    url?: string
   }[]
 }
 
-type TemplateType = 'classic' | 'modern' | 'minimal' | 'executive'
+type TemplateType = 'modern' | 'classic' | 'minimal' | 'executive' | 'tech' | 'creative'
 
-export default function AdvancedResumeBuilderPage() {
+export default function LuxuryResumeBuilderPage() {
   const { user } = useAuthStore()
   const { portfolioProjects, skills: dashboardSkills } = useDashboardStore()
   
   const [activeStep, setActiveStep] = useState(0)
   const steps = [
-    { label: 'Template', icon: LayoutTemplate },
-    { label: 'Personal', icon: User },
-    { label: 'Work', icon: Briefcase },
-    { label: 'Study', icon: GraduationCap },
-    { label: 'Projects', icon: Layout },
-    { label: 'Finish', icon: CheckCircle2 },
+    { label: 'Style', icon: Palette },
+    { label: 'Bio', icon: User },
+    { label: 'History', icon: Briefcase },
+    { label: 'Details', icon: Layout },
+    { label: 'Finalize', icon: Zap },
   ]
 
-  const [activeTemplate, setActiveTemplate] = useState<TemplateType>('modern')
+  const [activeTemplate, setActiveTemplate] = useState<TemplateType>('tech')
   const [primaryColor, setPrimaryColor] = useState('#0ea5e9')
+  const [fontFamily, setFontFamily] = useState('sans') // 'sans' | 'serif' | 'mono'
 
   const [resumeData, setResumeData] = useState<ResumeData>({
     personalInfo: {
@@ -94,7 +96,8 @@ export default function AdvancedResumeBuilderPage() {
       location: user?.location || '',
       website: user?.website || '',
       github: '',
-      summary: user?.bio || ''
+      summary: user?.bio || '',
+      photo: user?.avatarUrl || ''
     },
     experience: [],
     education: [],
@@ -102,401 +105,294 @@ export default function AdvancedResumeBuilderPage() {
     projects: []
   })
 
-  // Pre-fill from store if data exists
+  // Sync data
   useEffect(() => {
     if (portfolioProjects.length > 0 && resumeData.projects.length === 0) {
-      setResumeData(prev => ({
-        ...prev,
-        projects: portfolioProjects.map(p => ({
-          id: p.id,
-          title: p.title,
-          description: p.description,
-          skills: p.skills,
-          url: p.url
-        }))
-      }))
+      setResumeData(prev => ({ ...prev, projects: portfolioProjects.slice(0, 3) }))
     }
     if (dashboardSkills.length > 0 && resumeData.skills.length === 0) {
-      setResumeData(prev => ({
-        ...prev,
-        skills: dashboardSkills.filter(s => s.level > 50).map(s => s.name)
-      }))
+      setResumeData(prev => ({ ...prev, skills: dashboardSkills.map(s => ({ name: s.name, level: s.level })) }))
     }
   }, [portfolioProjects, dashboardSkills])
 
-  // --- Handlers ---
-  const updatePersonalInfo = (updates: Partial<ResumeData['personalInfo']>) => {
-    setResumeData(prev => ({
-      ...prev,
-      personalInfo: { ...prev.personalInfo, ...updates }
-    }))
+  // Handlers
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => setResumeData(p => ({ ...p, personalInfo: { ...p.personalInfo, photo: reader.result as string } }))
+      reader.readAsDataURL(file)
+    }
   }
 
-  const addExperience = () => {
-    setResumeData(prev => ({
-      ...prev,
-      experience: [...prev.experience, { id: Date.now().toString(), company: '', role: '', period: '', bullets: [''] }]
-    }))
-  }
-
-  const removeExperience = (id: string) => {
-    setResumeData(prev => ({
-      ...prev,
-      experience: prev.experience.filter(exp => exp.id !== id)
-    }))
-  }
-
-  const updateExperienceBullet = (expId: string, bulletIndex: number, text: string) => {
-    setResumeData(prev => ({
-      ...prev,
-      experience: prev.experience.map(exp => {
-        if (exp.id === expId) {
-          const newBullets = [...exp.bullets]
-          newBullets[bulletIndex] = text
-          return { ...exp, bullets: newBullets }
-        }
-        return exp
-      })
-    }))
-  }
-
-  const addExperienceBullet = (expId: string) => {
-    setResumeData(prev => ({
-      ...prev,
-      experience: prev.experience.map(exp => {
-        if (exp.id === expId) return { ...exp, bullets: [...exp.bullets, ''] }
-        return exp
-      })
-    }))
-  }
-
-  const removeExperienceBullet = (expId: string, bulletIndex: number) => {
-    setResumeData(prev => ({
-      ...prev,
-      experience: prev.experience.map(exp => {
-        if (exp.id === expId) return { ...exp, bullets: exp.bullets.filter((_, i) => i !== bulletIndex) }
-        return exp
-      })
-    }))
-  }
-
-  const addEducation = () => {
-    setResumeData(prev => ({
-      ...prev,
-      education: [...prev.education, { id: Date.now().toString(), school: '', degree: '', period: '', description: '' }]
-    }))
-  }
-
-  const removeEducation = (id: string) => {
-    setResumeData(prev => ({
-      ...prev,
-      education: prev.education.filter(edu => edu.id !== id)
-    }))
-  }
-
-  const handlePrint = () => {
-    window.print()
-  }
-
-  const generateAISummary = () => {
-    const allSkills = resumeData.skills.length > 0 ? resumeData.skills.join(', ') : 'modern tech stack'
-    const topProject = resumeData.projects[0]?.title || 'innovative solutions'
-    const summary = `Expert in ${allSkills}. Specialist in building high-performance applications like ${topProject}. Focused on delivering scalable and user-centric software solutions.`
-    updatePersonalInfo({ summary })
-    toast.success('AI Summary Generated!')
-  }
-
-  // --- Render Helpers ---
   const renderStepContent = () => {
     switch (activeStep) {
       case 0:
         return (
-          <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { id: 'modern', name: 'Modern', desc: 'Centered, clean & high-impact', icon: Layers },
-                { id: 'classic', name: 'Classic', desc: 'Standard professional layout', icon: Award },
-                { id: 'minimal', name: 'Minimal', desc: 'Modern sidebar structure', icon: Layout },
-                { id: 'executive', name: 'Executive', desc: 'Bold headings & dense info', icon: Briefcase },
-              ].map(t => (
-                <button
-                  key={t.id}
-                  onClick={() => {
-                    setActiveTemplate(t.id as TemplateType)
-                    setActiveStep(1)
-                  }}
-                  className={cn(
-                    "flex flex-col items-start p-4 rounded-xl border text-left transition-all group",
-                    activeTemplate === t.id ? "bg-primary/10 border-primary ring-1 ring-primary" : "bg-card border-border hover:border-primary/50"
-                  )}
-                >
-                  <div className={cn(
-                    "w-10 h-10 rounded-lg flex items-center justify-center mb-4 transition-colors",
-                    activeTemplate === t.id ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground group-hover:bg-primary/20 group-hover:text-primary"
-                  )}>
-                    <t.icon className="w-6 h-6" />
-                  </div>
-                  <h4 className="font-bold text-foreground text-sm">{t.name} Template</h4>
-                  <p className="text-[10px] text-muted-foreground mt-1">{t.desc}</p>
-                </button>
-              ))}
-            </div>
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { id: 'tech', name: 'Tech Innovator', desc: 'Dark-themed, high-contrast, skills-focused', icon: Zap },
+              { id: 'creative', name: 'Creative Portfolio', desc: 'Bold, asymmetric, with photo support', icon: Star },
+              { id: 'minimal', name: 'Nordic Minimal', desc: 'Clean, spacious, ultra-modern', icon: Layers },
+              { id: 'executive', name: 'Ivy Executive', desc: 'Elite, serif-based, formal', icon: Award },
+            ].map(t => (
+              <button
+                key={t.id}
+                onClick={() => { setActiveTemplate(t.id as TemplateType); setActiveStep(1) }}
+                className={cn(
+                  "p-4 rounded-2xl border text-left transition-all hover:scale-[1.02] flex flex-col gap-3",
+                  activeTemplate === t.id ? "bg-primary/10 border-primary ring-2 ring-primary/20" : "bg-card border-border shadow-sm"
+                )}
+              >
+                <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center", activeTemplate === t.id ? "bg-primary text-primary-foreground" : "bg-muted")}>
+                   <t.icon className="w-6 h-6" />
+                </div>
+                <div>
+                   <h4 className="font-bold text-sm">{t.name}</h4>
+                   <p className="text-[10px] text-muted-foreground mt-1 leading-relaxed">{t.desc}</p>
+                </div>
+              </button>
+            ))}
           </div>
         )
       case 1:
         return (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium mb-1 block">Full Name</label>
-                <input 
-                  value={resumeData.personalInfo.name} 
-                  onChange={e => updatePersonalInfo({ name: e.target.value })}
-                  className="w-full bg-input border border-border rounded-lg px-4 py-2 outline-none" 
-                  placeholder="John Doe"
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium mb-1 block">Email</label>
-                <input 
-                  value={resumeData.personalInfo.email} 
-                  onChange={e => updatePersonalInfo({ email: e.target.value })}
-                  className="w-full bg-input border border-border rounded-lg px-4 py-2 outline-none" 
-                />
-              </div>
+            <div className="flex items-center gap-6 mb-4">
+               <div className="relative group">
+                  <div className="w-24 h-24 rounded-2xl bg-muted border-2 border-dashed border-border flex items-center justify-center overflow-hidden">
+                     {resumeData.personalInfo.photo ? (
+                       <img src={resumeData.personalInfo.photo} className="w-full h-full object-cover" />
+                     ) : (
+                       <Camera className="w-8 h-8 text-muted-foreground" />
+                     )}
+                  </div>
+                  <input type="file" onChange={handlePhotoUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-2xl pointer-events-none">
+                     <span className="text-[10px] font-bold text-white uppercase tracking-wider">Change</span>
+                  </div>
+               </div>
+               <div className="flex-1 space-y-4">
+                  <input 
+                    value={resumeData.personalInfo.name} 
+                    onChange={e => setResumeData(p => ({ ...p, personalInfo: { ...p.personalInfo, name: e.target.value } }))}
+                    className="w-full bg-transparent border-b-2 border-border focus:border-primary text-xl font-bold outline-none pb-2" 
+                    placeholder="Full Name"
+                  />
+                  <input 
+                    value={resumeData.personalInfo.email} 
+                    onChange={e => setResumeData(p => ({ ...p, personalInfo: { ...p.personalInfo, email: e.target.value } }))}
+                    className="w-full bg-transparent border-b border-border focus:border-primary text-sm outline-none pb-1" 
+                    placeholder="Email Address"
+                  />
+               </div>
             </div>
-            <div>
-              <div className="flex justify-between items-center mb-1">
-                <label className="text-sm font-medium block">Personal Statement</label>
-                <button onClick={generateAISummary} className="text-[10px] font-bold text-primary flex items-center gap-1">
-                  <Sparkles className="w-3 h-3" /> AI Summary
-                </button>
-              </div>
-              <textarea 
-                value={resumeData.personalInfo.summary} 
-                onChange={e => updatePersonalInfo({ summary: e.target.value })}
-                rows={4}
-                className="w-full bg-input border border-border rounded-lg px-4 py-2 outline-none resize-none" 
-              />
-            </div>
+            <textarea 
+              value={resumeData.personalInfo.summary} 
+              onChange={e => setResumeData(p => ({ ...p, personalInfo: { ...p.personalInfo, summary: e.target.value } }))}
+              placeholder="Write a brief professional summary..."
+              className="w-full bg-input border border-border rounded-xl p-4 text-sm outline-none resize-none h-32"
+            />
           </div>
         )
       case 2:
         return (
           <div className="space-y-6">
-             <div className="flex justify-between items-center">
-              <h4 className="font-medium">Experience</h4>
-              <button onClick={addExperience} className="text-xs text-primary flex items-center gap-1">
-                <Plus className="w-3 h-3" /> Add Job
-              </button>
-            </div>
-            {resumeData.experience.map((exp, expIndex) => (
-              <GlassCard key={exp.id} className="p-4 grid gap-3">
-                <div className="flex justify-between">
-                  <input placeholder="Company" value={exp.company} onChange={e => {
-                    const n = [...resumeData.experience]; n[expIndex].company = e.target.value; setResumeData(p => ({ ...p, experience: n }))
-                  }} className="bg-transparent border-b border-border text-sm outline-none" />
-                  <button onClick={() => removeExperience(exp.id)} className="text-muted-foreground hover:text-destructive"><Trash2 className="w-3 h-3" /></button>
+             <div className="flex justify-between items-center"><h4 className="font-bold">Experience</h4><button onClick={() => setResumeData(p => ({ ...p, experience: [...p.experience, { id: Date.now().toString(), company: '', role: '', period: '', bullets: [''] }] }))} className="text-xs text-primary">+ Add Job</button></div>
+             {resumeData.experience.map((exp, i) => (
+                <div key={exp.id} className="p-4 rounded-xl bg-card border border-border relative">
+                   <button onClick={() => setResumeData(p => ({ ...p, experience: p.experience.filter(e => e.id !== exp.id) }))} className="absolute top-2 right-2 text-muted-foreground"><Trash2 className="w-3 h-3" /></button>
+                   <div className="grid grid-cols-2 gap-3 mb-3">
+                      <input placeholder="Company" value={exp.company} onChange={e => { const n = [...resumeData.experience]; n[i].company = e.target.value; setResumeData(p => ({ ...p, experience: n })) }} className="bg-transparent border-b border-border text-sm outline-none" />
+                      <input placeholder="Role" value={exp.role} onChange={e => { const n = [...resumeData.experience]; n[i].role = e.target.value; setResumeData(p => ({ ...p, experience: n })) }} className="bg-transparent border-b border-border text-sm outline-none" />
+                   </div>
+                   <input placeholder="Period" value={exp.period} onChange={e => { const n = [...resumeData.experience]; n[i].period = e.target.value; setResumeData(p => ({ ...p, experience: n })) }} className="w-full bg-transparent border-b border-border text-[10px] outline-none" />
                 </div>
-                <input placeholder="Role" value={exp.role} onChange={e => {
-                  const n = [...resumeData.experience]; n[expIndex].role = e.target.value; setResumeData(p => ({ ...p, experience: n }))
-                }} className="bg-transparent border-b border-border text-sm outline-none" />
-                <div className="space-y-1">
-                   {exp.bullets.map((b, bi) => (
-                     <div key={bi} className="flex gap-2">
-                        <input value={b} onChange={e => updateExperienceBullet(exp.id, bi, e.target.value)} className="flex-1 bg-transparent border-b border-border/50 text-xs outline-none" placeholder="Achievement..." />
-                        <button onClick={() => removeExperienceBullet(exp.id, bi)}><Trash2 className="w-2 h-2 text-muted-foreground" /></button>
-                     </div>
-                   ))}
-                   <button onClick={() => addExperienceBullet(exp.id)} className="text-[9px] text-primary">+ Bullet</button>
-                </div>
-              </GlassCard>
-            ))}
+             ))}
           </div>
         )
       case 3:
         return (
           <div className="space-y-6">
-             <div className="flex justify-between items-center">
-              <h4 className="font-medium">Education</h4>
-              <button onClick={addEducation} className="text-xs text-primary flex items-center gap-1">
-                <Plus className="w-3 h-3" /> Add Study
-              </button>
+            <h4 className="font-bold">Featured Projects</h4>
+            <div className="grid grid-cols-2 gap-3">
+               {portfolioProjects.map(p => {
+                 const isSel = resumeData.projects.find(rp => rp.id === p.id)
+                 return (
+                   <button key={p.id} onClick={() => setResumeData(prev => ({ ...prev, projects: isSel ? prev.projects.filter(rp => rp.id !== p.id) : [...prev.projects, p] }))} 
+                   className={cn("p-3 rounded-xl border text-left transition-all", isSel ? "border-primary bg-primary/5" : "border-border bg-card")}>
+                      <h5 className="text-[10px] font-bold truncate">{p.title}</h5>
+                      <p className="text-[8px] text-muted-foreground line-clamp-1 mt-1">{p.description}</p>
+                   </button>
+                 )
+               })}
             </div>
-            {resumeData.education.map((edu, i) => (
-              <GlassCard key={edu.id} className="p-4 grid gap-2">
-                 <input placeholder="School" value={edu.school} onChange={e => {
-                   const n = [...resumeData.education]; n[i].school = e.target.value; setResumeData(p => ({ ...p, education: n }))
-                 }} className="bg-transparent border-b border-border text-sm outline-none" />
-                 <input placeholder="Degree" value={edu.degree} onChange={e => {
-                   const n = [...resumeData.education]; n[i].degree = e.target.value; setResumeData(p => ({ ...p, education: n }))
-                 }} className="bg-transparent border-b border-border text-sm outline-none" />
-              </GlassCard>
-            ))}
+            <h4 className="font-bold mt-8">Technical Skills</h4>
+            <div className="flex flex-wrap gap-2">
+               {dashboardSkills.map(s => {
+                 const isSel = resumeData.skills.find(rs => rs.name === s.name)
+                 return (
+                   <button key={s.id} onClick={() => setResumeData(prev => ({ ...prev, skills: isSel ? prev.skills.filter(rs => rs.name !== s.name) : [...prev.skills, { name: s.name, level: s.level }] }))}
+                   className={cn("px-3 py-1 rounded-full text-[10px] border transition-all", isSel ? "bg-primary text-primary-foreground border-primary" : "bg-card border-border")}>
+                      {s.name}
+                   </button>
+                 )
+               })}
+            </div>
           </div>
         )
       case 4:
         return (
-          <div className="space-y-6">
-            <h4 className="font-medium">Projects</h4>
-            <div className="grid grid-cols-2 gap-3">
-              {portfolioProjects.map(p => {
-                const s = resumeData.projects.some(rp => rp.id === p.id)
-                return (
-                  <button key={p.id} onClick={() => {
-                    if (s) setResumeData(prev => ({ ...prev, projects: prev.projects.filter(rp => rp.id !== p.id) }))
-                    else setResumeData(prev => ({ ...prev, projects: [...prev.projects, { ...p }] }))
-                  }} className={cn("p-2 border rounded-lg text-left text-xs", s ? "border-primary bg-primary/5" : "border-border")}>
-                    {p.title}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        )
-      case 5:
-        return (
-          <div className="space-y-8">
-            <section>
-              <h4 className="font-medium mb-3">Branding</h4>
-              <div className="flex gap-3">
-                {['#0ea5e9', '#ec4899', '#10b981', '#6366f1', '#f59e0b', '#dc2626', '#1e293b'].map(c => (
-                  <button key={c} onClick={() => setPrimaryColor(c)} className={cn("w-8 h-8 rounded-full border-2", primaryColor === c ? "border-white" : "border-transparent")} style={{ backgroundColor: c }} />
+          <div className="space-y-8 text-center pt-10">
+             <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle2 className="w-10 h-10 text-primary" />
+             </div>
+             <div>
+                <h3 className="text-xl font-bold">Ready to Launch?</h3>
+                <p className="text-sm text-muted-foreground mt-2">Your luxury resume is ready for download. You can fine-tune colors below.</p>
+             </div>
+             <div className="flex justify-center gap-3">
+                {['#0ea5e9', '#6366f1', '#1e293b', '#10b981', '#f59e0b', '#dc2626'].map(c => (
+                  <button key={c} onClick={() => setPrimaryColor(c)} className={cn("w-10 h-10 rounded-full border-4", primaryColor === c ? "border-white shadow-lg" : "border-transparent")} style={{ backgroundColor: c }} />
                 ))}
-              </div>
-            </section>
-            
-            <section className="pt-6 border-t border-border">
-              <MagneticButton variant="primary" onClick={handlePrint} className="w-full">
-                <Download className="w-4 h-4" /> Download PDF
-              </MagneticButton>
-              <p className="text-[10px] text-muted-foreground text-center mt-4">
-                You can change the template at any time in Step 1.
-              </p>
-            </section>
+             </div>
+             <div className="flex gap-4">
+                <MagneticButton variant="primary" onClick={() => window.print()} className="flex-1 py-4">
+                   <Download className="w-4 h-4" /> Download PDF
+                </MagneticButton>
+             </div>
           </div>
         )
-      default:
-        return null
+      default: return null
     }
   }
 
   return (
-    <div className="p-6 lg:p-8">
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-        <h1 className="text-2xl font-bold flex items-center gap-3">
-          <FileText className="w-8 h-8 text-primary" />
-          Resume <span className="gradient-text">Studio</span>
-        </h1>
-      </motion.div>
+    <div className="p-6 lg:p-12 max-w-[1600px] mx-auto min-h-screen bg-transparent">
+       <div className="grid lg:grid-cols-[400px_1fr] gap-12 items-start">
+          
+          {/* Left Panel: Editor */}
+          <div className="space-y-8 sticky top-12">
+             <div className="flex items-center gap-4 mb-10">
+                <div className="p-3 bg-primary rounded-2xl shadow-lg shadow-primary/20"><Zap className="w-6 h-6 text-primary-foreground" /></div>
+                <div><h1 className="text-2xl font-black gradient-text">Luxury Resume</h1><p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Advanced Studio</p></div>
+             </div>
 
-      <div className="grid lg:grid-cols-2 gap-8 items-start">
-        <div className="space-y-8">
-          <div className="flex justify-between relative px-2">
-            <div className="absolute top-5 left-8 right-8 h-[1px] bg-border -z-10" />
-            {steps.map((step, index) => (
-              <div key={step.label} className="flex flex-col items-center gap-2 cursor-pointer" onClick={() => setActiveStep(index)}>
-                <div className={cn(
-                  "w-10 h-10 rounded-full flex items-center justify-center transition-all",
-                  activeStep === index ? "bg-primary text-primary-foreground scale-110 shadow-lg" : 
-                  activeStep > index ? "bg-emerald-500 text-white" : "bg-card border border-border text-muted-foreground"
-                )}>
-                  {activeStep > index ? <CheckCircle2 className="w-5 h-5" /> : <step.icon className="w-4 h-4" />}
-                </div>
-                <span className={cn("text-[8px] uppercase font-bold", activeStep === index ? "text-primary" : "text-muted-foreground")}>{step.label}</span>
-              </div>
-            ))}
-          </div>
-
-          <GlassCard>
-            <GlassCardContent className="p-6">
-              <AnimatePresence mode="wait">
-                <motion.div key={activeStep} initial={{ opacity: 0, x: 5 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -5 }}>
-                  {renderStepContent()}
-                </motion.div>
-              </AnimatePresence>
-              
-              <div className="mt-8 flex justify-between pt-6 border-t border-border">
-                <button onClick={() => setActiveStep(p => Math.max(0, p - 1))} className={cn("text-sm text-muted-foreground disabled:opacity-0", activeStep === 0 && "invisible")}>
-                   Back
-                </button>
-                {activeStep < steps.length - 1 && (
-                  <button onClick={() => setActiveStep(p => p + 1)} className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-bold">
-                    Continue
+             <div className="flex justify-between items-center relative py-4">
+                <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-border -z-10" />
+                {steps.map((s, idx) => (
+                  <button key={idx} onClick={() => setActiveStep(idx)} className={cn("w-10 h-10 rounded-xl flex items-center justify-center transition-all", activeStep === idx ? "bg-primary text-primary-foreground scale-110 shadow-xl" : activeStep > idx ? "bg-emerald-500 text-white" : "bg-card border border-border text-muted-foreground")}>
+                     {activeStep > idx ? <CheckCircle2 className="w-5 h-5" /> : <s.icon className="w-4 h-4" />}
                   </button>
-                )}
-              </div>
-            </GlassCardContent>
-          </GlassCard>
-        </div>
+                ))}
+             </div>
 
-        <div className="hidden lg:block sticky top-8 print:static">
-          <div id="resume-preview" className="aspect-[1/1.41] bg-white text-slate-800 shadow-2xl rounded-2xl overflow-hidden overflow-y-auto">
-            {activeTemplate === 'minimal' ? (
-              <div className="flex h-full">
-                <div className="w-1/3 bg-slate-50 p-8 border-r border-slate-100 flex flex-col gap-6">
-                  <h2 className="text-xl font-black uppercase text-slate-900 leading-tight">
-                    {resumeData.personalInfo.name.split(' ')[0]}<br/>
-                    <span style={{ color: primaryColor }}>{resumeData.personalInfo.name.split(' ').slice(1).join(' ')}</span>
-                  </h2>
-                  <div className="space-y-2 text-[10px] text-slate-500 font-medium">
-                     {resumeData.personalInfo.email && <div className="flex items-center gap-2 truncate"><Mail className="w-3 h-3" /> {resumeData.personalInfo.email}</div>}
-                     {resumeData.personalInfo.phone && <div className="flex items-center gap-2"><Phone className="w-3 h-3" /> {resumeData.personalInfo.phone}</div>}
-                  </div>
-                  <section>
-                    <h4 className="text-[10px] font-black uppercase text-slate-300 mb-2">Skills</h4>
-                    <div className="flex flex-wrap gap-1">
-                      {resumeData.skills.map(s => <span key={s} className="bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[8px] text-slate-600 font-bold">{s}</span>)}
-                    </div>
-                  </section>
+             <GlassCard className="border-none shadow-2xl bg-card/80 backdrop-blur-3xl overflow-hidden">
+                <GlassCardHeader className="bg-muted/50 py-4 border-b border-white/5"><h3 className="text-sm font-black uppercase tracking-widest">{steps[activeStep].label}</h3></GlassCardHeader>
+                <GlassCardContent className="p-8"><AnimatePresence mode="wait"><motion.div key={activeStep} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.05 }}>{renderStepContent()}</motion.div></AnimatePresence></GlassCardContent>
+                <div className="p-6 bg-muted/30 flex justify-between border-t border-white/5">
+                   <button onClick={() => setActiveStep(p => Math.max(0, p - 1))} className={cn("text-xs font-black uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors", activeStep === 0 && "opacity-0")}>Prev</button>
+                   {activeStep < steps.length - 1 && <button onClick={() => setActiveStep(p => p + 1)} className="text-xs font-black uppercase tracking-widest text-primary hover:scale-105 transition-transform">Continue</button>}
                 </div>
-                <div className="flex-1 p-10 flex flex-col gap-6 text-[11px]">
-                  <section><h4 className="text-[10px] font-black uppercase mb-2" style={{ color: primaryColor }}>Profile</h4><p className="text-slate-600">{resumeData.personalInfo.summary}</p></section>
-                  <section><h4 className="text-[10px] font-black uppercase mb-2" style={{ color: primaryColor }}>Experience</h4>{resumeData.experience.map(e => <div key={e.id} className="mb-4"><div className="font-bold flex justify-between"><span>{e.role}</span><span className="text-[9px] text-slate-400">{e.period}</span></div><div className="text-slate-500 italic mb-1">{e.company}</div><ul className="list-disc list-inside space-y-0.5">{e.bullets.map((b, i) => b && <li key={i}>{b}</li>)}</ul></div>)}</section>
-                </div>
-              </div>
-            ) : activeTemplate === 'executive' ? (
-              <div className="p-12 space-y-8 flex flex-col text-[11px]">
-                 <header className="border-b-4 pb-6" style={{ borderColor: primaryColor }}>
-                    <h2 className="text-4xl font-black text-slate-900">{resumeData.personalInfo.name}</h2>
-                    <div className="flex gap-4 mt-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                       <span>{resumeData.personalInfo.email}</span>
-                       <span>{resumeData.personalInfo.location}</span>
-                    </div>
-                 </header>
-                 <section><h4 className="text-sm font-black uppercase mb-4" style={{ color: primaryColor }}>Executive Summary</h4><p className="text-slate-700 leading-relaxed text-[12px]">{resumeData.personalInfo.summary}</p></section>
-                 <div className="grid grid-cols-2 gap-8">
-                    <section><h4 className="text-sm font-black uppercase mb-4" style={{ color: primaryColor }}>Professional Background</h4>{resumeData.experience.map(e => <div key={e.id} className="mb-4"><div className="font-bold text-[12px]">{e.company}</div><div className="italic text-slate-500 mb-1">{e.role} | {e.period}</div><ul className="list-disc list-inside">{e.bullets.map((b, i) => b && <li key={i}>{b}</li>)}</ul></div>)}</section>
-                    <div className="space-y-8">
-                       <section><h4 className="text-sm font-black uppercase mb-4" style={{ color: primaryColor }}>Core Competencies</h4><div className="grid grid-cols-2 gap-1">{resumeData.skills.map(s => <div key={s} className="flex items-center gap-1 font-bold text-slate-600"><div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: primaryColor }} />{s}</div>)}</div></section>
-                    </div>
-                 </div>
-              </div>
-            ) : (
-              <div className={cn("p-12 flex flex-col h-full", activeTemplate === 'modern' ? "items-center text-center" : "items-start")}>
-                 <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">{resumeData.personalInfo.name}</h2>
-                 <div className="flex flex-wrap justify-center gap-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2 mb-10">
-                    <span>{resumeData.personalInfo.email}</span>
-                    <span>{resumeData.personalInfo.location}</span>
-                 </div>
-                 <div className="w-full text-left space-y-8 text-[11px]">
-                    <section><h4 className="text-[10px] font-black uppercase border-b-2 pb-1 mb-3" style={{ color: primaryColor, borderColor: primaryColor }}>The Portfolio</h4><p className="text-slate-700">{resumeData.personalInfo.summary}</p></section>
-                    <section><h4 className="text-[10px] font-black uppercase border-b-2 pb-1 mb-3" style={{ color: primaryColor, borderColor: primaryColor }}>Selected Experience</h4>{resumeData.experience.map(e => <div key={e.id} className="mb-6"><div className="flex justify-between font-bold text-[13px]"><span>{e.role}</span><span className="text-[10px] text-slate-400">{e.period}</span></div><div className="font-bold text-slate-500 text-[10px] uppercase tracking-wider mb-2">{e.company}</div><ul className="space-y-1">{e.bullets.map((b, i) => b && <li key={i} className="flex gap-2"> <span className="mt-1.5 w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: primaryColor }} /> {b} </li>)}</ul></div>)}</section>
-                    <section><h4 className="text-[10px] font-black uppercase border-b-2 pb-1 mb-3" style={{ color: primaryColor, borderColor: primaryColor }}>Top Skills</h4><div className="flex flex-wrap gap-1">{resumeData.skills.map(s => <span key={s} className="px-2 py-1 bg-slate-50 border border-slate-100 rounded text-[9px] font-bold text-slate-600">{s}</span>)}</div></section>
-                 </div>
-              </div>
-            )}
+             </GlassCard>
           </div>
-        </div>
-      </div>
-      
-      <style jsx global>{`
+
+          {/* Right Panel: Advanced Live Preview */}
+          <div className="hidden lg:block">
+             <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3"><LayoutTemplate className="w-5 h-5 text-primary" /><h3 className="font-bold text-lg">Active Template: <span className="text-primary capitalize">{activeTemplate}</span></h3></div>
+                <div className="flex gap-2">
+                   {['sans', 'serif', 'mono'].map(f => <button key={f} onClick={() => setFontFamily(f)} className={cn("px-3 py-1 rounded-lg text-[10px] font-bold border transition-all", fontFamily === f ? "bg-white text-black border-black" : "bg-muted border-border")}>{f.toUpperCase()}</button>)}
+                </div>
+             </div>
+
+             <div className={cn("aspect-[1/1.41] bg-white text-slate-900 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] rounded-sm overflow-hidden p-0", fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans')}>
+                <div id="resume-preview" className="h-full w-full">
+                  {/* TECH INNOVATOR TEMPLATE */}
+                  {activeTemplate === 'tech' && (
+                    <div className="h-full flex flex-col bg-[#111827] text-gray-200">
+                       <div className="p-12 flex justify-between items-start border-b border-gray-800 bg-[#030712]">
+                          <div><h2 className="text-4xl font-black tracking-tight text-white mb-2">{resumeData.personalInfo.name || 'FULL NAME'}</h2><div className="flex gap-4 text-xs font-bold text-gray-400 uppercase tracking-widest"><span>{resumeData.personalInfo.email}</span><span>{resumeData.personalInfo.location}</span></div></div>
+                          <div className="w-20 h-20 rounded-2xl border-4 border-gray-800 overflow-hidden bg-gray-900">{resumeData.personalInfo.photo && <img src={resumeData.personalInfo.photo} className="w-full h-full object-cover" />}</div>
+                       </div>
+                       <div className="flex-1 grid grid-cols-[1fr_260px] h-full">
+                          <div className="p-12 space-y-12">
+                             <section><h4 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] mb-6" style={{ color: primaryColor }}><Zap className="w-3 h-3" /> Core Narrative</h4><p className="text-sm leading-relaxed text-gray-400">{resumeData.personalInfo.summary}</p></section>
+                             <section><h4 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] mb-6" style={{ color: primaryColor }}><Briefcase className="w-3 h-3" /> Mission Logs</h4><div className="space-y-8">{resumeData.experience.map(e => <div key={e.id} className="relative pl-6 border-l border-gray-800"><div className="absolute top-0 left-[-4.5px] w-2 h-2 rounded-full" style={{ backgroundColor: primaryColor }} /><div className="font-bold text-white">{e.role}</div><div className="text-xs text-gray-500 mb-2 font-black uppercase tracking-wider">{e.company} | {e.period}</div><ul className="text-xs text-gray-400 space-y-1 list-disc list-inside">{e.bullets.map((b, i) => b && <li key={i}>{b}</li>)}</ul></div>)}</div></section>
+                          </div>
+                          <div className="bg-[#1f2937]/50 p-10 border-l border-gray-800 space-y-10">
+                             <section><h4 className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-6">Stack Matrix</h4><div className="space-y-4">{resumeData.skills.map(s => <div key={s.name} className="space-y-1.5"><div className="flex justify-between text-[10px] uppercase font-bold text-gray-300"><span>{s.name}</span><span>{s.level}%</span></div><div className="h-1 bg-gray-800 rounded-full overflow-hidden"><div className="h-full transition-all duration-1000" style={{ width: `${s.level}%`, backgroundColor: primaryColor }} /></div></div>)}</div></section>
+                             <section><h4 className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-4">Repo Showcase</h4><div className="space-y-6">{resumeData.projects.map(p => <div key={p.id} className="p-4 rounded-xl bg-gray-900/50 border border-gray-800"><h5 className="font-bold text-[11px] text-white">/{p.title}</h5><p className="text-[9px] text-gray-500 mt-1 line-clamp-2">{p.description}</p></div>)}</div></section>
+                          </div>
+                       </div>
+                    </div>
+                  )}
+
+                  {/* CREATIVE PORTFOLIO TEMPLATE */}
+                  {activeTemplate === 'creative' && (
+                    <div className="h-full grid grid-cols-[340px_1fr]">
+                       <div className="bg-[#fafafa] p-12 flex flex-col items-center text-center border-r border-gray-100">
+                          <div className="w-40 h-40 rounded-full overflow-hidden mb-8 ring-8 ring-white shadow-xl bg-gray-200">{resumeData.personalInfo.photo && <img src={resumeData.personalInfo.photo} className="w-full h-full object-cover" />}</div>
+                          <h2 className="text-3xl font-black text-slate-900 leading-tight mb-2 uppercase">{resumeData.personalInfo.name}</h2>
+                          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 mb-10">Creative Engineer</p>
+                          <div className="w-full space-y-8 text-left">
+                             <section><h4 className="text-[9px] font-black uppercase tracking-widest mb-4" style={{ color: primaryColor }}>Connections</h4><div className="space-y-3 text-[10px] font-medium text-slate-600"><div>{resumeData.personalInfo.email}</div><div>{resumeData.personalInfo.location}</div></div></section>
+                             <section><h4 className="text-[9px] font-black uppercase tracking-widest mb-4" style={{ color: primaryColor }}>Top Arsenal</h4><div className="flex flex-wrap gap-1.5">{resumeData.skills.map(s => <span key={s.name} className="px-2 py-1 bg-white border border-gray-200 rounded text-[9px] font-bold shadow-sm">{s.name}</span>)}</div></section>
+                          </div>
+                       </div>
+                       <div className="p-16 space-y-16">
+                          <section><div className="w-12 h-1 mb-6" style={{ backgroundColor: primaryColor }} /><h3 className="text-xl font-black text-slate-900 mb-6">Brief</h3><p className="text-sm leading-relaxed text-slate-600 font-medium italic">"{resumeData.personalInfo.summary}"</p></section>
+                          <section><h3 className="text-xl font-black text-slate-900 mb-8">Journey</h3><div className="space-y-12">{resumeData.experience.map(e => <div key={e.id}><h5 className="text-lg font-bold text-slate-900">{e.role}</h5><p className="text-xs font-black uppercase tracking-widest mt-1" style={{ color: primaryColor }}>{e.company} // {e.period}</p><ul className="mt-4 space-y-2 text-xs text-slate-500 font-medium list-none">{e.bullets.map((b, i) => b && <li key={i} className="flex gap-3"><span>—</span>{b}</li>)}</ul></div>)}</div></section>
+                       </div>
+                    </div>
+                  )}
+
+                  {/* MINIMALIST TEMPLATE */}
+                  {activeTemplate === 'minimal' && (
+                    <div className="p-20 h-full flex flex-col gap-20 bg-white">
+                       <header className="flex justify-between items-end border-b-2 border-slate-900 pb-10">
+                          <div><h1 className="text-5xl font-black tracking-tighter text-slate-900">{resumeData.personalInfo.name}</h1><p className="text-xs font-bold uppercase tracking-[0.4em] text-slate-400 mt-2">Design-Led Development</p></div>
+                          <div className="text-right text-[10px] font-bold text-slate-800 uppercase space-y-1"><div>{resumeData.personalInfo.email}</div><div>{resumeData.personalInfo.location}</div></div>
+                       </header>
+                       <div className="grid grid-cols-[1fr_260px] gap-20">
+                          <div className="space-y-16">
+                             <section><h3 className="text-xs font-black uppercase tracking-widest mb-8 text-slate-300">Background</h3><p className="text-sm leading-loose text-slate-900">{resumeData.personalInfo.summary}</p></section>
+                             <section><h3 className="text-xs font-black uppercase tracking-widest mb-10 text-slate-300">Selection of Work</h3><div className="space-y-12">{resumeData.experience.map(e => <div key={e.id} className="grid grid-cols-[100px_1fr] gap-8"><div className="text-[10px] font-black uppercase tracking-widest text-slate-400 pt-1">{e.period}</div><div><h4 className="text-sm font-bold text-slate-900">{e.company}</h4><p className="text-[11px] font-medium text-slate-500 underline decoration-slate-200 underline-offset-4 mt-1 mb-4">{e.role}</p><ul className="space-y-2">{e.bullets.map((b, i) => b && <li key={i} className="text-xs text-slate-700 leading-relaxed">• {b}</li>)}</ul></div></div>)}</div></section>
+                          </div>
+                          <div className="space-y-16">
+                             <section><h3 className="text-xs font-black uppercase tracking-widest mb-8 text-slate-300">Technical</h3><div className="space-y-4">{resumeData.skills.map(s => <div key={s.name} className="flex flex-col gap-1"><span className="text-[10px] font-black uppercase tracking-wider text-slate-700">{s.name}</span><div className="w-full h-[1px] bg-slate-100" /><span className="text-[9px] font-bold text-slate-300">Proficiency: {s.level}%</span></div>)}</div></section>
+                          </div>
+                       </div>
+                    </div>
+                  )}
+
+                  {/* EXECUTIVE TEMPLATE */}
+                  {activeTemplate === 'executive' && (
+                    <div className="h-full p-16 flex flex-col bg-slate-50 overflow-hidden">
+                       <div className="border-[12px] border-slate-900 p-12 h-full flex flex-col">
+                          <header className="text-center mb-16 border-b border-slate-200 pb-10">
+                             <h1 className="text-4xl font-black text-slate-900 tracking-tight uppercase mb-4">{resumeData.personalInfo.name}</h1>
+                             <div className="flex justify-center gap-6 text-[10px] font-bold text-slate-400 tracking-widest uppercase"><span>{resumeData.personalInfo.email}</span><span>•</span><span>{resumeData.personalInfo.location}</span><span>•</span><span>{resumeData.personalInfo.phone}</span></div>
+                          </header>
+                          <div className="grid grid-cols-1 gap-12 flex-1">
+                             <section className="text-center max-w-2xl mx-auto"><h3 className="text-[11px] font-black uppercase tracking-[0.2em] mb-4 text-slate-300">Professional Profile</h3><p className="text-sm font-medium leading-relaxed text-slate-700 italic">"{resumeData.personalInfo.summary}"</p></section>
+                             <section><h3 className="text-[11px] font-black uppercase tracking-[0.2em] mb-8 text-slate-300 border-b border-slate-100 pb-2 text-center">Distinguished Career</h3><div className="space-y-10">{resumeData.experience.map(e => <div key={e.id} className="grid grid-cols-[140px_1fr] gap-8"><div className="text-[10px] font-black text-slate-400 uppercase pt-1">{e.period}</div><div><h4 className="text-sm font-bold text-slate-900 uppercase">{e.company}</h4><p className="text-xs font-black italic text-slate-500 mb-4">{e.role}</p><ul className="space-y-2">{e.bullets.map((b, i) => b && <li key={i} className="text-xs text-slate-700 leading-relaxed">• {b}</li>)}</ul></div></div>)}</div></section>
+                          </div>
+                       </div>
+                    </div>
+                  )}
+                </div>
+             </div>
+          </div>
+       </div>
+
+       <style jsx global>{`
         @media print {
           body * { visibility: hidden !important; }
           #resume-preview, #resume-preview * { visibility: visible !important; }
-          #resume-preview { position: fixed !important; left: 0 !important; top: 0 !important; width: 210mm !important; height: 297mm !important; padding: 1in !important; box-shadow: none !important; border-radius: 0 !important; margin: 0 !important; }
+          #resume-preview { position: fixed !important; left: 0 !important; top: 0 !important; width: 210mm !important; height: 297mm !important; box-shadow: none !important; border-radius: 0 !important; margin: 0 !important; z-index: 9999 !important; }
         }
-      `}</style>
+       `}</style>
     </div>
   )
 }
