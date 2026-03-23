@@ -20,13 +20,11 @@ import {
   Phone,
   MapPin,
   Globe,
-  Github,
   Palette,
   Sparkles,
-  ArrowUpDown,
-  MoveUp,
-  MoveDown,
-  LayoutTemplate
+  LayoutTemplate,
+  Layers,
+  Award
 } from 'lucide-react'
 import { GlassCard, GlassCardContent, GlassCardHeader } from '@/components/ui/glass-card'
 import { MagneticButton } from '@/components/ui/magnetic-button'
@@ -69,7 +67,7 @@ interface ResumeData {
   }[]
 }
 
-type TemplateType = 'classic' | 'modern' | 'minimal'
+type TemplateType = 'classic' | 'modern' | 'minimal' | 'executive'
 
 export default function AdvancedResumeBuilderPage() {
   const { user } = useAuthStore()
@@ -77,15 +75,16 @@ export default function AdvancedResumeBuilderPage() {
   
   const [activeStep, setActiveStep] = useState(0)
   const steps = [
-    { label: 'Personal Info', icon: User },
-    { label: 'Experience', icon: Briefcase },
-    { label: 'Education', icon: GraduationCap },
+    { label: 'Template', icon: LayoutTemplate },
+    { label: 'Personal', icon: User },
+    { label: 'Work', icon: Briefcase },
+    { label: 'Study', icon: GraduationCap },
     { label: 'Projects', icon: Layout },
-    { label: 'Skills & Finish', icon: Code2 },
+    { label: 'Finish', icon: CheckCircle2 },
   ]
 
   const [activeTemplate, setActiveTemplate] = useState<TemplateType>('modern')
-  const [primaryColor, setPrimaryColor] = useState('#0ea5e9') // Default sky-500
+  const [primaryColor, setPrimaryColor] = useState('#0ea5e9')
 
   const [resumeData, setResumeData] = useState<ResumeData>({
     personalInfo: {
@@ -202,16 +201,9 @@ export default function AdvancedResumeBuilderPage() {
   const generateAISummary = () => {
     const allSkills = resumeData.skills.length > 0 ? resumeData.skills.join(', ') : 'modern tech stack'
     const topProject = resumeData.projects[0]?.title || 'innovative solutions'
-    
-    const summaries = [
-      `Detail-oriented Software Developer with expertise in ${allSkills}. Highly skilled in building ${topProject} and committed to writing clean, scalable code.`,
-      `Full-Stack Developer passionate about ${allSkills}. Proven track record of delivering high-quality projects like ${topProject} with modern architectures.`,
-      `Creative Problem Solver and Developer. Specialist in ${allSkills.split(',')[0]} and ${allSkills.split(',')[1] || 'UI/UX'}. Dedicated to project excellence and functional design.`
-    ]
-    
-    const randomSummary = summaries[Math.floor(Math.random() * summaries.length)]
-    updatePersonalInfo({ summary: randomSummary })
-    toast.success('AI Summary Generated!', { icon: <Sparkles className="w-4 h-4 text-emerald-500" /> })
+    const summary = `Expert in ${allSkills}. Specialist in building high-performance applications like ${topProject}. Focused on delivering scalable and user-centric software solutions.`
+    updatePersonalInfo({ summary })
+    toast.success('AI Summary Generated!')
   }
 
   // --- Render Helpers ---
@@ -220,13 +212,47 @@ export default function AdvancedResumeBuilderPage() {
       case 0:
         return (
           <div className="space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { id: 'modern', name: 'Modern', desc: 'Centered, clean & high-impact', icon: Layers },
+                { id: 'classic', name: 'Classic', desc: 'Standard professional layout', icon: Award },
+                { id: 'minimal', name: 'Minimal', desc: 'Modern sidebar structure', icon: Layout },
+                { id: 'executive', name: 'Executive', desc: 'Bold headings & dense info', icon: Briefcase },
+              ].map(t => (
+                <button
+                  key={t.id}
+                  onClick={() => {
+                    setActiveTemplate(t.id as TemplateType)
+                    setActiveStep(1)
+                  }}
+                  className={cn(
+                    "flex flex-col items-start p-4 rounded-xl border text-left transition-all group",
+                    activeTemplate === t.id ? "bg-primary/10 border-primary ring-1 ring-primary" : "bg-card border-border hover:border-primary/50"
+                  )}
+                >
+                  <div className={cn(
+                    "w-10 h-10 rounded-lg flex items-center justify-center mb-4 transition-colors",
+                    activeTemplate === t.id ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground group-hover:bg-primary/20 group-hover:text-primary"
+                  )}>
+                    <t.icon className="w-6 h-6" />
+                  </div>
+                  <h4 className="font-bold text-foreground text-sm">{t.name} Template</h4>
+                  <p className="text-[10px] text-muted-foreground mt-1">{t.desc}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+        )
+      case 1:
+        return (
+          <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium mb-1 block">Full Name</label>
                 <input 
                   value={resumeData.personalInfo.name} 
                   onChange={e => updatePersonalInfo({ name: e.target.value })}
-                  className="w-full bg-input border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 outline-none" 
+                  className="w-full bg-input border border-border rounded-lg px-4 py-2 outline-none" 
                   placeholder="John Doe"
                 />
               </div>
@@ -235,185 +261,55 @@ export default function AdvancedResumeBuilderPage() {
                 <input 
                   value={resumeData.personalInfo.email} 
                   onChange={e => updatePersonalInfo({ email: e.target.value })}
-                  className="w-full bg-input border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 outline-none" 
-                  placeholder="john@example.com"
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium mb-1 block">Phone</label>
-                <input 
-                  value={resumeData.personalInfo.phone} 
-                  onChange={e => updatePersonalInfo({ phone: e.target.value })}
-                  className="w-full bg-input border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 outline-none" 
-                  placeholder="+1 234 567 890"
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium mb-1 block">Location</label>
-                <input 
-                  value={resumeData.personalInfo.location} 
-                  onChange={e => updatePersonalInfo({ location: e.target.value })}
-                  className="w-full bg-input border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 outline-none" 
-                  placeholder="City, Country"
+                  className="w-full bg-input border border-border rounded-lg px-4 py-2 outline-none" 
                 />
               </div>
             </div>
             <div>
               <div className="flex justify-between items-center mb-1">
-                <label className="text-sm font-medium block">Professional Summary</label>
-                <button 
-                  onClick={generateAISummary}
-                  className="text-[10px] font-bold uppercase tracking-wider text-primary flex items-center gap-1 hover:opacity-80"
-                >
-                  <Sparkles className="w-3 h-3" /> Generate with AI
+                <label className="text-sm font-medium block">Personal Statement</label>
+                <button onClick={generateAISummary} className="text-[10px] font-bold text-primary flex items-center gap-1">
+                  <Sparkles className="w-3 h-3" /> AI Summary
                 </button>
               </div>
               <textarea 
                 value={resumeData.personalInfo.summary} 
                 onChange={e => updatePersonalInfo({ summary: e.target.value })}
                 rows={4}
-                className="w-full bg-input border border-border rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 outline-none resize-none" 
-                placeholder="Brief professional profile..."
+                className="w-full bg-input border border-border rounded-lg px-4 py-2 outline-none resize-none" 
               />
             </div>
-          </div>
-        )
-      case 1:
-        return (
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h4 className="font-medium text-foreground">Work Experience</h4>
-              <button onClick={addExperience} className="text-sm text-primary hover:underline flex items-center gap-1">
-                <Plus className="w-4 h-4" /> Add Experience
-              </button>
-            </div>
-            {resumeData.experience.map((exp, expIndex) => (
-              <GlassCard key={exp.id} className="relative transition-all hover:border-primary/30">
-                <div className="absolute top-4 right-4 flex gap-2">
-                  <button 
-                    onClick={() => removeExperience(exp.id)}
-                    className="text-muted-foreground hover:text-destructive transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-                <GlassCardContent className="p-4 grid gap-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <input 
-                      placeholder="Company" 
-                      value={exp.company}
-                      onChange={e => {
-                        const newExp = [...resumeData.experience]
-                        newExp[expIndex].company = e.target.value
-                        setResumeData(prev => ({ ...prev, experience: newExp }))
-                      }}
-                      className="bg-transparent border-b border-border py-1 focus:border-primary outline-none"
-                    />
-                    <input 
-                      placeholder="Role" 
-                      value={exp.role}
-                      onChange={e => {
-                        const newExp = [...resumeData.experience]
-                        newExp[expIndex].role = e.target.value
-                        setResumeData(prev => ({ ...prev, experience: newExp }))
-                      }}
-                      className="bg-transparent border-b border-border py-1 focus:border-primary outline-none"
-                    />
-                  </div>
-                  <input 
-                    placeholder="Period (e.g. Jan 2023 - Present)" 
-                    value={exp.period}
-                    onChange={e => {
-                      const newExp = [...resumeData.experience]
-                      newExp[expIndex].period = e.target.value
-                      setResumeData(prev => ({ ...prev, experience: newExp }))
-                    }}
-                    className="bg-transparent border-b border-border py-1 focus:border-primary outline-none"
-                  />
-                  
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-muted-foreground uppercase">Achievements/Bullets</label>
-                    {exp.bullets.map((bullet, bulletIndex) => (
-                      <div key={bulletIndex} className="flex gap-2">
-                        <input 
-                          value={bullet}
-                          onChange={e => updateExperienceBullet(exp.id, bulletIndex, e.target.value)}
-                          placeholder="Bullet point..."
-                          className="flex-1 bg-transparent border-b border-border/50 py-1 text-sm focus:border-primary outline-none"
-                        />
-                        <button onClick={() => removeExperienceBullet(exp.id, bulletIndex)} className="text-muted-foreground hover:text-destructive">
-                          <Trash2 className="w-3 h-3" />
-                        </button>
-                      </div>
-                    ))}
-                    <button 
-                      onClick={() => addExperienceBullet(exp.id)}
-                      className="text-[10px] text-primary hover:underline flex items-center gap-1 mt-1"
-                    >
-                      <Plus className="w-3 h-3" /> Add Bullet
-                    </button>
-                  </div>
-                </GlassCardContent>
-              </GlassCard>
-            ))}
-            {resumeData.experience.length === 0 && (
-              <div className="text-center py-8 text-muted-foreground border-2 border-dashed border-border rounded-xl">
-                Add your work experience to build your resume.
-              </div>
-            )}
           </div>
         )
       case 2:
         return (
           <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h4 className="font-medium text-foreground">Education</h4>
-              <button onClick={addEducation} className="text-sm text-primary hover:underline flex items-center gap-1">
-                <Plus className="w-4 h-4" /> Add Education
+             <div className="flex justify-between items-center">
+              <h4 className="font-medium">Experience</h4>
+              <button onClick={addExperience} className="text-xs text-primary flex items-center gap-1">
+                <Plus className="w-3 h-3" /> Add Job
               </button>
             </div>
-            {resumeData.education.map((edu, index) => (
-              <GlassCard key={edu.id} className="relative transition-all hover:border-primary/30">
-                <button 
-                  onClick={() => removeEducation(edu.id)}
-                  className="absolute top-4 right-4 text-muted-foreground hover:text-destructive transition-colors"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-                <GlassCardContent className="p-4 grid gap-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <input 
-                      placeholder="School / University" 
-                      value={edu.school}
-                      onChange={e => {
-                        const newEdu = [...resumeData.education]
-                        newEdu[index].school = e.target.value
-                        setResumeData(prev => ({ ...prev, education: newEdu }))
-                      }}
-                      className="bg-transparent border-b border-border py-1 focus:border-primary outline-none"
-                    />
-                    <input 
-                      placeholder="Degree" 
-                      value={edu.degree}
-                      onChange={e => {
-                        const newEdu = [...resumeData.education]
-                        newEdu[index].degree = e.target.value
-                        setResumeData(prev => ({ ...prev, education: newEdu }))
-                      }}
-                      className="bg-transparent border-b border-border py-1 focus:border-primary outline-none"
-                    />
-                  </div>
-                  <input 
-                    placeholder="Period (e.g. 2019 - 2023)" 
-                    value={edu.period}
-                    onChange={e => {
-                      const newEdu = [...resumeData.education]
-                      newEdu[index].period = e.target.value
-                      setResumeData(prev => ({ ...prev, education: newEdu }))
-                    }}
-                    className="bg-transparent border-b border-border py-1 focus:border-primary outline-none"
-                  />
-                </GlassCardContent>
+            {resumeData.experience.map((exp, expIndex) => (
+              <GlassCard key={exp.id} className="p-4 grid gap-3">
+                <div className="flex justify-between">
+                  <input placeholder="Company" value={exp.company} onChange={e => {
+                    const n = [...resumeData.experience]; n[expIndex].company = e.target.value; setResumeData(p => ({ ...p, experience: n }))
+                  }} className="bg-transparent border-b border-border text-sm outline-none" />
+                  <button onClick={() => removeExperience(exp.id)} className="text-muted-foreground hover:text-destructive"><Trash2 className="w-3 h-3" /></button>
+                </div>
+                <input placeholder="Role" value={exp.role} onChange={e => {
+                  const n = [...resumeData.experience]; n[expIndex].role = e.target.value; setResumeData(p => ({ ...p, experience: n }))
+                }} className="bg-transparent border-b border-border text-sm outline-none" />
+                <div className="space-y-1">
+                   {exp.bullets.map((b, bi) => (
+                     <div key={bi} className="flex gap-2">
+                        <input value={b} onChange={e => updateExperienceBullet(exp.id, bi, e.target.value)} className="flex-1 bg-transparent border-b border-border/50 text-xs outline-none" placeholder="Achievement..." />
+                        <button onClick={() => removeExperienceBullet(exp.id, bi)}><Trash2 className="w-2 h-2 text-muted-foreground" /></button>
+                     </div>
+                   ))}
+                   <button onClick={() => addExperienceBullet(exp.id)} className="text-[9px] text-primary">+ Bullet</button>
+                </div>
               </GlassCard>
             ))}
           </div>
@@ -421,126 +317,63 @@ export default function AdvancedResumeBuilderPage() {
       case 3:
         return (
           <div className="space-y-6">
-            <h4 className="font-medium text-foreground">Featured Projects</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {portfolioProjects.map(project => {
-                const isSelected = resumeData.projects.some(p => p.id === project.id)
+             <div className="flex justify-between items-center">
+              <h4 className="font-medium">Education</h4>
+              <button onClick={addEducation} className="text-xs text-primary flex items-center gap-1">
+                <Plus className="w-3 h-3" /> Add Study
+              </button>
+            </div>
+            {resumeData.education.map((edu, i) => (
+              <GlassCard key={edu.id} className="p-4 grid gap-2">
+                 <input placeholder="School" value={edu.school} onChange={e => {
+                   const n = [...resumeData.education]; n[i].school = e.target.value; setResumeData(p => ({ ...p, education: n }))
+                 }} className="bg-transparent border-b border-border text-sm outline-none" />
+                 <input placeholder="Degree" value={edu.degree} onChange={e => {
+                   const n = [...resumeData.education]; n[i].degree = e.target.value; setResumeData(p => ({ ...p, education: n }))
+                 }} className="bg-transparent border-b border-border text-sm outline-none" />
+              </GlassCard>
+            ))}
+          </div>
+        )
+      case 4:
+        return (
+          <div className="space-y-6">
+            <h4 className="font-medium">Projects</h4>
+            <div className="grid grid-cols-2 gap-3">
+              {portfolioProjects.map(p => {
+                const s = resumeData.projects.some(rp => rp.id === p.id)
                 return (
-                  <button
-                    key={project.id}
-                    onClick={() => {
-                      if (isSelected) {
-                        setResumeData(prev => ({ ...prev, projects: prev.projects.filter(p => p.id !== project.id) }))
-                      } else {
-                        setResumeData(prev => ({ 
-                          ...prev, 
-                          projects: [...prev.projects, { 
-                            id: project.id, 
-                            title: project.title, 
-                            description: project.description, 
-                            skills: project.skills,
-                            url: project.url 
-                          }] 
-                        }))
-                      }
-                    }}
-                    className={cn(
-                      "text-left p-4 rounded-xl border transition-all duration-200",
-                      isSelected ? "bg-primary/10 border-primary" : "bg-input border-border hover:border-primary/50"
-                    )}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <h5 className="font-bold truncate">{project.title}</h5>
-                      {isSelected && <CheckCircle2 className="w-4 h-4 text-primary" />}
-                    </div>
-                    <p className="text-xs text-muted-foreground line-clamp-2">{project.description}</p>
+                  <button key={p.id} onClick={() => {
+                    if (s) setResumeData(prev => ({ ...prev, projects: prev.projects.filter(rp => rp.id !== p.id) }))
+                    else setResumeData(prev => ({ ...prev, projects: [...prev.projects, { ...p }] }))
+                  }} className={cn("p-2 border rounded-lg text-left text-xs", s ? "border-primary bg-primary/5" : "border-border")}>
+                    {p.title}
                   </button>
                 )
               })}
             </div>
           </div>
         )
-      case 4:
+      case 5:
         return (
           <div className="space-y-8">
             <section>
-              <h4 className="font-medium text-foreground mb-4">Skills</h4>
-              <div className="flex flex-wrap gap-2">
-                {dashboardSkills.map(skill => {
-                  const isSelected = resumeData.skills.includes(skill.name)
-                  return (
-                    <button
-                      key={skill.id}
-                      onClick={() => {
-                        if (isSelected) {
-                          setResumeData(prev => ({ ...prev, skills: prev.skills.filter(s => s !== skill.name) }))
-                        } else {
-                          setResumeData(prev => ({ ...prev, skills: [...prev.skills, skill.name] }))
-                        }
-                      }}
-                      className={cn(
-                        "px-3 py-1.5 rounded-lg text-sm transition-all",
-                        isSelected ? "bg-primary text-primary-foreground" : "bg-input border border-border hover:border-primary/50"
-                      )}
-                    >
-                      {skill.name}
-                    </button>
-                  )
-                })}
+              <h4 className="font-medium mb-3">Branding</h4>
+              <div className="flex gap-3">
+                {['#0ea5e9', '#ec4899', '#10b981', '#6366f1', '#f59e0b', '#dc2626', '#1e293b'].map(c => (
+                  <button key={c} onClick={() => setPrimaryColor(c)} className={cn("w-8 h-8 rounded-full border-2", primaryColor === c ? "border-white" : "border-transparent")} style={{ backgroundColor: c }} />
+                ))}
               </div>
             </section>
-
-            <section>
-              <h4 className="font-medium text-foreground mb-4 flex items-center gap-2">
-                <Palette className="w-4 h-4" /> Visual Settings
-              </h4>
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <label className="text-xs font-bold uppercase text-muted-foreground block mb-2">Pick Template</label>
-                  <div className="flex gap-2">
-                    {(['classic', 'modern', 'minimal'] as TemplateType[]).map(t => (
-                      <button
-                        key={t}
-                        onClick={() => setActiveTemplate(t)}
-                        className={cn(
-                          "px-3 py-2 rounded-lg text-xs capitalize transition-all border",
-                          activeTemplate === t ? "bg-primary/20 border-primary text-primary font-bold" : "bg-input border-border"
-                        )}
-                      >
-                        {t}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <label className="text-xs font-bold uppercase text-muted-foreground block mb-2">Primary Color</label>
-                  <div className="flex gap-2">
-                    {['#0ea5e9', '#ec4899', '#f59e0b', '#10b981', '#6366f1'].map(color => (
-                      <button
-                        key={color}
-                        onClick={() => setPrimaryColor(color)}
-                        className={cn(
-                          "w-6 h-6 rounded-full transition-transform active:scale-95",
-                          primaryColor === color ? "ring-2 ring-white ring-offset-2 scale-110" : ""
-                        )}
-                        style={{ backgroundColor: color }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
+            
+            <section className="pt-6 border-t border-border">
+              <MagneticButton variant="primary" onClick={handlePrint} className="w-full">
+                <Download className="w-4 h-4" /> Download PDF
+              </MagneticButton>
+              <p className="text-[10px] text-muted-foreground text-center mt-4">
+                You can change the template at any time in Step 1.
+              </p>
             </section>
-
-            <div className="pt-6 border-t border-border">
-              <div className="flex flex-col sm:flex-row gap-4">
-                <MagneticButton variant="primary" onClick={handlePrint} className="flex-1">
-                  <Download className="w-4 h-4" /> Download Professional PDF
-                </MagneticButton>
-                <MagneticButton variant="secondary" onClick={() => toast.success("Draft saved to cloud!")}>
-                  Save Draft
-                </MagneticButton>
-              </div>
-            </div>
           </div>
         )
       default:
@@ -550,277 +383,118 @@ export default function AdvancedResumeBuilderPage() {
 
   return (
     <div className="p-6 lg:p-8">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
-      >
-        <h1 className="text-2xl lg:text-3xl font-bold text-foreground mb-2 flex items-center gap-3">
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+        <h1 className="text-2xl font-bold flex items-center gap-3">
           <FileText className="w-8 h-8 text-primary" />
-          Advanced Resume <span className="gradient-text">Builder</span>
+          Resume <span className="gradient-text">Studio</span>
         </h1>
-        <p className="text-muted-foreground">
-          Tailored, professional, and AI-assisted. Your career starts here.
-        </p>
       </motion.div>
 
-      <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-        {/* Editor Side */}
+      <div className="grid lg:grid-cols-2 gap-8 items-start">
         <div className="space-y-8">
-          {/* Progress Tracker */}
           <div className="flex justify-between relative px-2">
-            <div className="absolute top-5 left-8 right-8 h-[2px] bg-border -z-10" />
+            <div className="absolute top-5 left-8 right-8 h-[1px] bg-border -z-10" />
             {steps.map((step, index) => (
-              <div key={step.label} className="flex flex-col items-center gap-2 group cursor-pointer" onClick={() => setActiveStep(index)}>
+              <div key={step.label} className="flex flex-col items-center gap-2 cursor-pointer" onClick={() => setActiveStep(index)}>
                 <div className={cn(
-                  "w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300",
-                  activeStep === index ? "bg-primary text-primary-foreground scale-110 shadow-lg shadow-primary/20" : 
+                  "w-10 h-10 rounded-full flex items-center justify-center transition-all",
+                  activeStep === index ? "bg-primary text-primary-foreground scale-110 shadow-lg" : 
                   activeStep > index ? "bg-emerald-500 text-white" : "bg-card border border-border text-muted-foreground"
                 )}>
-                  {activeStep > index ? <CheckCircle2 className="w-6 h-6" /> : <step.icon className="w-5 h-5" />}
+                  {activeStep > index ? <CheckCircle2 className="w-5 h-5" /> : <step.icon className="w-4 h-4" />}
                 </div>
-                <span className={cn(
-                  "text-[9px] uppercase font-bold tracking-wider transition-colors",
-                  activeStep === index ? "text-primary" : "text-muted-foreground"
-                )}>{step.label}</span>
+                <span className={cn("text-[8px] uppercase font-bold", activeStep === index ? "text-primary" : "text-muted-foreground")}>{step.label}</span>
               </div>
             ))}
           </div>
 
-          <GlassCard delay={0.1}>
-            <GlassCardHeader>
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-foreground">{steps[activeStep].label}</h3>
-                <span className="text-xs text-muted-foreground">Step {activeStep + 1} of 5</span>
-              </div>
-            </GlassCardHeader>
+          <GlassCard>
             <GlassCardContent className="p-6">
               <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeStep}
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.2 }}
-                >
+                <motion.div key={activeStep} initial={{ opacity: 0, x: 5 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -5 }}>
                   {renderStepContent()}
                 </motion.div>
               </AnimatePresence>
               
               <div className="mt-8 flex justify-between pt-6 border-t border-border">
-                <button 
-                  onClick={() => setActiveStep(prev => Math.max(0, prev - 1))}
-                  className={cn(
-                    "flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-all",
-                    activeStep === 0 && "opacity-0 pointer-events-none"
-                  )}
-                >
-                  <ChevronLeft className="w-4 h-4" /> Previous
+                <button onClick={() => setActiveStep(p => Math.max(0, p - 1))} className={cn("text-sm text-muted-foreground disabled:opacity-0", activeStep === 0 && "invisible")}>
+                   Back
                 </button>
                 {activeStep < steps.length - 1 && (
-                  <MagneticButton 
-                    variant="primary" 
-                    onClick={() => setActiveStep(prev => Math.min(steps.length - 1, prev + 1))}
-                  >
-                    Next Step <ChevronRight className="w-4 h-4" />
-                  </MagneticButton>
+                  <button onClick={() => setActiveStep(p => p + 1)} className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-bold">
+                    Continue
+                  </button>
                 )}
               </div>
             </GlassCardContent>
           </GlassCard>
         </div>
 
-        {/* Live Preview Side */}
         <div className="hidden lg:block sticky top-8 print:static">
-          <div className="mb-4 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-               <LayoutTemplate className="w-4 h-4 text-primary" />
-               <h3 className="font-semibold text-foreground">Live Preview</h3>
-            </div>
-            <div className="flex gap-1.5">
-              {[1, 2, 3].map(i => <div key={i} className="w-2 h-2 rounded-full bg-border" />)}
-            </div>
-          </div>
-          
-          <div 
-            id="resume-preview" 
-            className={cn(
-              "aspect-[1/1.41] bg-white text-slate-800 shadow-2xl rounded-2xl overflow-hidden transition-all duration-500",
-              activeTemplate === 'classic' ? "p-[1.2in]" : 
-              activeTemplate === 'modern' ? "p-[1in]" : "flex p-0"
-            )}
-          >
+          <div id="resume-preview" className="aspect-[1/1.41] bg-white text-slate-800 shadow-2xl rounded-2xl overflow-hidden overflow-y-auto">
             {activeTemplate === 'minimal' ? (
-              <>
-                {/* Left Sidebar */}
-                <div className="w-1/3 bg-slate-50 border-r border-slate-100 p-8 flex flex-col gap-8">
-                  <div className="mb-4">
-                    <h2 className="text-xl font-black uppercase text-slate-900 leading-tight mb-2">
-                       {resumeData.personalInfo.name.split(' ')[0]}<br/>
-                       <span style={{ color: primaryColor }}>{resumeData.personalInfo.name.split(' ').slice(1).join(' ')}</span>
-                    </h2>
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Software Engineer</p>
-                  </div>
-
-                  <section>
-                    <h4 className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-3">Contact</h4>
-                    <div className="space-y-2 text-[10px] text-slate-600 font-medium">
-                      {resumeData.personalInfo.email && <div className="flex items-center gap-2 truncate"><Mail className="w-3 h-3" /> {resumeData.personalInfo.email}</div>}
-                      {resumeData.personalInfo.phone && <div className="flex items-center gap-2"><Phone className="w-3 h-3" /> {resumeData.personalInfo.phone}</div>}
-                      {resumeData.personalInfo.location && <div className="flex items-center gap-2"><MapPin className="w-3 h-3" /> {resumeData.personalInfo.location}</div>}
-                    </div>
-                  </section>
-
-                  <section>
-                    <h4 className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-3">Skills</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {resumeData.skills.map(s => <span key={s} className="bg-white border border-slate-200 px-2 py-1 rounded text-[9px] text-slate-700 font-bold">{s}</span>)}
-                    </div>
-                  </section>
-                </div>
-                {/* Right Main */}
-                <div className="flex-1 p-10 h-full overflow-hidden flex flex-col gap-6">
-                   <section>
-                     <h4 className="text-[10px] font-black uppercase tracking-widest mb-3" style={{ color: primaryColor }}>Profile</h4>
-                     <p className="text-[11px] leading-relaxed text-slate-700">{resumeData.personalInfo.summary}</p>
-                   </section>
-
-                   <section>
-                     <h4 className="text-[10px] font-black uppercase tracking-widest mb-3" style={{ color: primaryColor }}>Experience</h4>
-                     <div className="space-y-6">
-                        {resumeData.experience.map(exp => (
-                          <div key={exp.id}>
-                            <div className="font-bold text-slate-900 text-[12px]">{exp.role}</div>
-                            <div className="flex justify-between items-center text-[10px] mb-2">
-                              <span className="font-bold text-slate-500 italic">{exp.company}</span>
-                              <span className="text-slate-400">{exp.period}</span>
-                            </div>
-                            <ul className="list-disc list-inside space-y-1 text-[11px] text-slate-600">
-                               {exp.bullets.map((b, i) => b && <li key={i}>{b}</li>)}
-                            </ul>
-                          </div>
-                        ))}
-                     </div>
-                   </section>
-
-                   <section>
-                      <h4 className="text-[10px] font-black uppercase tracking-widest mb-3" style={{ color: primaryColor }}>Featured Projects</h4>
-                      <div className="space-y-4">
-                        {resumeData.projects.map(proj => (
-                          <div key={proj.id}>
-                            <div className="font-bold text-slate-900 text-[11px]">{proj.title}</div>
-                            <p className="text-[10px] text-slate-600">{proj.description}</p>
-                          </div>
-                        ))}
-                      </div>
-                   </section>
-                </div>
-              </>
-            ) : (
-              <div className="h-full flex flex-col">
-                {/* Header */}
-                <header className={cn(
-                  "flex flex-col mb-10",
-                  activeTemplate === 'modern' ? "items-center text-center" : "items-start"
-                )}>
-                  <h2 className="text-4xl font-extrabold uppercase tracking-tight text-slate-900 mb-3">
-                    {resumeData.personalInfo.name || 'Your Name'}
+              <div className="flex h-full">
+                <div className="w-1/3 bg-slate-50 p-8 border-r border-slate-100 flex flex-col gap-6">
+                  <h2 className="text-xl font-black uppercase text-slate-900 leading-tight">
+                    {resumeData.personalInfo.name.split(' ')[0]}<br/>
+                    <span style={{ color: primaryColor }}>{resumeData.personalInfo.name.split(' ').slice(1).join(' ')}</span>
                   </h2>
-                  <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                    {resumeData.personalInfo.email && <span className="flex items-center gap-1.5"><Mail className="w-3 h-3" /> {resumeData.personalInfo.email}</span>}
-                    {resumeData.personalInfo.phone && <span className="flex items-center gap-1.5"><Phone className="w-3 h-3" /> {resumeData.personalInfo.phone}</span>}
-                    {resumeData.personalInfo.location && <span className="flex items-center gap-1.5"><MapPin className="w-3 h-3" /> {resumeData.personalInfo.location}</span>}
-                    {resumeData.personalInfo.website && <span className="flex items-center gap-1.5"><Globe className="w-3 h-3" /> {resumeData.personalInfo.website.replace('https://', '')}</span>}
+                  <div className="space-y-2 text-[10px] text-slate-500 font-medium">
+                     {resumeData.personalInfo.email && <div className="flex items-center gap-2 truncate"><Mail className="w-3 h-3" /> {resumeData.personalInfo.email}</div>}
+                     {resumeData.personalInfo.phone && <div className="flex items-center gap-2"><Phone className="w-3 h-3" /> {resumeData.personalInfo.phone}</div>}
                   </div>
-                </header>
-
-                <div className="grid grid-cols-1 gap-10 text-[11px] leading-relaxed flex-1">
-                   {/* Summary */}
-                   {resumeData.personalInfo.summary && (
-                    <section>
-                      <h4 className="text-[10px] font-black uppercase tracking-widest pb-1.5 border-b-2 mb-3" style={{ borderColor: primaryColor, color: primaryColor }}>About Me</h4>
-                      <p className="text-slate-700">{resumeData.personalInfo.summary}</p>
-                    </section>
-                  )}
-
-                  {/* Experience */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-                    <section className="col-span-full">
-                      <h4 className="text-[10px] font-black uppercase tracking-widest pb-1.5 border-b-2 mb-4" style={{ borderColor: primaryColor, color: primaryColor }}>Professional Background</h4>
-                      <div className="space-y-6">
-                        {resumeData.experience.map(exp => (
-                          <div key={exp.id}>
-                            <div className="flex justify-between items-baseline mb-1">
-                              <span className="font-bold text-slate-900 text-[13px]">{exp.role}</span>
-                              <span className="text-[10px] font-bold text-slate-400">{exp.period}</span>
-                            </div>
-                            <div className="font-bold mb-2 uppercase tracking-wide text-[10px]" style={{ color: primaryColor }}>{exp.company}</div>
-                            <ul className="space-y-1.5">
-                               {exp.bullets.map((b, i) => b && (
-                                 <li key={i} className="flex gap-2 text-slate-700">
-                                   <span className="mt-1.5 w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: primaryColor }} />
-                                   {b}
-                                 </li>
-                               ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    </section>
-
-                    <section>
-                      <h4 className="text-[10px] font-black uppercase tracking-widest pb-1.5 border-b-2 mb-4" style={{ borderColor: primaryColor, color: primaryColor }}>Education</h4>
-                      <div className="space-y-4">
-                        {resumeData.education.map(edu => (
-                          <div key={edu.id}>
-                            <div className="font-bold text-slate-900 mb-0.5">{edu.school}</div>
-                            <div className="text-[10px] text-slate-500 font-medium">{edu.degree}</div>
-                            <div className="text-[9px] text-slate-400 font-bold">{edu.period}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </section>
-
-                    <section>
-                      <h4 className="text-[10px] font-black uppercase tracking-widest pb-1.5 border-b-2 mb-4" style={{ borderColor: primaryColor, color: primaryColor }}>Key Skills</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {resumeData.skills.map(skill => (
-                          <span key={skill} className="px-2 py-1 bg-slate-50 border border-slate-100 rounded font-bold text-slate-600 text-[9px]">
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    </section>
-                  </div>
+                  <section>
+                    <h4 className="text-[10px] font-black uppercase text-slate-300 mb-2">Skills</h4>
+                    <div className="flex flex-wrap gap-1">
+                      {resumeData.skills.map(s => <span key={s} className="bg-white border border-slate-200 px-1.5 py-0.5 rounded text-[8px] text-slate-600 font-bold">{s}</span>)}
+                    </div>
+                  </section>
                 </div>
+                <div className="flex-1 p-10 flex flex-col gap-6 text-[11px]">
+                  <section><h4 className="text-[10px] font-black uppercase mb-2" style={{ color: primaryColor }}>Profile</h4><p className="text-slate-600">{resumeData.personalInfo.summary}</p></section>
+                  <section><h4 className="text-[10px] font-black uppercase mb-2" style={{ color: primaryColor }}>Experience</h4>{resumeData.experience.map(e => <div key={e.id} className="mb-4"><div className="font-bold flex justify-between"><span>{e.role}</span><span className="text-[9px] text-slate-400">{e.period}</span></div><div className="text-slate-500 italic mb-1">{e.company}</div><ul className="list-disc list-inside space-y-0.5">{e.bullets.map((b, i) => b && <li key={i}>{b}</li>)}</ul></div>)}</section>
+                </div>
+              </div>
+            ) : activeTemplate === 'executive' ? (
+              <div className="p-12 space-y-8 flex flex-col text-[11px]">
+                 <header className="border-b-4 pb-6" style={{ borderColor: primaryColor }}>
+                    <h2 className="text-4xl font-black text-slate-900">{resumeData.personalInfo.name}</h2>
+                    <div className="flex gap-4 mt-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                       <span>{resumeData.personalInfo.email}</span>
+                       <span>{resumeData.personalInfo.location}</span>
+                    </div>
+                 </header>
+                 <section><h4 className="text-sm font-black uppercase mb-4" style={{ color: primaryColor }}>Executive Summary</h4><p className="text-slate-700 leading-relaxed text-[12px]">{resumeData.personalInfo.summary}</p></section>
+                 <div className="grid grid-cols-2 gap-8">
+                    <section><h4 className="text-sm font-black uppercase mb-4" style={{ color: primaryColor }}>Professional Background</h4>{resumeData.experience.map(e => <div key={e.id} className="mb-4"><div className="font-bold text-[12px]">{e.company}</div><div className="italic text-slate-500 mb-1">{e.role} | {e.period}</div><ul className="list-disc list-inside">{e.bullets.map((b, i) => b && <li key={i}>{b}</li>)}</ul></div>)}</section>
+                    <div className="space-y-8">
+                       <section><h4 className="text-sm font-black uppercase mb-4" style={{ color: primaryColor }}>Core Competencies</h4><div className="grid grid-cols-2 gap-1">{resumeData.skills.map(s => <div key={s} className="flex items-center gap-1 font-bold text-slate-600"><div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: primaryColor }} />{s}</div>)}</div></section>
+                    </div>
+                 </div>
+              </div>
+            ) : (
+              <div className={cn("p-12 flex flex-col h-full", activeTemplate === 'modern' ? "items-center text-center" : "items-start")}>
+                 <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">{resumeData.personalInfo.name}</h2>
+                 <div className="flex flex-wrap justify-center gap-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2 mb-10">
+                    <span>{resumeData.personalInfo.email}</span>
+                    <span>{resumeData.personalInfo.location}</span>
+                 </div>
+                 <div className="w-full text-left space-y-8 text-[11px]">
+                    <section><h4 className="text-[10px] font-black uppercase border-b-2 pb-1 mb-3" style={{ color: primaryColor, borderColor: primaryColor }}>The Portfolio</h4><p className="text-slate-700">{resumeData.personalInfo.summary}</p></section>
+                    <section><h4 className="text-[10px] font-black uppercase border-b-2 pb-1 mb-3" style={{ color: primaryColor, borderColor: primaryColor }}>Selected Experience</h4>{resumeData.experience.map(e => <div key={e.id} className="mb-6"><div className="flex justify-between font-bold text-[13px]"><span>{e.role}</span><span className="text-[10px] text-slate-400">{e.period}</span></div><div className="font-bold text-slate-500 text-[10px] uppercase tracking-wider mb-2">{e.company}</div><ul className="space-y-1">{e.bullets.map((b, i) => b && <li key={i} className="flex gap-2"> <span className="mt-1.5 w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: primaryColor }} /> {b} </li>)}</ul></div>)}</section>
+                    <section><h4 className="text-[10px] font-black uppercase border-b-2 pb-1 mb-3" style={{ color: primaryColor, borderColor: primaryColor }}>Top Skills</h4><div className="flex flex-wrap gap-1">{resumeData.skills.map(s => <span key={s} className="px-2 py-1 bg-slate-50 border border-slate-100 rounded text-[9px] font-bold text-slate-600">{s}</span>)}</div></section>
+                 </div>
               </div>
             )}
           </div>
         </div>
       </div>
       
-      {/* Footer Print Styles */}
       <style jsx global>{`
         @media print {
-          body * {
-            visibility: hidden !important;
-          }
-          #resume-preview, #resume-preview * {
-            visibility: visible !important;
-          }
-          #resume-preview {
-            position: fixed !important;
-            left: 0 !important;
-            top: 0 !important;
-            width: 210mm !important;
-            height: 297mm !important;
-            padding: 1in !important;
-            box-shadow: none !important;
-            border-radius: 0 !important;
-            transform: none !important;
-            margin: 0 !important;
-          }
+          body * { visibility: hidden !important; }
+          #resume-preview, #resume-preview * { visibility: visible !important; }
+          #resume-preview { position: fixed !important; left: 0 !important; top: 0 !important; width: 210mm !important; height: 297mm !important; padding: 1in !important; box-shadow: none !important; border-radius: 0 !important; margin: 0 !important; }
         }
       `}</style>
     </div>
