@@ -40,6 +40,7 @@ import { MagneticButton } from '@/components/ui/magnetic-button'
 import { useAuthStore, useDashboardStore } from '@/lib/store'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
+import { ResumeOptimizer } from '@/components/resume/resume-optimizer'
 
 // --- Types ---
 interface ResumeData {
@@ -956,13 +957,10 @@ export default function UltimateResumeStudioPage() {
                 </div>
 
                 {/* Floating Action Button for Mobile Preview */}
-                <div className="absolute bottom-10 inset-x-0 flex justify-center p-4">
-                   <div className="px-6 py-3 bg-slate-900 text-white rounded-full shadow-2xl text-[10px] font-black uppercase tracking-widest flex items-center gap-3">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Live Rendering
-                   </div>
-                </div>
              </div>
-          </div>
-       </div>
-  )
+           </div>
+           
+           <ResumeOptimizer data={resumeData} />
+        </div>
+   )
 }
