@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -243,6 +243,166 @@ export default function UltimateResumeStudioPage() {
     })
   }
 
+  const handlePrint = () => {
+    const { personalInfo, experience, education, skills, projects, sections } = resumeData
+    const color = primaryColor
+    const font = fontFamily === 'serif' ? 'Georgia, serif' : fontFamily === 'mono' ? 'Courier New, monospace' : 'Inter, Arial, sans-serif'
+
+    const buildExperienceHTML = () => experience.map(e => `
+      <div style="margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <strong style="font-size:11px">${e.company}</strong>
+          <span style="font-size:9px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:0.05em">${e.period}</span>
+        </div>
+        <div style="font-size:10px;color:#64748b;font-style:italic;margin:2px 0 6px">${e.role}</div>
+        <ul style="margin:0;padding-left:16px">
+          ${e.bullets.filter(b => b).map(b => `<li style="font-size:10px;color:#475569;line-height:1.6;margin-bottom:3px">${b}</li>`).join('')}
+        </ul>
+      </div>`).join('')
+
+    const buildEducationHTML = () => education.map(edu => `
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px">
+        <div>
+          <div style="font-size:10px;font-weight:700">${edu.degree}</div>
+          <div style="font-size:9px;color:#94a3b8;font-weight:600">${edu.school}</div>
+        </div>
+        <span style="font-size:9px;font-weight:700;color:#cbd5e1;text-transform:uppercase">${edu.period}</span>
+      </div>`).join('')
+
+    const buildSkillsHTML = () => `<div style="display:flex;flex-wrap:wrap;gap:6px">
+      ${skills.map(s => `<span style="padding:3px 10px;background:${color}15;color:${color};border:1px solid ${color}30;border-radius:4px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em">${s.name}</span>`).join('')}
+    </div>`
+
+    const buildProjectsHTML = () => projects.map(p => `
+      <div style="margin-bottom:14px">
+        <div style="font-size:10px;font-weight:700;color:#1e293b">${p.title}</div>
+        <div style="font-size:9px;color:#64748b;margin:3px 0">${p.description}</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:4px">
+          ${(p.skills || []).map((sk: string) => `<span style="font-size:8px;padding:2px 7px;background:#f1f5f9;border-radius:3px;font-weight:700;color:#64748b;text-transform:uppercase">${sk}</span>`).join('')}
+        </div>
+      </div>`).join('')
+
+    const buildCustomSectionsHTML = () => (sections || []).filter(s => s.visible).map(s => `
+      <div style="margin-bottom:20px">
+        <h3 style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:0.2em;color:${color};border-bottom:2px solid ${color};padding-bottom:4px;margin-bottom:10px">${s.title}</h3>
+        <p style="font-size:10px;color:#475569;white-space:pre-wrap;line-height:1.6">${s.content}</p>
+      </div>`).join('')
+
+    const professionalTemplate = `
+      <div style="padding:40px;font-family:${font};color:#1e293b;max-width:794px;margin:0 auto">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;padding-bottom:20px;border-bottom:2px solid #e2e8f0">
+          <div>
+            ${personalInfo.photo ? `<img src="${personalInfo.photo}" style="width:64px;height:64px;border-radius:12px;object-fit:cover;margin-bottom:10px" />` : ''}
+            <h1 style="font-size:28px;font-weight:900;letter-spacing:-0.03em;color:${color};margin:0 0 4px">${personalInfo.name || 'Your Name'}</h1>
+            <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:#64748b;margin:0">${experience[0]?.role || 'Professional Title'}</p>
+          </div>
+          <div style="text-align:right;font-size:9px;line-height:1.8;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:0.05em">
+            ${personalInfo.email ? `<div>${personalInfo.email}</div>` : ''}
+            ${personalInfo.phone ? `<div>${personalInfo.phone}</div>` : ''}
+            ${personalInfo.location ? `<div>${personalInfo.location}</div>` : ''}
+            ${personalInfo.linkedin ? `<div>${personalInfo.linkedin}</div>` : ''}
+          </div>
+        </div>
+        ${personalInfo.summary ? `
+          <div style="margin-bottom:24px">
+            <h3 style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:0.2em;color:${color};border-bottom:2px solid ${color};padding-bottom:4px;margin-bottom:10px">Summary</h3>
+            <p style="font-size:10px;color:#475569;line-height:1.7;margin:0">${personalInfo.summary}</p>
+          </div>` : ''}
+        ${experience.length > 0 ? `
+          <div style="margin-bottom:24px">
+            <h3 style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:0.2em;color:${color};border-bottom:2px solid ${color};padding-bottom:4px;margin-bottom:14px">Experience</h3>
+            ${buildExperienceHTML()}
+          </div>` : ''}
+        ${education.length > 0 ? `
+          <div style="margin-bottom:24px">
+            <h3 style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:0.2em;color:${color};border-bottom:2px solid ${color};padding-bottom:4px;margin-bottom:12px">Education</h3>
+            ${buildEducationHTML()}
+          </div>` : ''}
+        ${skills.length > 0 ? `
+          <div style="margin-bottom:24px">
+            <h3 style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:0.2em;color:${color};border-bottom:2px solid ${color};padding-bottom:4px;margin-bottom:10px">Skills</h3>
+            ${buildSkillsHTML()}
+          </div>` : ''}
+        ${projects.length > 0 ? `
+          <div style="margin-bottom:24px">
+            <h3 style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:0.2em;color:${color};border-bottom:2px solid ${color};padding-bottom:4px;margin-bottom:10px">Projects</h3>
+            ${buildProjectsHTML()}
+          </div>` : ''}
+        ${buildCustomSectionsHTML()}
+      </div>`
+
+    const techTemplate = `
+      <div style="font-family:${font};background:#0f172a;color:#f1f5f9;padding:44px;max-width:794px;margin:0 auto;min-height:1122px">
+        <div style="margin-bottom:32px;border-bottom:1px solid #1e293b;padding-bottom:24px">
+          <h1 style="font-size:32px;font-weight:900;letter-spacing:-0.03em;color:${color};margin:0 0 6px">${personalInfo.name || 'Your Name'}</h1>
+          <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;color:${color}80;margin:0 0 12px">${experience[0]?.role || 'Software Engineer'}</p>
+          <div style="display:flex;gap:20px;font-size:9px;color:#64748b;font-weight:600">
+            ${personalInfo.email ? `<span>${personalInfo.email}</span>` : ''}
+            ${personalInfo.phone ? `<span>${personalInfo.phone}</span>` : ''}
+            ${personalInfo.location ? `<span>${personalInfo.location}</span>` : ''}
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 280px;gap:32px">
+          <div>
+            ${personalInfo.summary ? `<div style="margin-bottom:28px"><h3 style="font-size:9px;font-weight:900;color:${color};text-transform:uppercase;letter-spacing:0.2em;margin-bottom:10px;padding-bottom:4px;border-bottom:1px solid #1e293b">Overview</h3><p style="font-size:10px;color:#94a3b8;line-height:1.7">${personalInfo.summary}</p></div>` : ''}
+            ${experience.length > 0 ? `<div style="margin-bottom:28px"><h3 style="font-size:9px;font-weight:900;color:${color};text-transform:uppercase;letter-spacing:0.2em;margin-bottom:14px;padding-bottom:4px;border-bottom:1px solid #1e293b">Experience</h3>
+            ${experience.map(e => `<div style="margin-bottom:18px"><div style="display:flex;justify-content:space-between"><strong style="font-size:10px;color:#f1f5f9">${e.company}</strong><span style="font-size:8px;color:#475569;font-weight:700;text-transform:uppercase">${e.period}</span></div><div style="font-size:9px;color:${color};margin:2px 0 6px;font-weight:600">${e.role}</div><ul style="margin:0;padding-left:14px">${e.bullets.filter(b=>b).map(b=>`<li style="font-size:9px;color:#94a3b8;line-height:1.6;margin-bottom:2px">${b}</li>`).join('')}</ul></div>`).join('')}</div>` : ''}
+          </div>
+          <div style="border-left:1px solid #1e293b;padding-left:24px">
+            ${skills.length > 0 ? `<div style="margin-bottom:24px"><h3 style="font-size:9px;font-weight:900;color:${color};text-transform:uppercase;letter-spacing:0.2em;margin-bottom:10px">Tech Stack</h3><div style="display:flex;flex-direction:column;gap:6px">${skills.slice(0,12).map(s=>`<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:9px;color:#cbd5e1;font-weight:600">${s.name}</span><div style="width:60px;height:3px;background:#1e293b;border-radius:4px"><div style="height:100%;background:${color};border-radius:4px;width:${s.level}%"></div></div></div>`).join('')}</div></div>` : ''}
+            ${education.length > 0 ? `<div><h3 style="font-size:9px;font-weight:900;color:${color};text-transform:uppercase;letter-spacing:0.2em;margin-bottom:10px">Education</h3>${education.map(edu=>`<div style="margin-bottom:10px"><div style="font-size:10px;font-weight:700;color:#f1f5f9">${edu.degree}</div><div style="font-size:9px;color:#64748b">${edu.school}</div><div style="font-size:8px;color:#475569;text-transform:uppercase;font-weight:700;margin-top:2px">${edu.period}</div></div>`).join('')}</div>` : ''}
+          </div>
+        </div>
+      </div>`
+
+    const maverickTemplate = `
+      <div style="font-family:${font};background:#f8fafc;max-width:794px;margin:0 auto;min-height:1122px;display:flex;flex-direction:row">
+        <div style="width:240px;background:#1e293b;color:#f1f5f9;padding:40px 28px;flex-shrink:0">
+          ${personalInfo.photo ? `<img src="${personalInfo.photo}" style="width:80px;height:80px;border-radius:16px;object-fit:cover;margin-bottom:20px" />` : `<div style="width:80px;height:80px;border-radius:16px;background:#334155;margin-bottom:20px"></div>`}
+          <h1 style="font-size:18px;font-weight:900;color:#ffffff;margin:0 0 4px;letter-spacing:-0.02em">${personalInfo.name || 'Your Name'}</h1>
+          <p style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:${color};margin:0 0 28px">${experience[0]?.role || ''}</p>
+          <div style="font-size:8px;color:#94a3b8;font-weight:600;line-height:2;margin-bottom:24px">
+            ${personalInfo.email ? `<div>${personalInfo.email}</div>` : ''}
+            ${personalInfo.phone ? `<div>${personalInfo.phone}</div>` : ''}
+            ${personalInfo.location ? `<div>${personalInfo.location}</div>` : ''}
+          </div>
+          ${skills.length > 0 ? `<div><h3 style="font-size:7px;font-weight:900;text-transform:uppercase;letter-spacing:0.2em;color:${color};margin-bottom:10px">Skills</h3><div style="display:flex;flex-direction:column;gap:7px">${skills.slice(0,10).map(s=>`<div><div style="display:flex;justify-content:space-between;font-size:8px;color:#cbd5e1;margin-bottom:3px"><span>${s.name}</span></div><div style="height:2px;background:#334155;border-radius:4px"><div style="height:100%;background:${color};width:${s.level}%;border-radius:4px"></div></div></div>`).join('')}</div></div>` : ''}
+        </div>
+        <div style="flex:1;padding:40px 36px">
+          ${personalInfo.summary ? `<div style="margin-bottom:28px"><h3 style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:0.2em;color:#1e293b;border-bottom:3px solid ${color};display:inline-block;padding-bottom:3px;margin-bottom:12px">About</h3><p style="font-size:10px;color:#64748b;line-height:1.7">${personalInfo.summary}</p></div>` : ''}
+          ${experience.length > 0 ? `<div style="margin-bottom:28px"><h3 style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:0.2em;color:#1e293b;border-bottom:3px solid ${color};display:inline-block;padding-bottom:3px;margin-bottom:14px">Experience</h3>${buildExperienceHTML()}</div>` : ''}
+          ${education.length > 0 ? `<div style="margin-bottom:28px"><h3 style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:0.2em;color:#1e293b;border-bottom:3px solid ${color};display:inline-block;padding-bottom:3px;margin-bottom:12px">Education</h3>${buildEducationHTML()}</div>` : ''}
+        </div>
+      </div>`
+
+    const templateHTML = activeTemplate === 'tech' ? techTemplate :
+                         activeTemplate === 'maverick' ? maverickTemplate :
+                         professionalTemplate
+
+    const printWindow = window.open('', '_blank', 'width=900,height=700')
+    if (!printWindow) { toast.error('Pop-up blocked! Please allow pop-ups for this page.'); return; }
+
+    printWindow.document.write(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>${personalInfo.name || 'Resume'} â€” Resume</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { font-family: ${font}; background: #fff; }
+    @page { size: A4; margin: 0; }
+    @media print { body { margin: 0; } }
+  </style>
+</head>
+<body>${templateHTML}</body>
+</html>`)
+
+    printWindow.document.close()
+    printWindow.focus()
+    setTimeout(() => { printWindow.print() }, 800)
+  }
+
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
@@ -431,7 +591,7 @@ export default function UltimateResumeStudioPage() {
         return (
           <div className="space-y-10">
             {/* Section title */}
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Choose your visual identity — you can always change it later.</p>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Choose your visual identity â€” you can always change it later.</p>
 
             <div className="grid grid-cols-2 gap-4">
               {[
@@ -468,7 +628,7 @@ export default function UltimateResumeStudioPage() {
                     {/* Active badge */}
                     {isActive && (
                       <div className="absolute top-2 left-2 px-2 py-1 rounded-full text-[8px] font-black uppercase tracking-widest text-white shadow-md" style={{ backgroundColor: t.accent }}>
-                        Selected ✓
+                        Selected âœ“
                       </div>
                     )}
                   </button>
@@ -798,7 +958,7 @@ export default function UltimateResumeStudioPage() {
                    </div>
                 </div>
 
-                <button onClick={() => window.print()} className="w-full py-6 bg-pink-600 text-white rounded-[2rem] text-xl font-black uppercase tracking-[0.2em] shadow-2xl shadow-pink-600/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4">
+                <button onClick={handlePrint} className="w-full py-6 bg-pink-600 text-white rounded-[2rem] text-xl font-black uppercase tracking-[0.2em] shadow-2xl shadow-pink-600/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-4">
                    <Download className="w-7 h-7" /> Export PDF
                 </button>
              </div>
@@ -907,7 +1067,7 @@ export default function UltimateResumeStudioPage() {
              </nav>
 
              <div className="pt-6 border-t border-white/5 text-[9px] font-bold text-white/15 uppercase tracking-widest space-y-2 px-1">
-               <p>© 2026 Pathforge Studio v2</p>
+               <p>Â© 2026 Pathforge Studio v2</p>
              </div>
           </aside>
 
@@ -940,8 +1100,8 @@ export default function UltimateResumeStudioPage() {
 
                    <footer className="mt-12 py-8 border-t border-slate-100 flex justify-between items-center bg-white sticky bottom-0 z-20">
                       <div className="flex gap-3">
-                         <button onClick={() => window.print()} className="px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 border-slate-200 text-slate-500 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 transition-all flex items-center gap-2">
-                            <Download className="w-4 h-4" /> PDF
+                         <button onClick={handlePrint} className="px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 border-slate-200 text-slate-500 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 transition-all flex items-center gap-2">
+                            <Download className="w-4 h-4" /> Export PDF
                          </button>
                          <button className="px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 border-slate-100 text-slate-400 hover:bg-slate-50 transition-all">
                             Preview
@@ -960,7 +1120,7 @@ export default function UltimateResumeStudioPage() {
                       )}
                       {activeStep === steps.length - 1 && (
                         <button 
-                          onClick={() => toast.success("Resume Finalized & Synced! 🎉")}
+                          onClick={() => toast.success("Resume Finalized & Synced! ðŸŽ‰")}
                           className="px-10 py-4 bg-emerald-600 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-emerald-600/20 hover:scale-105 transition-all flex items-center gap-3"
                         >
                            Finalize Resume <CheckCircle2 className="w-5 h-5" />
@@ -978,7 +1138,7 @@ export default function UltimateResumeStudioPage() {
                         <Palette className="w-3.5 h-3.5 text-white" />
                       </div>
                       <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-700">Live Preview</h3>
-                      {isSaving && <span className="text-[8px] font-bold text-slate-300 uppercase tracking-widest animate-pulse">Saving…</span>}
+                      {isSaving && <span className="text-[8px] font-bold text-slate-300 uppercase tracking-widest animate-pulse">Savingâ€¦</span>}
                     </div>
                    <div className="flex gap-1 p-1 bg-slate-100 rounded-lg">
                       {['sans', 'serif', 'mono'].map(f => <button key={f} onClick={() => setFontFamily(f)} className={cn("px-3 py-1 rounded-md text-[8px] font-black border transition-all", fontFamily === f ? "bg-white text-slate-800 border-slate-200 shadow-sm" : "border-transparent text-slate-400 hover:text-slate-600")}>{f.toUpperCase()}</button>)}
@@ -1066,7 +1226,7 @@ export default function UltimateResumeStudioPage() {
                                           <section>
                                              <h4 className="text-[10px] font-black uppercase tracking-widest mb-6 py-2 border-b-2 border-slate-900 w-fit">Combat Record / Experience</h4>
                                              <div className="space-y-8">
-                                                {resumeData.experience.map(e => <div key={e.id} className="space-y-2"><div className="flex justify-between font-black text-[10px]"><span>{e.company}</span><span className="text-slate-300">{e.period}</span></div><p className="text-[9px] font-bold text-slate-400 italic">{e.role}</p><div className="space-y-1">{e.bullets.map((b, i) => b && <p key={i} className="text-[9px] text-slate-600 leading-relaxed">• {b}</p>)}</div></div>)}
+                                                {resumeData.experience.map(e => <div key={e.id} className="space-y-2"><div className="flex justify-between font-black text-[10px]"><span>{e.company}</span><span className="text-slate-300">{e.period}</span></div><p className="text-[9px] font-bold text-slate-400 italic">{e.role}</p><div className="space-y-1">{e.bullets.map((b, i) => b && <p key={i} className="text-[9px] text-slate-600 leading-relaxed">â€¢ {b}</p>)}</div></div>)}
                                              </div>
                                           </section>
                                        </div>
@@ -1138,3 +1298,4 @@ export default function UltimateResumeStudioPage() {
         </div>
    )
 }
+
