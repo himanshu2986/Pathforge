@@ -268,7 +268,7 @@ export default function DashboardOverview() {
                          { a: 'Certificate "ML Mastery" issued', t: '2d ago' }
                        ].map((log, i) => (
                          <div key={i} className="flex justify-between items-center text-[10px]">
-                            <span className="text-gray-400">> {log.a}</span>
+                            <span className="text-gray-400">{">"} {log.a}</span>
                             <span className="text-gray-600 italic">{log.t}</span>
                          </div>
                        ))}
