@@ -271,7 +271,7 @@ export default function UltimateResumeStudioPage() {
             {[
               { id: 'tech', name: 'Tech Master', desc: 'Dark / High Performance', icon: Cpu },
               { id: 'creative', name: 'Artisan', desc: 'Artist / Bold Mix', icon: PenTool },
-              { id: 'minimal', name: 'Zenith', desc: 'Minimal / Architectural', icon: Layers },
+              { id: 'minimal', name: 'Minimal Elite', desc: 'Zenith / Architectural', icon: Layers },
               { id: 'executive', name: 'Prestige', desc: 'Elite / Ivy League', icon: Trophy },
               { id: 'cyber', name: 'Neon', desc: 'Futuristic / Cyberpunk', icon: Activity },
               { id: 'sidebar-left', name: 'Columnist', desc: 'Modern Sidebar L', icon: Layout },
@@ -282,7 +282,8 @@ export default function UltimateResumeStudioPage() {
             ].map(t => (
               <button
                 key={t.id}
-                onClick={() => { setActiveTemplate(t.id as TemplateType); toast.success(`${t.name} Selected`) }}
+                onClick={() => { setActiveTemplate(t.id as TemplateType); toast.success(`STUDIO ENGINE: ${t.name} SET`) }}
+
 
                 className={cn(
                   "flex flex-col group gap-3 text-left transition-all",
