@@ -16,8 +16,10 @@ import {
   Compass, Zap, Shield,
   ChevronRight,
   User,
-  Code2
+  Code2,
+  FileText
 } from 'lucide-react'
+
 import { useAuthStore, useDashboardStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
 
@@ -26,8 +28,10 @@ const navItems = [
   { href: '/dashboard/skills', icon: Route, label: 'Skills Roadmap' },
   { href: '/projects', icon: Code2, label: 'Practice Projects' },
   { href: '/dashboard/portfolio', icon: PieChart, label: 'Portfolio Analytics' },
+  { href: '/dashboard/resume', icon: FileText, label: 'Resume Builder' },
   { href: '/dashboard/internships', icon: Briefcase, label: 'Internships' },
 ]
+
 
 const bottomNavItems = [
   { href: '/dashboard/settings', icon: Settings, label: 'Settings' },
