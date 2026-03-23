@@ -50,6 +50,7 @@ interface ResumeData {
     location: string
     website: string
     github: string
+    linkedin: string
     summary: string
     photo?: string
   }
@@ -67,6 +68,7 @@ interface ResumeData {
     period: string
   }[]
   skills: { name: string, level: number }[]
+  interests: string[]
   projects: {
     id: string
     title: string
@@ -75,7 +77,7 @@ interface ResumeData {
   }[]
 }
 
-type TemplateType = 'tech' | 'creative' | 'minimal' | 'executive' | 'cyber' | 'maverick' | 'sidebar-left' | 'sidebar-right' | 'swiss' | 'elegant'
+type TemplateType = 'tech' | 'creative' | 'minimal' | 'executive' | 'cyber' | 'maverick' | 'sidebar-left' | 'sidebar-right' | 'swiss' | 'elegant' | 'professional'
 
 export default function UltimateResumeStudioPage() {
   const { user } = useAuthStore()
@@ -86,11 +88,13 @@ export default function UltimateResumeStudioPage() {
     { label: 'Template Gallery', icon: Grid },
     { label: 'Basic Info', icon: User },
     { label: 'Career History', icon: Briefcase },
-    { label: 'Portfolio & Skills', icon: Code2 },
+    { label: 'Education', icon: GraduationCap },
+    { label: 'Skills & Interests', icon: Code2 },
+    { label: 'Projects', icon: Layout },
     { label: 'Review & Design', icon: Palette },
   ]
 
-  const [activeTemplate, setActiveTemplate] = useState<TemplateType>('tech')
+  const [activeTemplate, setActiveTemplate] = useState<TemplateType>('professional')
   const [primaryColor, setPrimaryColor] = useState('#0ea5e9')
   const [fontFamily, setFontFamily] = useState('sans')
 
@@ -102,13 +106,14 @@ export default function UltimateResumeStudioPage() {
       location: user?.location || '',
       website: user?.website || '',
       github: '',
+      linkedin: '',
       summary: user?.bio || '',
       photo: user?.avatar || ''
-
     },
     experience: [],
     education: [],
     skills: [],
+    interests: [],
     projects: []
   })
 
@@ -259,6 +264,29 @@ export default function UltimateResumeStudioPage() {
              </div>
           </div>
         )}
+        {id === 'professional' && (
+          <div className="h-full bg-white p-2 flex flex-col gap-2">
+             <div className="flex justify-between items-start">
+                <div className="space-y-1">
+                   <div className="h-3 w-16 bg-blue-600" />
+                   <div className="h-2 w-24 bg-slate-900" />
+                   <div className="h-1 w-12 bg-slate-400" />
+                </div>
+                <div className="space-y-0.5">
+                   <div className="h-1 w-16 bg-slate-300" />
+                   <div className="h-1 w-16 bg-slate-300" />
+                </div>
+             </div>
+             <div className="h-[1px] bg-slate-200 w-full my-1" />
+             <div className="space-y-2">
+                <div className="h-1.5 w-20 bg-blue-600/50" />
+                <div className="space-y-1">
+                   <div className="h-1 w-full bg-slate-100" />
+                   <div className="h-1 w-5/6 bg-slate-100" />
+                </div>
+             </div>
+          </div>
+        )}
       </div>
     )
   }
@@ -269,16 +297,17 @@ export default function UltimateResumeStudioPage() {
         return (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 max-h-[60vh] overflow-y-auto p-4 custom-scrollbar">
             {[
-              { id: 'tech', name: 'Tech Master', desc: 'Dark / High Performance', icon: Cpu },
-              { id: 'creative', name: 'Artisan', desc: 'Artist / Bold Mix', icon: PenTool },
-              { id: 'minimal', name: 'Minimal Elite', desc: 'Zenith / Architectural', icon: Layers },
-              { id: 'executive', name: 'Prestige', desc: 'Elite / Ivy League', icon: Trophy },
-              { id: 'cyber', name: 'Neon', desc: 'Futuristic / Cyberpunk', icon: Activity },
-              { id: 'sidebar-left', name: 'Columnist', desc: 'Modern Sidebar L', icon: Layout },
-              { id: 'sidebar-right', name: 'Focus', desc: 'Modern Sidebar R', icon: AppWindow },
-              { id: 'swiss', name: 'Grid Master', desc: 'Bold Swiss Design', icon: Grid },
-              { id: 'maverick', name: 'Maverick', desc: 'Edgy / Modernist', icon: Zap },
-              { id: 'elegant', name: 'Heritage', desc: 'Timeless / Serif', icon: BookOpen },
+               { id: 'professional', name: 'Professional', desc: 'Standard / Corporate', icon: FileText },
+               { id: 'tech', name: 'Tech Master', desc: 'Dark / High Performance', icon: Cpu },
+               { id: 'creative', name: 'Artisan', desc: 'Artist / Bold Mix', icon: PenTool },
+               { id: 'minimal', name: 'Minimal Elite', desc: 'Zenith / Architectural', icon: Layers },
+               { id: 'executive', name: 'Prestige', desc: 'Elite / Ivy League', icon: Trophy },
+               { id: 'cyber', name: 'Neon', desc: 'Futuristic / Cyberpunk', icon: Activity },
+               { id: 'sidebar-left', name: 'Columnist', desc: 'Modern Sidebar L', icon: Layout },
+               { id: 'sidebar-right', name: 'Focus', desc: 'Modern Sidebar R', icon: AppWindow },
+               { id: 'swiss', name: 'Grid Master', desc: 'Bold Swiss Design', icon: Grid },
+               { id: 'maverick', name: 'Maverick', desc: 'Edgy / Modernist', icon: Zap },
+               { id: 'elegant', name: 'Heritage', desc: 'Timeless / Serif', icon: BookOpen },
             ].map(t => (
               <button
                 key={t.id}
@@ -335,6 +364,14 @@ export default function UltimateResumeStudioPage() {
                         <label className="text-[10px] font-black text-muted-foreground uppercase">Phone</label>
                         <input value={resumeData.personalInfo.phone} onChange={e => setResumeData(p => ({ ...p, personalInfo: { ...p.personalInfo, phone: e.target.value } }))} className="w-full bg-transparent border-b border-border focus:border-primary text-sm outline-none pb-1" />
                      </div>
+                     <div className="space-y-1">
+                        <label className="text-[10px] font-black text-muted-foreground uppercase">LinkedIn</label>
+                        <input value={resumeData.personalInfo.linkedin} onChange={e => setResumeData(p => ({ ...p, personalInfo: { ...p.personalInfo, linkedin: e.target.value } }))} className="w-full bg-transparent border-b border-border focus:border-primary text-sm outline-none pb-1" placeholder="linkedin.com/in/username" />
+                     </div>
+                     <div className="space-y-1">
+                        <label className="text-[10px] font-black text-muted-foreground uppercase">Location</label>
+                        <input value={resumeData.personalInfo.location} onChange={e => setResumeData(p => ({ ...p, personalInfo: { ...p.personalInfo, location: e.target.value } }))} className="w-full bg-transparent border-b border-border focus:border-primary text-sm outline-none pb-1" placeholder="City, Country" />
+                     </div>
                   </div>
                 </div>
             </div>
@@ -353,22 +390,36 @@ export default function UltimateResumeStudioPage() {
         return (
           <div className="space-y-8">
              <div className="flex justify-between items-center"><h4 className="font-black text-lg uppercase tracking-tight">Experience</h4><button onClick={() => setResumeData(p => ({ ...p, experience: [...p.experience, { id: Date.now().toString(), company: '', role: '', period: '', bullets: [''] }] }))} className="p-2 bg-primary/10 rounded-full hover:bg-primary/20 transition-colors"><Plus className="w-4 h-4 text-primary" /></button></div>
-             <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
+              <div className="space-y-6 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar pb-10">
                 {resumeData.experience.map((exp, i) => (
                   <GlassCard key={exp.id} className="relative transition-all hover:bg-muted/50">
-                     <button onClick={() => setResumeData(p => ({ ...p, experience: p.experience.filter(e => e.id !== exp.id) }))} className="absolute top-4 right-4 text-muted-foreground/30 hover:text-destructive"><Trash2 className="w-4 h-4" /></button>
-                     <GlassCardContent className="p-6 grid gap-4">
+                     <button onClick={() => setResumeData(p => ({ ...p, experience: p.experience.filter(e => e.id !== exp.id) }))} className="absolute top-4 right-4 text-muted-foreground/30 hover:text-destructive z-10"><Trash2 className="w-4 h-4" /></button>
+                     <GlassCardContent className="p-6 grid gap-6">
                         <div className="grid grid-cols-2 gap-6">
                            <div className="space-y-1">
-                              <label className="text-[10px] font-black text-muted-foreground uppercase italic">Company</label>
-                              <input value={exp.company} onChange={e => { const n = [...resumeData.experience]; n[i].company = e.target.value; setResumeData(p => ({ ...p, experience: n })) }} className="w-full bg-transparent border-b border-border text-sm font-bold outline-none" />
+                              <label className="text-[10px] font-black text-muted-foreground uppercase">Company</label>
+                              <input value={exp.company} onChange={e => { const n = [...resumeData.experience]; n[i].company = e.target.value; setResumeData(p => ({ ...p, experience: n })) }} className="w-full bg-transparent border-b border-border text-sm font-bold outline-none py-1" />
                            </div>
                            <div className="space-y-1">
-                              <label className="text-[10px] font-black text-muted-foreground uppercase italic">Role</label>
-                              <input value={exp.role} onChange={e => { const n = [...resumeData.experience]; n[i].role = e.target.value; setResumeData(p => ({ ...p, experience: n })) }} className="w-full bg-transparent border-b border-border text-sm font-bold outline-none" />
+                              <label className="text-[10px] font-black text-muted-foreground uppercase">Role</label>
+                              <input value={exp.role} onChange={e => { const n = [...resumeData.experience]; n[i].role = e.target.value; setResumeData(p => ({ ...p, experience: n })) }} className="w-full bg-transparent border-b border-border text-sm font-bold outline-none py-1" />
                            </div>
                         </div>
-                        <input value={exp.period} onChange={e => { const n = [...resumeData.experience]; n[i].period = e.target.value; setResumeData(p => ({ ...p, experience: n })) }} placeholder="e.g. JAN 2022 - PRESENT" className="w-full bg-transparent border-b border-border text-[10px] font-black uppercase tracking-widest outline-none" />
+                        <div className="space-y-1">
+                           <label className="text-[10px] font-black text-muted-foreground uppercase italic tracking-widest">Period</label>
+                           <input value={exp.period} onChange={e => { const n = [...resumeData.experience]; n[i].period = e.target.value; setResumeData(p => ({ ...p, experience: n })) }} placeholder="e.g. JUL 2017 - NOV 2019" className="w-full bg-transparent border-b border-border text-[10px] font-black uppercase outline-none" />
+                        </div>
+                        <div className="space-y-2">
+                           <div className="flex justify-between items-center"><label className="text-[10px] font-black text-muted-foreground uppercase">Key Achievements</label> <button onClick={() => { const n = [...resumeData.experience]; n[i].bullets.push(''); setResumeData(p => ({ ...p, experience: n })) }} className="text-[10px] font-black text-primary hover:underline">+ ADD BULLET</button></div>
+                           <div className="space-y-2">
+                              {exp.bullets.map((bullet, bi) => (
+                                <div key={bi} className="flex gap-2">
+                                   <input value={bullet} onChange={e => { const n = [...resumeData.experience]; n[i].bullets[bi] = e.target.value; setResumeData(p => ({ ...p, experience: n })) }} className="flex-1 bg-transparent border-b border-border/50 text-xs py-1 outline-none" placeholder="Managed a $7M retail-focused book of clients..." />
+                                   <button onClick={() => { const n = [...resumeData.experience]; n[i].bullets = n[i].bullets.filter((_, idx) => idx !== bi); setResumeData(p => ({ ...p, experience: n })) }}><Trash2 className="w-3 h-3 text-muted-foreground/30 hover:text-destructive" /></button>
+                                </div>
+                              ))}
+                           </div>
+                        </div>
                      </GlassCardContent>
                   </GlassCard>
                 ))}
@@ -376,6 +427,79 @@ export default function UltimateResumeStudioPage() {
           </div>
         )
       case 3:
+        return (
+          <div className="space-y-8">
+             <div className="flex justify-between items-center"><h4 className="font-black text-lg uppercase tracking-tight">Education</h4><button onClick={() => setResumeData(p => ({ ...p, education: [...p.education, { id: Date.now().toString(), school: '', degree: '', period: '' }] }))} className="p-2 bg-primary/10 rounded-full hover:bg-primary/20 transition-colors"><Plus className="w-4 h-4 text-primary" /></button></div>
+             <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar pb-10">
+                {resumeData.education.map((edu, i) => (
+                  <GlassCard key={edu.id} className="relative transition-all hover:bg-muted/50">
+                     <button onClick={() => setResumeData(p => ({ ...p, education: p.education.filter(e => e.id !== edu.id) }))} className="absolute top-4 right-4 text-muted-foreground/30 hover:text-destructive"><Trash2 className="w-4 h-4" /></button>
+                     <GlassCardContent className="p-6 grid gap-4">
+                        <div className="grid grid-cols-2 gap-6">
+                           <div className="space-y-1">
+                              <label className="text-[10px] font-black text-muted-foreground uppercase">Institution</label>
+                              <input value={edu.school} onChange={e => { const n = [...resumeData.education]; n[i].school = e.target.value; setResumeData(p => ({ ...p, education: n })) }} className="w-full bg-transparent border-b border-border text-sm font-bold outline-none" />
+                           </div>
+                           <div className="space-y-1">
+                              <label className="text-[10px] font-black text-muted-foreground uppercase">Degree/Field</label>
+                              <input value={edu.degree} onChange={e => { const n = [...resumeData.education]; n[i].degree = e.target.value; setResumeData(p => ({ ...p, education: n })) }} className="w-full bg-transparent border-b border-border text-sm font-bold outline-none" />
+                           </div>
+                        </div>
+                        <input value={edu.period} onChange={e => { const n = [...resumeData.education]; n[i].period = e.target.value; setResumeData(p => ({ ...p, education: n })) }} placeholder="e.g. SEP 2014 - MAY 2016" className="w-full bg-transparent border-b border-border text-[10px] font-black uppercase tracking-widest outline-none" />
+                     </GlassCardContent>
+                  </GlassCard>
+                ))}
+             </div>
+          </div>
+        )
+      case 4:
+        return (
+          <div className="space-y-10">
+            <section>
+              <h4 className="font-black text-lg uppercase mb-4 tracking-tight">The Arsenal (Skills)</h4>
+              <div className="flex flex-wrap gap-2">
+                 {dashboardSkills.map(s => {
+                   const isSel = resumeData.skills.find(rs => rs.name === s.name)
+                   return (
+                     <button key={s.id} onClick={() => setResumeData(prev => ({ ...prev, skills: isSel ? prev.skills.filter(rs => rs.name !== s.name) : [...prev.skills, { name: s.name, level: s.level }] }))}
+                     className={cn("px-4 py-1.5 rounded-full text-[10px] font-black uppercase border tracking-widest transition-all", isSel ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20" : "bg-card border-border")}>
+                        {s.name}
+                     </button>
+                   )
+                 })}
+              </div>
+            </section>
+            <section>
+              <h4 className="font-black text-lg uppercase mb-4 tracking-tight">Interests & Hobbies</h4>
+              <div className="space-y-4">
+                 <div className="flex gap-2">
+                    <input 
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') {
+                          const val = (e.target as HTMLInputElement).value
+                          if (val && !resumeData.interests.includes(val)) {
+                            setResumeData(p => ({ ...p, interests: [...p.interests, val] }))
+                            ;(e.target as HTMLInputElement).value = ''
+                          }
+                        }
+                      }}
+                      className="flex-1 bg-muted/20 border border-white/5 rounded-xl px-4 py-2 text-sm outline-none focus:border-primary" 
+                      placeholder="Add an interest and press Enter..." 
+                    />
+                 </div>
+                 <div className="flex flex-wrap gap-2">
+                    {resumeData.interests.map(interest => (
+                      <div key={interest} className="px-3 py-1 bg-muted/30 border border-white/5 rounded-full text-[10px] font-bold uppercase flex items-center gap-2">
+                        {interest}
+                        <button onClick={() => setResumeData(p => ({ ...p, interests: p.interests.filter(i => i !== interest) }))}><Trash2 className="w-3 h-3 text-muted-foreground" /></button>
+                      </div>
+                    ))}
+                 </div>
+              </div>
+            </section>
+          </div>
+        )
+      case 5:
         return (
           <div className="space-y-10">
             <section>
@@ -393,23 +517,9 @@ export default function UltimateResumeStudioPage() {
                  })}
               </div>
             </section>
-            <section>
-              <h4 className="font-black text-lg uppercase mb-4 tracking-tight">The Arsenal (Skills)</h4>
-              <div className="flex flex-wrap gap-2">
-                 {dashboardSkills.map(s => {
-                   const isSel = resumeData.skills.find(rs => rs.name === s.name)
-                   return (
-                     <button key={s.id} onClick={() => setResumeData(prev => ({ ...prev, skills: isSel ? prev.skills.filter(rs => rs.name !== s.name) : [...prev.skills, { name: s.name, level: s.level }] }))}
-                     className={cn("px-4 py-1.5 rounded-full text-[10px] font-black uppercase border tracking-widest transition-all", isSel ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20" : "bg-card border-border")}>
-                        {s.name}
-                     </button>
-                   )
-                 })}
-              </div>
-            </section>
           </div>
         )
-      case 4:
+      case 6:
         return (
           <div className="space-y-10 h-full flex flex-col items-center justify-center py-10">
              <div className="relative">
@@ -474,7 +584,7 @@ export default function UltimateResumeStudioPage() {
              <GlassCard className="flex-1 border-none shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] bg-slate-900/40 backdrop-blur-3xl overflow-hidden flex flex-col">
                 <header className="bg-white/5 p-6 flex items-center justify-between border-b border-white/5">
                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white flex items-center gap-3"><span className="w-1 h-5 bg-primary rounded-full transition-all" /> {steps[activeStep].label}</h3>
-                   <span className="text-[10px] font-black text-muted-foreground">Step {activeStep + 1} / 5</span>
+                   <span className="text-[10px] font-black text-muted-foreground">Step {activeStep + 1} / {steps.length}</span>
                 </header>
                 <div className="flex-1 p-8 overflow-y-auto custom-scrollbar">
                    <AnimatePresence mode="wait">
@@ -503,8 +613,119 @@ export default function UltimateResumeStudioPage() {
 
              <div className={cn("flex-1 bg-white text-slate-900 shadow-[0_80px_160px_-40px_rgba(0,0,0,0.2)] rounded-sm overflow-hidden p-0 relative group", fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans')}>
                 <div id="resume-preview" className="h-full w-full overflow-y-auto custom-scrollbar">
-                  {/* TECH MASTER */}
-                  {activeTemplate === 'tech' && (
+                   {/* PROFESSIONAL STANDARD */}
+                   {activeTemplate === 'professional' && (
+                     <div id="resume-preview-content" className="min-h-full bg-white text-slate-900 p-[0.75in] font-sans">
+                        <div className="flex justify-between items-start mb-10">
+                           <div className="space-y-1">
+                              <h1 className="text-4xl font-extrabold tracking-tight" style={{ color: primaryColor }}>{resumeData.personalInfo.name || 'Your Name'}</h1>
+                              <p className="text-xl font-bold text-slate-700 uppercase tracking-widest">{resumeData.experience[0]?.role || 'Professional Title'}</p>
+                           </div>
+                           <div className="text-right text-[11px] space-y-1 font-medium text-slate-600">
+                              <div className="flex items-center justify-end gap-2">{resumeData.personalInfo.email} <Mail className="w-3 h-3" /></div>
+                              <div className="flex items-center justify-end gap-2">{resumeData.personalInfo.linkedin} <Globe className="w-3 h-3" /></div>
+                              <div className="flex items-center justify-end gap-2">{resumeData.personalInfo.phone} <Phone className="w-3 h-3" /></div>
+                              <div className="flex items-center justify-end gap-2">{resumeData.personalInfo.location} <MapPin className="w-3 h-3" /></div>
+                           </div>
+                        </div>
+
+                        <div className="space-y-10">
+                           {resumeData.personalInfo.summary && (
+                             <section>
+                                <h4 className="text-sm font-black uppercase tracking-[0.2em] mb-3 pb-1 border-b-2 border-slate-900" style={{ color: primaryColor, borderColor: primaryColor }}>Summary</h4>
+                                <p className="text-[13px] leading-relaxed text-slate-700">{resumeData.personalInfo.summary}</p>
+                             </section>
+                           )}
+
+                           {resumeData.experience.length > 0 && (
+                             <section>
+                                <h4 className="text-sm font-black uppercase tracking-[0.2em] mb-6 pb-1 border-b-2 border-slate-900" style={{ color: primaryColor, borderColor: primaryColor }}>Professional Experience</h4>
+                                <div className="space-y-8">
+                                   {resumeData.experience.map(e => (
+                                     <div key={e.id}>
+                                        <div className="flex justify-between items-baseline mb-1">
+                                           <h5 className="text-base font-bold text-slate-900">{e.role}</h5>
+                                           <span className="text-[11px] font-black uppercase text-slate-500">{e.period}</span>
+                                        </div>
+                                        <div className="text-[13px] font-bold text-slate-900 mb-3">{e.company}</div>
+                                        <ul className="text-[12px] space-y-2 list-none">
+                                           {e.bullets.map((b, i) => b && (
+                                             <li key={i} className="flex gap-3 text-slate-700 leading-relaxed">
+                                                <span className="mt-1.5 w-1 h-1 bg-slate-900 rounded-full shrink-0" />
+                                                {b}
+                                             </li>
+                                           ))}
+                                        </ul>
+                                     </div>
+                                   ))}
+                                </div>
+                             </section>
+                           )}
+
+                           {resumeData.education.length > 0 && (
+                             <section>
+                                <h4 className="text-sm font-black uppercase tracking-[0.2em] mb-6 pb-1 border-b-2 border-slate-900" style={{ color: primaryColor, borderColor: primaryColor }}>Education</h4>
+                                <div className="space-y-6">
+                                   {resumeData.education.map(edu => (
+                                     <div key={edu.id} className="flex justify-between items-baseline">
+                                        <div>
+                                           <h5 className="text-[13px] font-bold text-slate-900">{edu.degree}</h5>
+                                           <div className="text-[12px] text-slate-600">{edu.school}</div>
+                                        </div>
+                                        <span className="text-[11px] font-black uppercase text-slate-400">{edu.period}</span>
+                                     </div>
+                                   ))}
+                                </div>
+                             </section>
+                           )}
+
+                           {resumeData.projects.length > 0 && (
+                             <section>
+                                <h4 className="text-sm font-black uppercase tracking-[0.2em] mb-6 pb-1 border-b-2 border-slate-900" style={{ color: primaryColor, borderColor: primaryColor }}>Projects</h4>
+                                <div className="space-y-6">
+                                   {resumeData.projects.map(proj => (
+                                     <div key={proj.id}>
+                                        <h5 className="text-[13px] font-bold text-slate-900">{proj.title}</h5>
+                                        <p className="text-[12px] text-slate-700 mt-1 leading-relaxed">{proj.description}</p>
+                                        <div className="flex flex-wrap gap-2 mt-2">
+                                           {proj.skills.map(s => <span key={s} className="text-[10px] font-bold text-slate-400 capitalize">{s}</span>)}
+                                        </div>
+                                     </div>
+                                   ))}
+                                </div>
+                             </section>
+                           )}
+
+                           <div className="grid grid-cols-2 gap-10">
+                              <section>
+                                 <h4 className="text-sm font-black uppercase tracking-[0.2em] mb-6 pb-1 border-b-2 border-slate-900" style={{ color: primaryColor, borderColor: primaryColor }}>Skills</h4>
+                                 <div className="grid grid-cols-1 gap-y-4">
+                                    {resumeData.skills.slice(0, 6).map(s => (
+                                      <div key={s.name} className="flex justify-between items-center text-[12px]">
+                                         <span className="font-bold text-slate-700">{s.name}</span>
+                                         <div className="flex gap-1">
+                                            {[1, 2, 3, 4, 5].map(dot => (
+                                              <div key={dot} className={cn("w-2 h-2 rounded-full", dot <= (s.level / 20) ? "bg-slate-900" : "bg-slate-200")} />
+                                            ))}
+                                         </div>
+                                      </div>
+                                    ))}
+                                 </div>
+                              </section>
+
+                              <section>
+                                 <h4 className="text-sm font-black uppercase tracking-[0.2em] mb-6 pb-1 border-b-2 border-slate-900" style={{ color: primaryColor, borderColor: primaryColor }}>Interests</h4>
+                                 <p className="text-[12px] leading-relaxed text-slate-600 italic">
+                                    {resumeData.interests.join(', ')}
+                                 </p>
+                              </section>
+                           </div>
+                        </div>
+                     </div>
+                   )}
+
+                   {/* TECH MASTER */}
+                   {activeTemplate === 'tech' && (
                     <div className="min-h-full flex flex-col bg-[#030712] text-gray-200">
                        <header className="p-16 border-b border-white/5 bg-[#020617] relative">
                           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[120px] rounded-full" />
