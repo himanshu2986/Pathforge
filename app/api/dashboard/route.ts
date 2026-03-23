@@ -38,8 +38,31 @@ export async function GET() {
 
     if (!dashboard) {
       const defaultLearningPaths = [
-        { id: '1', title: 'Full-Stack Development', description: 'Master modern web development from frontend to backend', progress: 0, modules: [ { id: '1a', title: 'HTML & CSS Fundamentals', completed: false }, { id: '1b', title: 'JavaScript Deep Dive', completed: false }, { id: '1c', title: 'React & State Management', completed: false }, { id: '1d', title: 'Node.js & Express', completed: false }, { id: '1e', title: 'Database Design', completed: false } ] },
-        { id: '2', title: 'Machine Learning Fundamentals', description: 'Introduction to ML concepts and practical applications', progress: 0, modules: [ { id: '2a', title: 'Python for ML', completed: false }, { id: '2b', title: 'Linear Algebra Basics', completed: false }, { id: '2c', title: 'Supervised Learning', completed: false }, { id: '2d', title: 'Neural Networks', completed: false } ] }
+        { 
+          id: '1', 
+          title: 'Full-Stack Development', 
+          description: 'Master modern web development from frontend to backend', 
+          progress: 0, 
+          modules: [ 
+            { id: '1a', title: 'HTML & CSS Fundamentals', completed: false, content: 'HTML (HyperText Markup Language) is the standard markup language for documents designed to be displayed in a web browser.\n\nKey Concepts:\n- Elements and Tags\n- Document Structure\n- CSS Selectors and Box Model\n- Layout with Flexbox and Grid', example: '<!-- Basic HTML Structure -->\n<!DOCTYPE html>\n<html>\n<head>\n<style>\n  .box { \n    background: #ec4899; \n    padding: 20px; \n    color: white; \n    font-family: sans-serif; \n    border-radius: 12px; \n  }\n</style>\n</head>\n<body>\n  <div class="box">\n    <h1>Hello Pathforce!</h1>\n    <p>This is a live trial ground.</p>\n  </div>\n</body>\n</html>' }, 
+            { id: '1b', title: 'JavaScript Deep Dive', completed: false, content: 'JavaScript is a versatile, high-level programming language that powers the interactive behavior of web pages.\n\nVariables, Functions, and Objects are the building blocks of JS.', example: '<script>\n  const user = { name: "Agent", level: 99 };\n  document.body.innerHTML = `<h1>User: ${user.name}</h1><p>Skill Level: ${user.level}</p>`;\n</script>' }, 
+            { id: '1c', title: 'React & State Management', completed: false, content: 'React is a library for building modular user interfaces using a component-based architecture.', example: '<div id="root"></div>\n<script type="text/babel">\n  function App() {\n    return <h1>React Live Demo</h1>;\n  }\n</script>' }, 
+            { id: '1d', title: 'Node.js & Express', completed: false }, 
+            { id: '1e', title: 'Database Design', completed: false } 
+          ] 
+        },
+        { 
+          id: '2', 
+          title: 'Machine Learning Fundamentals', 
+          description: 'Introduction to ML concepts and practical applications', 
+          progress: 0, 
+          modules: [ 
+            { id: '2a', title: 'Python for ML', completed: false, content: 'Python is the language of AI. Libraries like NumPy, Pandas, and Scikit-Learn provide the mathematical power required for model building.', example: '<script>\n  const data = [1.2, 2.3, 3.4, 4.5];\n  const mean = data.reduce((a,b)=>a+b)/data.length;\n  document.body.innerHTML = `<h1>Data Analysis</h1><p>Processed: ${data.length} nodes</p><p>Vector Mean: ${mean}</p>`;\n</script>' }, 
+            { id: '2b', title: 'Linear Algebra Basics', completed: false }, 
+            { id: '2c', title: 'Supervised Learning', completed: false }, 
+            { id: '2d', title: 'Neural Networks', completed: false } 
+          ] 
+        }
       ];
 
       // Convert global paths to dashboard format

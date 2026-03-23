@@ -51,6 +51,8 @@ export interface LearningPath {
     id: string
     title: string
     completed: boolean
+    content?: string
+    example?: string
   }[]
 }
 
@@ -223,8 +225,8 @@ const mockLearningPaths: LearningPath[] = [
     description: 'Master modern web development from frontend to backend',
     progress: 65,
     modules: [
-      { id: '1a', title: 'HTML & CSS Fundamentals', completed: true },
-      { id: '1b', title: 'JavaScript Deep Dive', completed: true },
+      { id: '1a', title: 'HTML & CSS Fundamentals', completed: true, content: 'HTML is the backbone of the web. CSS brings it to life.\n\nMastering components like Flexbox and CSS Grid is essential for modern development.', example: '<!-- HTML/CSS Example -->\n<div style="background: navy; color: white; padding: 2rem; border-radius: 1rem;">\n  <h1>Mission Control</h1>\n  <p>Status: Active</p>\n</div>' },
+      { id: '1b', title: 'JavaScript Deep Dive', completed: true, content: 'JavaScript is the engine of interactivity on the web.', example: '<script>\n  alert("Pathforge JavaScript Protocol Active");\n</script>' },
       { id: '1c', title: 'React & State Management', completed: true },
       { id: '1d', title: 'Node.js & Express', completed: false },
       { id: '1e', title: 'Database Design', completed: false },

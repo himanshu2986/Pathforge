@@ -40,7 +40,8 @@ export default function AdvancedAdminDashboard() {
   const [isLoading, setIsLoading] = useState(false)
   
   const [jobForm, setJobForm] = useState({ company: '', role: '', location: 'Remote', type: 'remote', matchScore: 85, skills: '', deadline: '2026-12-31' })
-  const [pathForm, setPathForm] = useState({ title: '', description: '', category: 'Web Development', level: 'beginner', modules: '' })
+  const [pathForm, setPathForm] = useState({ title: '', description: '', category: 'Web Development', level: 'beginner', modules: [] as any[] })
+  const [newModule, setNewModule] = useState({ title: '', content: '', example: '' })
 
   useEffect(() => {
     if (!isAuthenticated) router.push('/login')
@@ -161,15 +162,20 @@ export default function AdvancedAdminDashboard() {
   }
 
   const handlePathSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); setIsLoading(true)
+    e.preventDefault(); 
+    if (pathForm.modules.length === 0) {
+      toast.error("Protocol Error: Curicculum cannot be empty.");
+      return;
+    }
+    setIsLoading(true)
     const res = await fetch('/api/admin/learning-paths', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...pathForm, modules: pathForm.modules.split(',').map(m => ({ title: m.trim(), completed: false })) })
+      body: JSON.stringify(pathForm)
     })
     if (res.ok) { 
       toast.success("Publication Matrix Updated: Learning Path is now live.", { icon: <BookOpen className="w-5 h-5 text-purple-400" /> }); 
-      setPathForm({ title: '', description: '', category: 'Web Development', level: 'beginner', modules: '' }); 
+      setPathForm({ title: '', description: '', category: 'Web Development', level: 'beginner', modules: [] }); 
       fetchPaths(); 
     }
     setIsLoading(false)
@@ -413,21 +419,96 @@ export default function AdvancedAdminDashboard() {
         {activeTab === 'paths' && (
           <motion.div key="paths" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid lg:grid-cols-12 gap-8 relative z-10">
             <div className="lg:col-span-4">
-              <GlassCard>
-                <div className="p-8">
-                  <h2 className="text-2xl font-black mb-8 italic flex items-center gap-3">
-                    <BookOpen className="w-6 h-6 text-purple-500" /> PUBLISH MATRIX
-                  </h2>
-                  <form onSubmit={handlePathSubmit} className="space-y-6">
-                    <input required value={pathForm.title} onChange={(e)=>setPathForm({...pathForm, title:e.target.value})} className="w-full p-4 bg-white/5 border border-white/10 rounded-2xl focus:border-purple-500 outline-none transition-all font-semibold" placeholder="Learning Path Title" />
-                    <textarea required rows={4} value={pathForm.description} onChange={(e)=>setPathForm({...pathForm, description:e.target.value})} className="w-full p-4 bg-white/5 border border-white/10 rounded-2xl focus:border-purple-500 outline-none transition-all font-semibold resize-none" placeholder="Instructional Summary..." />
-                    <input required value={pathForm.modules} onChange={(e)=>setPathForm({...pathForm, modules:e.target.value})} className="w-full p-4 bg-white/5 border border-white/10 rounded-2xl focus:border-purple-500 outline-none transition-all font-semibold" placeholder="Modules (Module 1, Module 2...)" />
-                    <button type="submit" disabled={isLoading} className="w-full py-5 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl shadow-purple-500/20 hover:scale-[1.02] transition-all">
-                      BROADCAST TO COHORT
-                    </button>
-                  </form>
-                </div>
-              </GlassCard>
+             <div className="lg:col-span-12">
+               <GlassCard>
+                 <div className="p-10">
+                   <div className="flex justify-between items-center mb-10">
+                      <h2 className="text-3xl font-black italic flex items-center gap-3">
+                        <BookOpen className="w-8 h-8 text-purple-500" /> PUBLISH MASTER MATRIX
+                      </h2>
+                      <div className="flex gap-4">
+                         <div className="px-4 py-2 bg-white/5 rounded-xl border border-white/10 flex items-center gap-3">
+                            <span className="text-[10px] font-black text-gray-500 uppercase">Status</span>
+                            <span className="text-xs font-bold text-emerald-500">READY</span>
+                         </div>
+                      </div>
+                   </div>
+
+                   <form onSubmit={handlePathSubmit} className="grid lg:grid-cols-2 gap-12">
+                      <div className="space-y-8">
+                         <div className="space-y-6">
+                            <div>
+                               <label className="text-[10px] font-black text-gray-500 uppercase ml-1 block mb-3">Core Title</label>
+                               <input required value={pathForm.title} onChange={(e)=>setPathForm({...pathForm, title:e.target.value})} className="w-full p-5 bg-white/5 border border-white/10 rounded-2xl focus:border-purple-500 outline-none transition-all font-bold text-lg" placeholder="e.g. Advanced Neural Architectures" />
+                            </div>
+                            <div>
+                               <label className="text-[10px] font-black text-gray-500 uppercase ml-1 block mb-3">Abstract</label>
+                               <textarea required rows={5} value={pathForm.description} onChange={(e)=>setPathForm({...pathForm, description:e.target.value})} className="w-full p-5 bg-white/5 border border-white/10 rounded-2xl focus:border-purple-500 outline-none transition-all font-medium resize-none text-gray-400" placeholder="Describe the mission outcomes..." />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                               <div>
+                                  <label className="text-[10px] font-black text-gray-500 uppercase ml-1 block mb-3">Category Cluster</label>
+                                  <select value={pathForm.category} onChange={(e)=>setPathForm({...pathForm, category:e.target.value})} className="w-full p-5 bg-[#0d0f1a] border border-white/10 rounded-2xl focus:border-purple-500 outline-none transition-all font-bold">
+                                     <option>Web Development</option>
+                                     <option>Data Science</option>
+                                     <option>Machine Learning</option>
+                                     <option>Cyber Security</option>
+                                  </select>
+                               </div>
+                               <div>
+                                  <label className="text-[10px] font-black text-gray-500 uppercase ml-1 block mb-3">Complexity Level</label>
+                                  <select value={pathForm.level} onChange={(e)=>setPathForm({...pathForm, level:e.target.value})} className="w-full p-5 bg-[#0d0f1a] border border-white/10 rounded-2xl focus:border-purple-500 outline-none transition-all font-bold uppercase text-xs tracking-widest text-primary">
+                                     <option value="beginner">Beginner</option>
+                                     <option value="intermediate">Intermediate</option>
+                                     <option value="advanced">Advanced</option>
+                                  </select>
+                               </div>
+                            </div>
+                         </div>
+                         <button type="submit" disabled={isLoading} className="w-full py-8 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-[2.5rem] font-black text-sm uppercase tracking-[0.3em] shadow-[0_20px_50px_rgba(147,51,234,0.3)] hover:scale-[1.02] transition-all">
+                           {isLoading ? 'ENCRYPTING BROADCAST...' : 'ESTABLISH GLOBAL PROTOCOL'}
+                         </button>
+                      </div>
+
+                      <div className="space-y-8 bg-white/5 p-8 rounded-[3rem] border border-white/10 shadow-inner">
+                         <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-sm font-black text-white/40 uppercase tracking-widest flex items-center gap-2"><Layers className="w-4 h-4" /> Curriculum Stack</h3>
+                            <div className="px-3 py-1 bg-white/10 rounded-full text-[10px] font-bold">{pathForm.modules.length} Nodes</div>
+                         </div>
+
+                         <div className="space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar pr-2">
+                            {pathForm.modules.length === 0 && (
+                              <div className="py-20 text-center border-2 border-dashed border-white/5 rounded-3xl opacity-30 flex flex-col items-center gap-4">
+                                 <Plus className="w-10 h-10" />
+                                 <p className="text-[10px] uppercase font-black tracking-widest">No curriculum nodes defined</p>
+                              </div>
+                            )}
+                            {pathForm.modules.map((m, idx) => (
+                              <div key={idx} className="p-6 bg-black/40 border border-white/5 rounded-2xl flex items-center justify-between group">
+                                 <div>
+                                    <p className="font-bold text-white mb-1">{m.title}</p>
+                                    <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{m.content.length > 50 ? m.content.substring(0, 50) + '...' : m.content || 'No description'}</p>
+                                 </div>
+                                 <button type="button" onClick={() => setPathForm(p => ({ ...p, modules: p.modules.filter((_, i) => i !== idx) }))} className="p-3 bg-red-500/10 text-red-500 rounded-xl opacity-0 group-hover:opacity-100 transition-all"><Trash2 className="w-4 h-4" /></button>
+                              </div>
+                            ))}
+                         </div>
+
+                         <div className="pt-8 border-t border-white/5 space-y-6">
+                            <div className="space-y-4">
+                               <input value={newModule.title} onChange={e => setNewModule({...newModule, title:e.target.value})} className="w-full p-4 bg-black/40 border border-white/5 rounded-2xl outline-none focus:border-primary transition-all text-sm font-bold" placeholder="Chapter Title..." />
+                               <div className="grid grid-cols-2 gap-4">
+                                  <textarea value={newModule.content} onChange={e => setNewModule({...newModule, content:e.target.value})} className="w-full p-4 bg-black/40 border border-white/5 rounded-2xl outline-none focus:border-primary transition-all text-xs font-medium resize-none h-24" placeholder="Instructional Markdown..." />
+                                  <textarea value={newModule.example} onChange={e => setNewModule({...newModule, example:e.target.value})} className="w-full p-4 bg-black/40 border border-white/5 rounded-2xl outline-none focus:border-primary transition-all text-xs font-mono h-24" placeholder="Code Blueprint..." />
+                               </div>
+                            </div>
+                            <button type="button" onClick={() => { if(!newModule.title) return; setPathForm(p => ({ ...p, modules: [...p.modules, newModule] })); setNewModule({title:'', content:'', example:''}) }} className="w-full py-4 bg-white/5 hover:bg-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 transition-all"><Plus className="w-4 h-4" /> Integrate Chapter Node</button>
+                         </div>
+                      </div>
+                   </form>
+                 </div>
+               </GlassCard>
+             </div>
             </div>
             <div className="lg:col-span-8 flex flex-col items-center justify-center p-20 border-2 border-dashed border-white/5 rounded-[40px] bg-white/[0.02]">
                <Layers className="w-16 h-16 text-gray-700 mb-6" />

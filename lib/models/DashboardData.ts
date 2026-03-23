@@ -33,6 +33,8 @@ const LearningPathModuleSchema = new Schema({
   id: String,
   title: String,
   completed: Boolean,
+  content: { type: String, default: '' },
+  example: { type: String, default: '' },
 });
 
 const LearningPathSchema = new Schema({

@@ -7,7 +7,9 @@ const GlobalLearningPathSchema = new Schema(
     modules: [
       {
         title: { type: String, required: true },
-        duration: { type: String }, // optional duration
+        duration: { type: String },
+        content: { type: String, default: '' },
+        example: { type: String, default: '' },
       }
     ],
     category: { type: String, required: true },
