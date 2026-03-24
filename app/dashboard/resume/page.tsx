@@ -1098,12 +1098,12 @@ export default function UltimateResumeStudioPage() {
                       </AnimatePresence>
                    </div>
 
-                   <footer className="mt-12 py-8 border-t border-slate-100 flex justify-between items-center bg-white sticky bottom-0 z-20">
-                      <div className="flex gap-3">
-                         <button onClick={handlePrint} className="px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 border-slate-200 text-slate-500 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 transition-all flex items-center gap-2">
-                            <Download className="w-4 h-4" /> Export PDF
+                   <footer className="mt-12 py-6 md:py-8 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 bg-white sticky bottom-0 z-20">
+                      <div className="flex gap-2">
+                         <button onClick={handlePrint} className="flex-1 sm:flex-none px-4 md:px-6 py-3 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest border-2 border-slate-200 text-slate-500 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 transition-all flex items-center justify-center gap-2">
+                            <Download className="w-4 h-4" /> <span className="hidden xs:inline">Export PDF</span><span className="xs:hidden">PDF</span>
                          </button>
-                         <button className="px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 border-slate-100 text-slate-400 hover:bg-slate-50 transition-all">
+                         <button className="flex-1 sm:flex-none px-4 md:px-6 py-3 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest border-2 border-slate-100 text-slate-400 hover:bg-slate-50 transition-all text-center">
                             Preview
                          </button>
                       </div>
@@ -1111,7 +1111,7 @@ export default function UltimateResumeStudioPage() {
                       {activeStep < steps.length - 1 && (
                         <button 
                           onClick={() => setActiveStep(p => p + 1)} 
-                          className="group px-10 py-4 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl active:scale-95 transition-all flex items-center gap-3"
+                          className="group px-6 md:px-10 py-4 text-white text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3"
                           style={{ background: 'linear-gradient(135deg, #ec4899, #8b5cf6)', boxShadow: '0 8px 30px rgba(236,72,153,0.35)' }}
                         >
                            Next: {steps[activeStep + 1].label}
@@ -1120,11 +1120,11 @@ export default function UltimateResumeStudioPage() {
                       )}
                       {activeStep === steps.length - 1 && (
                         <button 
-                          onClick={() => toast.success("Resume Finalized & Synced! ðŸŽ‰")}
-                          className="px-10 py-4 bg-emerald-600 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-emerald-600/20 hover:scale-105 transition-all flex items-center gap-3"
+                          onClick={() => toast.success("Resume Finalized & Synced! 🎉")}
+                          className="px-6 md:px-10 py-4 bg-emerald-600 text-white text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-emerald-600/20 hover:scale-105 transition-all flex items-center justify-center gap-3"
                         >
                            Finalize Resume <CheckCircle2 className="w-5 h-5" />
-                        </button>
+                         </button>
                       )}
                    </footer>
                 </div>
