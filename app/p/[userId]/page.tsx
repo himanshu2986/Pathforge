@@ -102,7 +102,7 @@ export default function PublicArchitectPortfolio() {
                  Edit <span className="hidden xs:inline">Profile</span>
               </button>
             ) : (
-              <a href={`mailto:${profile.email}`} className="px-3 md:px-5 py-2 md:py-2.5 bg-white text-black rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-slate-200 transition-all shadow-xl shadow-white/10">
+              <a href={`mailto:admin@pathforge.com?subject=Inquiry for ${profile.name} (via Pathforge Architect)`} className="px-3 md:px-5 py-2 md:py-2.5 bg-white text-black rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-slate-200 transition-all shadow-xl shadow-white/10">
                  <Mail className="w-4 h-4" /> <span className="hidden xs:inline">Message</span> <span className="xs:hidden">Contact</span>
               </a>
             )}
