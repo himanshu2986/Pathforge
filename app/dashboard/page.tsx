@@ -99,7 +99,7 @@ function PublicProfileCard() {
                       {publicUrl}
                    </div>
                    <button onClick={handleCopy} className="p-3 bg-white/5 hover:bg-white text-gray-500 hover:text-black rounded-xl transition-all"><Copy className="w-4 h-4" /></button>
-                   <Link href={`/p/${user?.id}`} target="_blank" className="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+                   <Link href={`/p/${user?.id}`} className="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
                       View Profile <ArrowUpRight className="w-4 h-4" />
                    </Link>
                 </div>
