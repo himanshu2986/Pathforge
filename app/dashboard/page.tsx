@@ -112,7 +112,21 @@ function PublicProfileCard() {
 
 export default function DashboardOverview() {
   const { user } = useAuthStore()
-  const { portfolioScore, skills, internships, portfolioProjects, weeklyProgress, learningPaths } = useDashboardStore()
+  const { portfolioScore, skills, internships, portfolioProjects, weeklyProgress, learningPaths, loadUserData } = useDashboardStore()
+
+  const handleGlobalSync = () => {
+    const publicUrl = typeof window !== 'undefined' ? `${window.location.origin}/p/${user?.id}` : ''
+    navigator.clipboard.writeText(publicUrl)
+    toast.success("Global Sync: Profile URL Copied!")
+  }
+
+  const handleInitialize = () => {
+    const tId = toast.loading("Initializing Mission Matrix...")
+    if (user?.id) {
+      loadUserData(user.id)
+    }
+    setTimeout(() => toast.success("Mission Matrix Resynced Online.", { id: tId }), 800)
+  }
   
   const stats = useMemo(() => {
     const appliedInternships = internships.filter((internship) => internship.applied)
@@ -175,10 +189,10 @@ export default function DashboardOverview() {
            </h1>
         </div>
         <div className="flex gap-4">
-           <button className="px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center gap-2">
+           <button onClick={handleGlobalSync} className="px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center gap-2">
               <Share2 className="w-4 h-4" /> Global Sync
            </button>
-           <button onClick={() => toast.info("Mission Matrix Refreshed.")} className="px-6 py-3 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+           <button onClick={handleInitialize} className="px-6 py-3 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
               Initialize Protocol
            </button>
         </div>

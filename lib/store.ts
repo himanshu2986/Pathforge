@@ -300,8 +300,8 @@ const createSampleDashboardData = (): DashboardSnapshot => ({
 const createEmptyDashboardData = (): DashboardSnapshot => ({
   skills: [],
   portfolioProjects: [],
-  learningPaths: [],
-  internships: [],
+  learningPaths: structuredClone(mockLearningPaths),
+  internships: structuredClone(mockInternships),
   portfolioScore: 0,
   weeklyProgress: 0,
 })
@@ -402,8 +402,8 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
           const syncedData = {
             skills: cloudData.skills || [],
             portfolioProjects: cloudData.portfolioProjects || [],
-            learningPaths: cloudData.learningPaths || [],
-            internships: cloudData.internships || [],
+            learningPaths: (cloudData.learningPaths && cloudData.learningPaths.length > 0) ? cloudData.learningPaths : structuredClone(mockLearningPaths),
+            internships: (cloudData.internships && cloudData.internships.length > 0) ? cloudData.internships : structuredClone(mockInternships),
             portfolioScore: cloudData.portfolioScore || 0,
             weeklyProgress: cloudData.weeklyProgress || 0,
           }

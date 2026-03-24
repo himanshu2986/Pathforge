@@ -298,7 +298,23 @@ export default function PathDetailsPage() {
 
   useEffect(() => { if (!selectedModuleId && modules.length > 0) setSelectedModuleId(modules[0].id) }, [modules, selectedModuleId])
 
-  if (!path) return null
+  if (!path) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center p-6 bg-[#030712] pl-64">
+        <div className="text-center bg-white/5 border border-white/10 p-12 rounded-[2.5rem] max-w-lg shadow-3xl relative overflow-hidden">
+           <div className="absolute top-0 right-0 w-40 h-40 bg-indigo-500/20 blur-3xl -translate-y-1/2 translate-x-1/2" />
+           <div className="w-20 h-20 bg-indigo-500/20 text-indigo-400 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-[0_0_40px_-5px_rgba(99,102,241,0.3)]">
+             <Terminal className="w-10 h-10" />
+           </div>
+           <h2 className="text-2xl font-black text-white italic mb-3">Module Not Synchronized</h2>
+           <p className="text-slate-400 text-sm font-medium mb-8 leading-relaxed">This learning path could not be located in your neural matrix. It may be loading, or it hasn't been assigned to your profile yet.</p>
+           <button onClick={() => router.push('/dashboard')} className="px-8 py-4 bg-primary text-white rounded-xl font-black uppercase text-[10px] tracking-widest hover:scale-105 active:scale-95 transition-all w-full flex justify-center items-center gap-2 shadow-xl shadow-primary/20">
+             <ArrowLeft className="w-4 h-4" /> Return to Command Center
+           </button>
+        </div>
+      </div>
+    )
+  }
 
   const handleNext = () => { if (currentIdx < modules.length - 1) { setSelectedModuleId(modules[currentIdx + 1].id); window.scrollTo(0, 0); } }
   const handlePrev = () => { if (currentIdx > 0) { setSelectedModuleId(modules[currentIdx - 1].id); window.scrollTo(0, 0); } }
