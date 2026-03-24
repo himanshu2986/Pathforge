@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -593,7 +593,7 @@ export default function UltimateResumeStudioPage() {
             {/* Section title */}
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Choose your visual identity â€” you can always change it later.</p>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
                 { id: 'professional', name: 'Elite Professional', desc: 'Classic Corporate', icon: FileText, gradient: 'from-blue-50 to-indigo-50', accent: '#3b82f6' },
                 { id: 'tech', name: 'Software Engineer', desc: 'Modern Tech Header', icon: Cpu, gradient: 'from-slate-800 to-slate-950', accent: '#22d3ee', dark: true },
@@ -669,7 +669,7 @@ export default function UltimateResumeStudioPage() {
       case 1:
         return (
           <div className="space-y-12">
-            <div className="grid grid-cols-2 gap-8 items-start">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                {/* Photo Upload */}
                <div className="space-y-4">
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Profile Picture</label>
@@ -697,7 +697,7 @@ export default function UltimateResumeStudioPage() {
                </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-6 pt-8 border-t border-slate-50">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-8 border-t border-slate-50">
                <div className="space-y-2">
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Contact Email</label>
                   <input value={resumeData.personalInfo.email} onChange={e => setResumeData(p => ({ ...p, personalInfo: { ...p.personalInfo, email: e.target.value } }))} className="w-full bg-slate-50 rounded-xl p-4 text-sm font-bold outline-none focus:bg-white border-2 border-slate-50 focus:border-slate-900 transition-all" placeholder="hello@company.com" />
@@ -747,7 +747,7 @@ export default function UltimateResumeStudioPage() {
                   <div key={exp.id} className="p-8 rounded-3xl bg-slate-50 border-2 border-slate-100 relative group transition-all hover:border-slate-200">
                      <button onClick={() => setResumeData(p => ({ ...p, experience: p.experience.filter(e => e.id !== exp.id) }))} className="absolute top-6 right-6 p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"><Trash2 className="w-4 h-4" /></button>
                      
-                     <div className="grid grid-cols-2 gap-8 mb-8">
+                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 mb-8">
                         <div className="space-y-2">
                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Company / Organization</label>
                            <input value={exp.company} onChange={e => { const n = [...resumeData.experience]; n[i].company = e.target.value; setResumeData(p => ({ ...p, experience: n })) }} className="w-full bg-white rounded-xl p-4 text-sm font-bold border-2 border-transparent focus:border-slate-900 outline-none transition-all" placeholder="e.g. Google, Inc." />
@@ -877,7 +877,7 @@ export default function UltimateResumeStudioPage() {
                 <p className="text-xs text-slate-400 font-medium">Select up to 3 projects to showcase on your professional resume.</p>
              </div>
              
-             <div className="grid grid-cols-2 gap-4">
+             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {portfolioProjects.map(p => {
                   const isSel = resumeData.projects.find(rp => rp.id === p.id)
                   return (
@@ -998,8 +998,8 @@ export default function UltimateResumeStudioPage() {
              }
           `}</style>
        
-          {/* Left Sidebar Navigation */}
-           <aside className="fixed left-0 top-0 bottom-0 w-[300px] text-white flex flex-col pt-12 pb-8 px-8 shrink-0 z-50 overflow-y-auto" style={{ background: 'linear-gradient(180deg, #060c1a 0%, #0a0e1f 60%, #0d1228 100%)' }}>
+          {/* Sidebar - Desktop (Hidable/Responsive) */}
+           <aside className="hidden lg:flex fixed left-0 top-0 bottom-0 w-[280px] text-white flex-col pt-12 pb-8 px-8 shrink-0 z-50 overflow-y-auto" style={{ background: 'linear-gradient(180deg, #060c1a 0%, #0a0e1f 60%, #0d1228 100%)' }}>
              {/* Logo */}
              <div className="flex items-center gap-3 mb-12 px-1">
                <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-lg" style={{ background: 'linear-gradient(135deg, #ec4899, #8b5cf6)' }}>
@@ -1071,11 +1071,11 @@ export default function UltimateResumeStudioPage() {
              </div>
           </aside>
 
-          {/* Main Content Area */}
-           <div className="flex-1 flex flex-row relative h-full ml-[300px]">
+           {/* Main Content Area */}
+            <div className="flex-1 flex flex-row relative h-full lg:ml-[280px]">
               
               {/* Dynamic Form Area (Left) */}
-              <main className="flex-1 overflow-y-auto custom-scrollbar p-12 lg:p-20 bg-white min-w-0">
+              <main className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-12 lg:p-20 bg-white min-w-0">
                  <div className="max-w-3xl mx-auto h-full flex flex-col">
                     <header className="mb-10">
                        <button onClick={() => setActiveStep(p => Math.max(0, p - 1))} className={cn("text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-all flex items-center gap-2 mb-5", activeStep === 0 && "opacity-0 pointer-events-none")}>

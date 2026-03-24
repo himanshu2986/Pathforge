@@ -90,20 +90,20 @@ export default function PublicArchitectPortfolio() {
       <div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[180px] opacity-20 translate-y-1/3 -translate-x-1/3" />
 
       {/* Navigation Top (Recruiter Protocol) */}
-      <nav className="fixed top-0 inset-x-0 h-20 z-50 bg-[#07090f]/80 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-4 md:px-8 lg:px-20">
-         <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-indigo-600 rounded-xl flex items-center justify-center shadow-lg"><Zap className="w-6 h-6 text-white" /></div>
-            <span className="text-xl font-black italic tracking-tighter">PATHFORGE <span className="hidden sm:inline text-gray-600">ARCHITECT</span></span>
+      <nav className="fixed top-0 inset-x-0 h-16 md:h-20 z-50 bg-[#07090f]/80 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-4 md:px-8 lg:px-20">
+         <div className="flex items-center gap-2 md:gap-3">
+            <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-primary to-indigo-600 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg"><Zap className="w-5 h-5 md:w-6 md:h-6 text-white" /></div>
+            <span className="text-base md:text-xl font-black italic tracking-tighter">PATHFORGE <span className="hidden sm:inline text-gray-600 font-normal">ARCHITECT</span></span>
          </div>
-         <div className="flex items-center gap-4">
+         <div className="flex items-center gap-3 md:gap-4">
             <p className="hidden lg:block text-[10px] font-black uppercase text-emerald-500 animate-pulse">Live Certification Engine Active</p>
             {user?.id === profile.id || user?.id === 'demo-user' ? (
-              <button onClick={() => router.push('/dashboard/settings')} className="px-5 py-2.5 bg-white text-black rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-slate-200 transition-all shadow-xl shadow-white/10">
-                 Edit Profile
+              <button onClick={() => router.push('/dashboard/settings')} className="px-3 md:px-5 py-2 md:py-2.5 bg-white text-black rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-slate-200 transition-all shadow-xl shadow-white/10">
+                 Edit <span className="hidden xs:inline">Profile</span>
               </button>
             ) : (
-              <a href={`mailto:${profile.email}`} className="px-5 py-2.5 bg-white text-black rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-slate-200 transition-all shadow-xl shadow-white/10">
-                 <Mail className="w-4 h-4" /> Message Candidate
+              <a href={`mailto:${profile.email}`} className="px-3 md:px-5 py-2 md:py-2.5 bg-white text-black rounded-lg md:rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-slate-200 transition-all shadow-xl shadow-white/10">
+                 <Mail className="w-4 h-4" /> <span className="hidden xs:inline">Message</span> <span className="xs:hidden">Contact</span>
               </a>
             )}
          </div>
