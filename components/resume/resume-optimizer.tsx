@@ -85,7 +85,7 @@ export function ResumeOptimizer({ data }: { data: any }) {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="absolute bottom-24 right-0 w-[400px] max-h-[600px] bg-slate-900 border border-white/10 rounded-[3rem] shadow-3xl overflow-hidden flex flex-col"
+            className="absolute bottom-24 right-[-24px] sm:right-0 w-[calc(100vw-40px)] sm:w-[400px] max-h-[70vh] sm:max-h-[600px] bg-slate-900 border border-white/10 rounded-[2.5rem] sm:rounded-[3rem] shadow-3xl overflow-hidden flex flex-col"
           >
              <header className="p-8 bg-gradient-to-br from-indigo-600 to-indigo-800 text-white relative">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
