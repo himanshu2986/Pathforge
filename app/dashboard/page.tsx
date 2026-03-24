@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useMemo } from 'react'
+import { Suspense, useMemo, useState } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -29,6 +29,7 @@ import { SkillGalaxy } from '@/components/dashboard/skill-galaxy'
 import { JobMatchmaker } from '@/components/dashboard/job-matchmaker'
 import { CareerMentorAI } from '@/components/dashboard/career-mentor-ai'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 
 const PortfolioHologram = dynamic(
   () => import('@/components/3d/portfolio-hologram'),
@@ -70,11 +71,19 @@ function StatCard({ stat, index }: { stat: {
 
 function PublicProfileCard() {
   const { user } = useAuthStore()
+  const [isPublished, setIsPublished] = useState(true)
   const publicUrl = typeof window !== 'undefined' ? `${window.location.origin}/p/${user?.id}` : ''
   
   const handleCopy = () => {
     navigator.clipboard.writeText(publicUrl)
     toast.success("Profile URL Copied to Clipboard!")
+  }
+
+  const toggleVisibility = () => {
+    setIsPublished(!isPublished)
+    toast.success(isPublished ? "Stealth Protocol Active: Profile Hidden" : "Atlas Sync Restored: Profile Live", {
+      icon: isPublished ? <TrendingUp className="rotate-180" /> : <Globe className="text-emerald-500" />
+    })
   }
 
   return (
@@ -83,14 +92,23 @@ function PublicProfileCard() {
           <div className="absolute top-[-20px] right-[-20px] w-40 h-40 bg-primary/10 rounded-full blur-3xl pointer-events-none group-hover:bg-primary/20 transition-all" />
           
           <div className="flex flex-col md:flex-row items-center gap-10">
-             <div className="w-20 h-20 bg-white text-black rounded-[1.5rem] flex items-center justify-center shadow-2xl shrink-0 group-hover:scale-110 transition-transform">
-                <Globe className="w-10 h-10" />
+             <div className="w-20 h-20 bg-white text-black rounded-[1.5rem] flex items-center justify-center shadow-2xl shrink-0 group-hover:scale-110 transition-transform relative">
+                <Globe className={cn("w-10 h-10 transition-all", !isPublished && "opacity-20 grayscale")} />
+                {!isPublished && <div className="absolute inset-0 flex items-center justify-center"><div className="w-12 h-1 bg-red-500 rotate-45 rounded-full" /></div>}
              </div>
              
              <div className="flex-1 text-center md:text-left space-y-4">
-                <div>
-                   <h3 className="text-2xl font-black italic tracking-tighter mb-1">Public Architect Profile</h3>
-                   <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Global Atlas Synchronization ACTIVE</p>
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                   <div>
+                      <h3 className="text-2xl font-black italic tracking-tighter mb-1">Public Architect Profile</h3>
+                      <p className={cn("text-[9px] font-black uppercase tracking-[0.2em] transition-colors", isPublished ? "text-emerald-500" : "text-red-500")}>
+                        Global Atlas Sync: {isPublished ? 'ONLINE' : 'OFFLINE'}
+                      </p>
+                   </div>
+                   <button onClick={toggleVisibility} className={cn("px-4 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest border transition-all flex items-center gap-2 mx-auto md:mx-0", isPublished ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : "bg-red-500/10 text-red-500 border-red-500/20")}>
+                      <div className={cn("w-2 h-2 rounded-full", isPublished ? "bg-emerald-500 animate-pulse" : "bg-red-500")} />
+                      {isPublished ? 'Go Stealth' : 'Go Live'}
+                   </button>
                 </div>
                 <p className="text-sm font-medium text-muted-foreground max-w-lg">Your public portfolio is live and verified. Recruiters can view your full mission history, certificates, and validated skill levels.</p>
                 
@@ -125,10 +143,21 @@ export default function DashboardOverview() {
   const { user } = useAuthStore()
   const { portfolioScore, skills, internships, portfolioProjects, weeklyProgress, learningPaths, loadUserData, activityLogs } = useDashboardStore()
 
+  const [isPublished, setIsPublished] = useState(true)
+
   const handleGlobalSync = () => {
     const publicUrl = typeof window !== 'undefined' ? `${window.location.origin}/p/${user?.id}` : ''
     navigator.clipboard.writeText(publicUrl)
-    toast.success("Global Sync: Profile URL Copied!")
+    toast.success("Global Sync: Profile URL Copied!", {
+      description: isPublished ? "Your portal is live & receiving pings." : "Warning: Portal is currently OFFLINE."
+    })
+  }
+
+  const toggleVisibility = () => {
+    setIsPublished(!isPublished)
+    toast.success(isPublished ? "Stealth Protocol Active: Profile Hidden" : "Atlas Sync Restored: Profile Live", {
+      icon: isPublished ? <TrendingUp className="rotate-180" /> : <Globe className="text-emerald-500" />
+    })
   }
 
   const handleInitialize = () => {

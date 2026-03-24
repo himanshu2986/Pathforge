@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
@@ -182,10 +182,13 @@ export default function AdvancedAdminDashboard() {
     setIsLoading(false)
   }
 
-  const filteredUsers = allUsers.filter(u => 
-    u.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    u.email?.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  const filteredUsers = useMemo(() => {
+    return allUsers.filter(u => 
+      u.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      u.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      u._id?.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  }, [allUsers, searchQuery])
 
   if (user?.role !== 'admin') return null
 

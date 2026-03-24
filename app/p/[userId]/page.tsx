@@ -39,6 +39,12 @@ export default function PublicArchitectPortfolio() {
     fetchProfile()
   }, [])
 
+  useEffect(() => {
+    if (data?.profile?.name) {
+      document.title = `${data.profile.name} | Pathforge Architect`
+    }
+  }, [data])
+
   const fetchProfile = async () => {
     try {
       const res = await fetch(`/api/public/profile/${params.userId}`)
