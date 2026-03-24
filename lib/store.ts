@@ -73,6 +73,12 @@ export interface Internship {
   applied: boolean
 }
 
+export interface ActivityLog {
+  id: string
+  action: string
+  timestamp: string
+}
+
 // Auth Store
 interface AuthState {
   user: User | null
@@ -181,6 +187,7 @@ interface DashboardState {
   portfolioProjects: PortfolioProject[]
   learningPaths: LearningPath[]
   internships: Internship[]
+  activityLogs: ActivityLog[]
   portfolioScore: number
   weeklyProgress: number
   currentUserId: string | null
@@ -199,6 +206,7 @@ interface DashboardState {
   applyToInternship: (id: string) => void
   toggleLearningModule: (pathId: string, moduleId: string) => void
   addCertificate: (certificate: { id: string; title: string; date: string }) => void
+  logAction: (action: string) => void
 }
 
 interface DashboardSnapshot {
@@ -206,6 +214,7 @@ interface DashboardSnapshot {
   portfolioProjects: PortfolioProject[]
   learningPaths: LearningPath[]
   internships: Internship[]
+  activityLogs: ActivityLog[]
   portfolioScore: number
   weeklyProgress: number
 }
@@ -288,11 +297,19 @@ const mockInternships: Internship[] = [
   }
 ]
 
+const mockActivityLogs: ActivityLog[] = [
+  { id: 'log1', action: 'Project "Nexus" verified by AI', timestamp: new Date(Date.now() - 2 * 60000).toISOString() },
+  { id: 'log2', action: 'Skill "React" advanced to 88%', timestamp: new Date(Date.now() - 15 * 3600000).toISOString() },
+  { id: 'log3', action: 'Applied to StartupXYZ (Full-Stack)', timestamp: new Date(Date.now() - 24 * 3600000).toISOString() },
+  { id: 'log4', action: 'Certificate "ML Mastery" issued', timestamp: new Date(Date.now() - 48 * 3600000).toISOString() }
+]
+
 const createSampleDashboardData = (): DashboardSnapshot => ({
   skills: structuredClone(mockSkills),
   portfolioProjects: structuredClone(mockPortfolioProjects),
   learningPaths: structuredClone(mockLearningPaths),
   internships: structuredClone(mockInternships),
+  activityLogs: structuredClone(mockActivityLogs),
   portfolioScore: 78,
   weeklyProgress: 12,
 })
@@ -302,6 +319,7 @@ const createEmptyDashboardData = (): DashboardSnapshot => ({
   portfolioProjects: [],
   learningPaths: structuredClone(mockLearningPaths),
   internships: structuredClone(mockInternships),
+  activityLogs: structuredClone(mockActivityLogs),
   portfolioScore: 0,
   weeklyProgress: 0,
 })
@@ -367,6 +385,7 @@ const setAndPersistDashboardState = (
       portfolioProjects: nextState.portfolioProjects,
       learningPaths: nextState.learningPaths,
       internships: nextState.internships,
+      activityLogs: nextState.activityLogs,
       portfolioScore: nextState.portfolioScore,
       weeklyProgress: nextState.weeklyProgress,
     })
@@ -404,6 +423,7 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
             portfolioProjects: cloudData.portfolioProjects || [],
             learningPaths: (cloudData.learningPaths && cloudData.learningPaths.length > 0) ? cloudData.learningPaths : structuredClone(mockLearningPaths),
             internships: (cloudData.internships && cloudData.internships.length > 0) ? cloudData.internships : structuredClone(mockInternships),
+            activityLogs: (cloudData.activityLogs && cloudData.activityLogs.length > 0) ? cloudData.activityLogs : structuredClone(mockActivityLogs),
             portfolioScore: cloudData.portfolioScore || 0,
             weeklyProgress: cloudData.weeklyProgress || 0,
           }
@@ -457,11 +477,18 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
   })),
   setLearningPaths: (paths) => setAndPersistDashboardState(set, { learningPaths: paths }),
   setInternships: (internships) => setAndPersistDashboardState(set, { internships }),
-  applyToInternship: (id) => setAndPersistDashboardState(set, (state) => ({
-    internships: state.internships.map(i => 
-      i.id === id ? { ...i, applied: true } : i
-    )
+  logAction: (action) => setAndPersistDashboardState(set, (state) => ({
+    activityLogs: [{ id: Date.now().toString(), action, timestamp: new Date().toISOString() }, ...state.activityLogs].slice(0, 50)
   })),
+  applyToInternship: (id) => setAndPersistDashboardState(set, (state) => {
+    const internship = state.internships.find(i => i.id === id)
+    return {
+      internships: state.internships.map(i => 
+        i.id === id ? { ...i, applied: true } : i
+      ),
+      activityLogs: [{ id: Date.now().toString(), action: `Applied to ${internship?.company} (${internship?.role})`, timestamp: new Date().toISOString() }, ...state.activityLogs].slice(0, 50)
+    }
+  }),
   toggleLearningModule: (pathId: string, moduleId: string) => setAndPersistDashboardState(set, (state) => {
     let nextSkills = [...state.skills]
     const nextLearningPaths = state.learningPaths.map((path) => {
@@ -493,12 +520,21 @@ export const useDashboardStore = create<DashboardState>()((set) => ({
       const progress = Math.round((newModules.filter(m => m.completed).length / newModules.length) * 100)
       return { ...path, modules: newModules, progress }
     })
+    
+    const path = state.learningPaths.find(p => p.id === pathId)
+    const module = path?.modules.find(m => m.id === moduleId)
+    let nextLogs = state.activityLogs
+    if (module && !module.completed) {
+      nextLogs = [{ id: Date.now().toString(), action: `Completed module "${module.title}"`, timestamp: new Date().toISOString() }, ...state.activityLogs].slice(0, 50)
+    }
+
     return {
       learningPaths: nextLearningPaths,
-      skills: nextSkills // Note: The actual skill update happens above, we just need to re-pass the correctly mapped array
+      skills: nextSkills, // Note: The actual skill update happens above, we just need to re-pass the correctly mapped array
+      activityLogs: nextLogs
     }
   }),
   addCertificate: (cert) => setAndPersistDashboardState(set, (state) => ({
-    // Placeholder if we had a certificates array, for now just show success toast in UI
+    activityLogs: [{ id: Date.now().toString(), action: `Certificate "${cert.title}" issued`, timestamp: new Date().toISOString() }, ...state.activityLogs].slice(0, 50)
   })),
 }))

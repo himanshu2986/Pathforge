@@ -110,9 +110,20 @@ function PublicProfileCard() {
   )
 }
 
+const timeAgo = (dateString: string) => {
+  const diff = Date.now() - new Date(dateString).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return `just now`;
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
+
 export default function DashboardOverview() {
   const { user } = useAuthStore()
-  const { portfolioScore, skills, internships, portfolioProjects, weeklyProgress, learningPaths, loadUserData } = useDashboardStore()
+  const { portfolioScore, skills, internships, portfolioProjects, weeklyProgress, learningPaths, loadUserData, activityLogs } = useDashboardStore()
 
   const handleGlobalSync = () => {
     const publicUrl = typeof window !== 'undefined' ? `${window.location.origin}/p/${user?.id}` : ''
@@ -275,19 +286,14 @@ export default function DashboardOverview() {
                     <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest">Terminal Output</h3>
                  </GlassCardHeader>
                  <GlassCardContent className="p-6">
-                    <div className="space-y-4 font-mono">
-                       {[
-                         { a: 'Project "Nexus" verified by AI', t: '2m ago' },
-                         { a: 'Skill "React" advanced to 88%', t: '15h ago' },
-                         { a: 'Applied to Google (Full-stack)', t: '1d ago' },
-                         { a: 'Certificate "ML Mastery" issued', t: '2d ago' }
-                       ].map((log, i) => (
-                         <div key={i} className="flex justify-between items-center text-[10px]">
-                            <span className="text-gray-400">{">"} {log.a}</span>
-                            <span className="text-gray-600 italic">{log.t}</span>
-                         </div>
-                       ))}
-                    </div>
+                     <div className="space-y-4 font-mono">
+                        {activityLogs?.slice(0, 4).map((log) => (
+                          <div key={log.id || log.action} className="flex justify-between items-center text-[10px]">
+                             <span className="text-gray-400">{">"} {log.action}</span>
+                             <span className="text-gray-600 italic">{timeAgo(log.timestamp)}</span>
+                          </div>
+                        ))}
+                     </div>
                  </GlassCardContent>
               </GlassCard>
 
