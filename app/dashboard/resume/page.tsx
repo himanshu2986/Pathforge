@@ -163,6 +163,7 @@ export default function UltimateResumeStudioPage() {
         try {
           await fetch('/api/dashboard/resume', {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               data: resumeData,
               settings: {
@@ -386,7 +387,7 @@ export default function UltimateResumeStudioPage() {
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>${personalInfo.name || 'Resume'} â€” Resume</title>
+  <title>${personalInfo.name || 'Resume'} — Resume</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -591,7 +592,7 @@ export default function UltimateResumeStudioPage() {
         return (
           <div className="space-y-10">
             {/* Section title */}
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Choose your visual identity â€” you can always change it later.</p>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Choose your visual identity — you can always change it later.</p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
@@ -628,7 +629,7 @@ export default function UltimateResumeStudioPage() {
                     {/* Active badge */}
                     {isActive && (
                       <div className="absolute top-2 left-2 px-2 py-1 rounded-full text-[8px] font-black uppercase tracking-widest text-white shadow-md" style={{ backgroundColor: t.accent }}>
-                        Selected âœ“
+                        Selected ✓
                       </div>
                     )}
                   </button>

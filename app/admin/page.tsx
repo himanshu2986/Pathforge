@@ -300,7 +300,7 @@ export default function AdvancedAdminDashboard() {
                     </div>
                     <div className="h-[350px]">
                       <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={mockChartData}>
+                        <AreaChart data={(stats as any).chartData || mockChartData}>
                           <defs>
                             <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
                               <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.4}/>

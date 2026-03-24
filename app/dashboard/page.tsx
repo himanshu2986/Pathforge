@@ -79,11 +79,23 @@ function PublicProfileCard() {
     toast.success("Profile URL Copied to Clipboard!")
   }
 
-  const toggleVisibility = () => {
-    setIsPublished(!isPublished)
-    toast.success(isPublished ? "Stealth Protocol Active: Profile Hidden" : "Atlas Sync Restored: Profile Live", {
-      icon: isPublished ? <TrendingUp className="rotate-180" /> : <Globe className="text-emerald-500" />
-    })
+  const toggleVisibility = async () => {
+    const nextState = !isPublished
+    setIsPublished(nextState)
+    
+    try {
+      await fetch('/api/user/visibility', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isPublished: nextState })
+      })
+      toast.success(nextState ? "Atlas Sync Restored: Profile Live" : "Stealth Protocol Active: Profile Hidden", {
+        icon: nextState ? <Globe className="text-emerald-500" /> : <TrendingUp className="rotate-180 text-red-500" />
+      })
+    } catch (e) {
+      setIsPublished(!nextState)
+      toast.error("Protocol Sync Failure: Please re-authenticate.")
+    }
   }
 
   return (

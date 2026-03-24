@@ -10,6 +10,7 @@ const UserSchema = new Schema(
     bio: { type: String, default: '' },
     location: { type: String, default: '' },
     website: { type: String, default: '' },
+    isPublished: { type: Boolean, default: true },
     isVerified: { type: Boolean, default: false },
     verificationToken: { type: String, required: false },
     resetToken: { type: String, required: false },
