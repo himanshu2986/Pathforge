@@ -183,7 +183,7 @@ export default function DashboardOverview() {
   }, [portfolioScore, portfolioProjects.length, skills.length, internships, learningPaths])
   
   return (
-    <div className="p-6 lg:p-12 space-y-12">
+    <div className="p-4 md:p-8 lg:p-12 space-y-8 md:space-y-12">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
