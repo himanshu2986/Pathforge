@@ -7,7 +7,8 @@ import {
   ShieldAlert, Plus, Save, Activity, Users, User as UserIcon,
   Briefcase, Globe, Trash2, Edit2, CheckCircle, Award,
   MapPin, Clock, Building2, UserCircle, BookOpen, Layers,
-  BarChart3, Settings, Search, Filter, ShieldCheck, ChevronRight
+  BarChart3, Settings, Search, Filter, ShieldCheck, ChevronRight,
+  ExternalLink
 } from 'lucide-react'
 import { MagneticButton } from '@/components/ui/magnetic-button'
 import { GlassCard, GlassCardContent, GlassCardHeader } from '@/components/ui/glass-card'
@@ -428,8 +429,7 @@ export default function AdvancedAdminDashboard() {
 
         {activeTab === 'paths' && (
           <motion.div key="paths" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid lg:grid-cols-12 gap-8 relative z-10">
-            <div className="lg:col-span-4">
-             <div className="lg:col-span-12">
+            <div className="lg:col-span-8">
                <GlassCard>
                  <div className="p-10">
                    <div className="flex justify-between items-center mb-10">
@@ -518,9 +518,8 @@ export default function AdvancedAdminDashboard() {
                    </form>
                  </div>
                </GlassCard>
-             </div>
             </div>
-            <div className="lg:col-span-8 flex flex-col items-center justify-center p-20 border-2 border-dashed border-white/5 rounded-[40px] bg-white/[0.02]">
+            <div className="lg:col-span-4 flex flex-col items-center justify-center p-10 lg:p-20 border-2 border-dashed border-white/5 rounded-[40px] bg-white/[0.02]">
                <Layers className="w-16 h-16 text-gray-700 mb-6" />
                <h3 className="text-xl font-bold text-gray-500 uppercase tracking-widest mb-4">Live Matrix Postings ({learningPaths.length})</h3>
                <div className="flex flex-wrap gap-4 justify-center">
@@ -606,6 +605,9 @@ export default function AdvancedAdminDashboard() {
                         </td>
                         <td className="p-6 text-right last:rounded-r-2xl">
                           <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                             <a href={`/p/${u._id}`} target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all block">
+                                <ExternalLink className="w-4 h-4 text-gray-400" />
+                             </a>
                              <button onClick={() => openEditModal(u)} className="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all">
                                 <Settings className="w-4 h-4 text-gray-400" />
                              </button>

@@ -24,8 +24,10 @@ import {
 import { GlassCard, GlassCardContent } from '@/components/ui/glass-card'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
+import { useAuthStore } from '@/lib/store'
 
 export default function PublicArchitectPortfolio() {
+  const { user } = useAuthStore()
   const params = useParams()
   const router = useRouter()
   const [data, setData] = useState<any>(null)
@@ -95,9 +97,15 @@ export default function PublicArchitectPortfolio() {
          </div>
          <div className="flex items-center gap-4">
             <p className="hidden md:block text-[10px] font-black uppercase text-emerald-500 animate-pulse">Live Certification Engine Active</p>
-            <a href={`mailto:${profile.email}`} className="px-5 py-2.5 bg-white text-black rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-slate-200 transition-all shadow-xl shadow-white/10">
-               <Mail className="w-4 h-4" /> Message Candidate
-            </a>
+            {user?.id === profile.id || user?.id === 'demo-user' ? (
+              <button onClick={() => router.push('/dashboard/settings')} className="px-5 py-2.5 bg-white text-black rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-slate-200 transition-all shadow-xl shadow-white/10">
+                 Edit Profile
+              </button>
+            ) : (
+              <a href={`mailto:${profile.email}`} className="px-5 py-2.5 bg-white text-black rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-slate-200 transition-all shadow-xl shadow-white/10">
+                 <Mail className="w-4 h-4" /> Message Candidate
+              </a>
+            )}
          </div>
       </nav>
 
@@ -259,9 +267,9 @@ export default function PublicArchitectPortfolio() {
                                          <span key={idx} className="px-3 py-1 bg-white/5 rounded-lg text-[9px] font-bold text-gray-400 border border-white/5">{s}</span>
                                        ))}
                                     </div>
-                                    <button className="w-full py-4 bg-white/5 hover:bg-white text-gray-400 hover:text-black rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2">
+                                    <a href={p.url || '#'} target="_blank" rel="noopener noreferrer" className="w-full py-4 bg-white/5 hover:bg-white text-gray-400 hover:text-black rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2">
                                        Analyze Repository <ExternalLink className="w-4 h-4 ml-2" />
-                                    </button>
+                                    </a>
                                  </div>
                               </GlassCard>
                            </motion.div>
@@ -320,10 +328,14 @@ export default function PublicArchitectPortfolio() {
             </div>
 
             <div className="flex gap-4">
-               {[Github, Twitter, Linkedin].map((Icon, i) => (
-                 <button key={i} className="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-white/10 hover:scale-110 active:scale-95 transition-all transition-transform">
+               {[
+                 { src: Github, url: profile.github || 'https://github.com' },
+                 { src: Twitter, url: profile.twitter || 'https://twitter.com' },
+                 { src: Linkedin, url: profile.linkedin || 'https://linkedin.com' }
+               ].map(({ src: Icon, url }, i) => (
+                 <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-white/10 hover:scale-110 active:scale-95 transition-all transition-transform block">
                     <Icon className="w-6 h-6 text-gray-400 hover:text-white" />
-                 </button>
+                 </a>
                ))}
             </div>
          </div>

@@ -196,7 +196,7 @@ export default function DashboardOverview() {
               <div className="text-gray-600 text-[8px] font-black uppercase tracking-widest">• 24ms Platform Latency</div>
            </div>
            <h1 className="text-4xl lg:text-5xl font-black text-foreground italic tracking-tighter">
-             ARCHITECT COMMAND: <span className="gradient-text">{user?.name?.split(' ')[0] || 'User'}</span>
+             ARCHITECT COMMAND: <span className="gradient-text pr-2">{user?.name?.split(' ')[0] || 'User'}</span>
            </h1>
         </div>
         <div className="flex gap-4">

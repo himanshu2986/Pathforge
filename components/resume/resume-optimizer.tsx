@@ -152,11 +152,11 @@ export function ResumeOptimizer({ data }: { data: any }) {
       <button 
         onClick={() => setIsOpen(!isOpen)} 
         className={cn(
-          "w-20 h-20 rounded-[2rem] flex items-center justify-center shadow-3xl border-2 transition-all group overflow-hidden relative",
+          "w-20 h-20 rounded-[2rem] flex items-center justify-center shadow-3xl border-2 transition-all group relative",
           overallScore === 100 ? "bg-emerald-500 border-emerald-400" : "bg-indigo-600 border-indigo-500"
         )}
       >
-        <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+        <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-[2rem]" />
         <motion.div animate={{ rotate: isOpen ? 90 : 0 }} className={cn("relative z-10", overallScore === 100 ? "text-white" : "text-white")}>
            <Brain className="w-10 h-10" />
         </motion.div>
