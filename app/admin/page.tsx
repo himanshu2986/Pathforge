@@ -229,7 +229,7 @@ export default function AdvancedAdminDashboard() {
       </div>
 
       {/* Advanced Navigation Bar */}
-      <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-2 mb-10 p-1.5 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-2xl w-full max-w-4xl mx-auto shadow-2xl">
+      <div className="relative z-10 grid grid-cols-2 lg:grid-cols-4 gap-2 mb-10 p-1.5 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-2xl w-full max-w-4xl mx-auto shadow-2xl">
         {[
           { id: 'overview', icon: BarChart3, label: 'Analytics' },
           { id: 'internships', icon: Briefcase, label: 'Deployment' },
@@ -240,14 +240,14 @@ export default function AdvancedAdminDashboard() {
             key={t.id} 
             onClick={() => setActiveTab(t.id as any)} 
             className={cn(
-              "flex items-center justify-center gap-3 py-3.5 rounded-xl text-sm font-bold transition-all duration-500 group",
+              "flex items-center justify-center gap-2 md:gap-3 py-3 md:py-3.5 rounded-xl text-[10px] md:text-sm font-bold transition-all duration-500 group",
               activeTab === t.id 
                 ? "bg-gradient-to-r from-primary to-indigo-600 text-white shadow-xl shadow-primary/20 scale-[1.02]" 
                 : "text-gray-400 hover:text-white hover:bg-white/5"
             )}
           >
-            <t.icon className={cn("w-4 h-4 transition-transform group-hover:scale-110", activeTab === t.id ? "text-white" : "text-gray-500")} />
-            {t.label}
+            <t.icon className={cn("w-3.5 h-3.5 md:w-4 h-4 transition-transform group-hover:scale-110", activeTab === t.id ? "text-white" : "text-gray-500")} />
+            <span className="hidden xs:inline">{t.label}</span>
           </button>
         ))}
       </div>

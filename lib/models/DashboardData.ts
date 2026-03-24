@@ -71,6 +71,13 @@ const DashboardDataSchema = new Schema(
     portfolioProjects: [PortfolioProjectSchema],
     learningPaths: [LearningPathSchema],
     internships: [InternshipSchema],
+    activityLogs: [
+      {
+        id: String,
+        action: String,
+        timestamp: String,
+      }
+    ],
     portfolioScore: { type: Number, default: 0 },
     weeklyProgress: { type: Number, default: 0 },
   },

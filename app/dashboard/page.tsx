@@ -191,19 +191,19 @@ export default function DashboardOverview() {
         className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6"
       >
         <div>
-           <div className="flex items-center gap-3 mb-4">
-              <div className="px-3 py-1 bg-primary/10 border border-primary/20 text-primary text-[8px] font-black uppercase tracking-[0.3em] rounded-full">Mission Status: Online</div>
-              <div className="text-gray-600 text-[8px] font-black uppercase tracking-widest">• 24ms Platform Latency</div>
+           <div className="flex flex-wrap items-center gap-2 mb-4">
+              <div className="px-2 py-1 bg-primary/10 border border-primary/20 text-primary text-[7px] md:text-[8px] font-black uppercase tracking-[0.3em] rounded-full">Mission Status: Online</div>
+              <div className="text-gray-600 text-[7px] md:text-[8px] font-black uppercase tracking-widest">• 24ms Platform Latency</div>
            </div>
-           <h1 className="text-4xl lg:text-5xl font-black text-foreground italic tracking-tighter">
+           <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-foreground italic tracking-tighter leading-none">
              ARCHITECT COMMAND: <span className="gradient-text pr-2">{user?.name?.split(' ')[0] || 'User'}</span>
            </h1>
         </div>
-        <div className="flex gap-4">
-           <button onClick={handleGlobalSync} className="px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center gap-2">
-              <Share2 className="w-4 h-4" /> Global Sync
+        <div className="flex flex-wrap gap-3 w-full md:w-auto">
+           <button onClick={handleGlobalSync} className="flex-1 md:flex-none px-4 md:px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+              <Share2 className="w-4 h-4" /> <span className="whitespace-nowrap">Global Sync</span>
            </button>
-           <button onClick={handleInitialize} className="px-6 py-3 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+           <button onClick={handleInitialize} className="flex-1 md:flex-none px-4 md:px-6 py-3 bg-primary text-white rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all text-center">
               Initialize Protocol
            </button>
         </div>
