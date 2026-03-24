@@ -25,6 +25,64 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
   const desc = targetProject ? targetProject.desc : "This is a practice workspace for your project. To get started, set up a local repository on your machine, initialize your favorite framework, and bring your ideas to life!"
   const tags = targetProject ? targetProject.tags : []
   const Icon = targetProject && iconMap[targetProject.iconName] ? iconMap[targetProject.iconName] : Rocket
+  
+  // Dynamic step generation based on project type
+  const getProjectSteps = (title: string) => {
+    const t = title.toLowerCase()
+    
+    if (t.includes('portfolio')) return [
+      "Design a custom grid layout to showcase your top 3 projects.",
+      "Implement a responsive navigation bar with smooth anchor scrolling.",
+      "Add an interactive 'skills' section with progress indicators.",
+      "Create a 'Contact Me' section with a functional email link or form."
+    ]
+    if (t.includes('landing page')) return [
+      "Draft a high-converting hero section with a clear Call to Action.",
+      "Identify and list 3 key features with unique iconography.",
+      "Add a 'Price Table' or 'Services' section relevant to the industry.",
+      "Ensure the entire layout is fully responsive for mobile nodes."
+    ]
+    if (t.includes('quiz app')) return [
+      "Define a data structure for questions, options, and correct answers.",
+      "Build a game loop that transitions between multiple questions.",
+      "Implement a scoring system that calculates results in real-time.",
+      "Add a 'Result Matrix' summary showing the final architecture score."
+    ]
+    if (t.includes('to-do') || t.includes('note taker')) return [
+      "Create an input field for adding new text entries/tasks.",
+      "Implement persistent storage using LocalStorage or a Database.",
+      "Add 'Mark as Completed' and 'Delete' functionalities.",
+      "Implement a search filter to quickly find specific nodes/notes."
+    ]
+    if (t.includes('blog') || t.includes('cms')) return [
+      "Set up a dynamic route to render individual article pages.",
+      "Implement a Markdown parser to handle wealthy text content.",
+      "Add a 'Recent Posts' feed on the homepage.",
+      "Create an Admin interface for creating and editing and deleting posts."
+    ]
+    if (t.includes('tracker') || t.includes('manager') || t.includes('system')) return [
+      "Create a table view to list all existing records/items.",
+      "Implement a 'Create/Edit' modal for item deployment.",
+      "Add sorting and filtering capabilities (e.g., sort by date/price).",
+      "Integrate a 'Total Summary' widget showing overall count/cost."
+    ]
+    if (t.includes('streaming') || t.includes('player')) return [
+      "Integrate an HTML5 player for audio/video playback.",
+      "Build a 'Play Queue' or 'Playlist' sidebar.",
+      "Implement play, pause, skip, and volume control protocols.",
+      "Add a 'Current Item' card with progress seek bars."
+    ]
+    
+    // Default fallback
+    return [
+      "Initialize your workspace with a modern framework (React/Next.js/Vue).",
+      "Draft the primary UI components required for this specific architecture.",
+      "Build the core logic (Data models, state management, and routing).",
+      "Clean your code and deploy your first production candidate."
+    ]
+  }
+
+  const steps = getProjectSteps(title)
 
   return (
     <div className="min-h-screen pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-background">
@@ -63,12 +121,15 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
             
             <div className="space-y-8">
               <section>
-                <h3 className="text-2xl font-semibold mb-4 text-foreground">Getting Started</h3>
-                <ol className="list-decimal list-inside space-y-3 text-muted-foreground ml-2">
-                  <li>Create a new directory on your computer for this project.</li>
-                  <li>Initialize a new Git repository (`git init`).</li>
-                  <li>Build the core features required for a standard {title} application.</li>
-                  <li>Push your code to a new public repository on GitHub.</li>
+                <h3 className="text-2xl font-semibold mb-4 text-foreground italic flex items-center gap-3">
+                  <Terminal className="w-6 h-6 text-primary" /> MISSION STEPS
+                </h3>
+                <ol className="list-decimal list-inside space-y-4 text-muted-foreground ml-2">
+                   {steps.map((s, i) => (
+                     <li key={i} className="pl-2">
+                       <span className="text-foreground font-semibold">{s.split(' ')[0]}</span> {s.split(' ').slice(1).join(' ')}
+                     </li>
+                   ))}
                 </ol>
               </section>
               
