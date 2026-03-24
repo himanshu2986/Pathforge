@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 import Link from 'next/link'
 
 export function JobMatchmaker() {
-  const { internships, skills, learningPaths } = useDashboardStore()
+  const { internships, skills, learningPaths, applyToInternship } = useDashboardStore()
   
   const recommendations = useMemo(() => {
     return internships.slice(0, 2).map(job => {
@@ -87,7 +87,18 @@ export function JobMatchmaker() {
 
                   <div className="flex gap-2">
                      <button className="flex-1 py-4 bg-white/5 hover:bg-white text-gray-500 hover:text-black rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Mission Brief</button>
-                     <button className="px-6 py-4 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all">Apply Now</button>
+                     <button 
+                       onClick={() => applyToInternship(job.id)}
+                       disabled={job.applied}
+                       className={cn(
+                         "px-6 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                         job.applied 
+                           ? "bg-emerald-500/20 text-emerald-500 cursor-not-allowed" 
+                           : "bg-primary text-white shadow-xl shadow-primary/20 hover:scale-105 active:scale-95"
+                       )}
+                     >
+                       {job.applied ? 'Applied' : 'Apply Now'}
+                     </button>
                   </div>
                </div>
             </motion.div>

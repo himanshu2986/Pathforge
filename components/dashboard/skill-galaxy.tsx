@@ -37,8 +37,8 @@ export function SkillGalaxy() {
             animate={{ 
               scale: 1, 
               opacity: 1,
-              x: `${node.x}%`,
-              y: `${node.y}%`
+              left: `${node.x}%`,
+              top: `${node.y}%`
             }}
             whileHover={{ scale: 1.1, zIndex: 20 }}
             className="absolute -translate-x-1/2 -translate-y-1/2"
