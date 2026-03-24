@@ -594,7 +594,7 @@ export default function UltimateResumeStudioPage() {
             {/* Section title */}
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Choose your visual identity — you can always change it later.</p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 px-1 sm:px-0">
               {[
                 { id: 'professional', name: 'Elite Professional', desc: 'Classic Corporate', icon: FileText, gradient: 'from-blue-50 to-indigo-50', accent: '#3b82f6' },
                 { id: 'tech', name: 'Software Engineer', desc: 'Modern Tech Header', icon: Cpu, gradient: 'from-slate-800 to-slate-950', accent: '#22d3ee', dark: true },
@@ -1076,7 +1076,7 @@ export default function UltimateResumeStudioPage() {
             <div className="flex-1 flex flex-row relative h-full lg:ml-[280px]">
               
               {/* Dynamic Form Area (Left) */}
-              <main className="flex-1 overflow-y-auto custom-scrollbar p-6 md:p-12 lg:p-20 bg-white min-w-0">
+              <main className="flex-1 overflow-y-auto custom-scrollbar p-0 px-4 xs:px-6 py-6 md:p-12 lg:p-20 bg-white min-w-0">
                  <div className="max-w-3xl mx-auto h-full flex flex-col">
                     <header className="mb-10">
                        <button onClick={() => setActiveStep(p => Math.max(0, p - 1))} className={cn("text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-all flex items-center gap-2 mb-5", activeStep === 0 && "opacity-0 pointer-events-none")}>
