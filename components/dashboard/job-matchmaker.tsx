@@ -86,7 +86,7 @@ export function JobMatchmaker() {
                   )}
 
                   <div className="flex gap-2">
-                     <button className="flex-1 py-4 bg-white/5 hover:bg-white text-gray-500 hover:text-black rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Mission Brief</button>
+                     <Link href="/dashboard/internships" className="flex-1 py-4 bg-white/5 hover:bg-white text-gray-500 hover:text-black rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center">Mission Brief</Link>
                      <button 
                        onClick={() => applyToInternship(job.id)}
                        disabled={job.applied}

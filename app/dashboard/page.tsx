@@ -242,7 +242,7 @@ export default function DashboardOverview() {
                        </li>
                     ))}
                  </ul>
-                 <Link href="/dashboard/learning" className="mt-10 flex items-center justify-center gap-2 py-4 border border-dashed border-white/10 rounded-xl text-[10px] font-black uppercase text-gray-500 hover:text-white hover:border-white/20 transition-all">
+                 <Link href={`/dashboard/learning/${learningPaths[0]?.id || '1'}`} className="mt-10 flex items-center justify-center gap-2 py-4 border border-dashed border-white/10 rounded-xl text-[10px] font-black uppercase text-gray-500 hover:text-white hover:border-white/20 transition-all">
                     Expand Roadmap <ChevronRight className="w-4 h-4" />
                  </Link>
               </GlassCardContent>

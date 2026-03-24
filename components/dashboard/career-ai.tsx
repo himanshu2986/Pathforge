@@ -85,7 +85,7 @@ export function CareerAI() {
             </div>
           </div>
           
-          <Link href="/dashboard/learning" className="block p-3 rounded-lg bg-accent/5 border border-accent/10 hover:bg-accent/10 transition-colors group">
+          <Link href={`/dashboard/learning/${learningPaths[0]?.id || '1'}`} className="block p-3 rounded-lg bg-accent/5 border border-accent/10 hover:bg-accent/10 transition-colors group">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[10px] uppercase font-bold text-accent tracking-wider mb-0.5">Recommended Next Step</p>
