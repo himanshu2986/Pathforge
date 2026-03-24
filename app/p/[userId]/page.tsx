@@ -132,15 +132,14 @@ export default function PublicArchitectPortfolio() {
 
                         <h1 className="text-3xl font-black italic tracking-tighter mb-2">{profile.name}</h1>
                         <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-6">Master Domain: {resume?.role || 'Senior Architect'}</p>
-                        
-                        <div className="flex items-center justify-center gap-3 mb-8">
-                           <div className="px-4 py-2 bg-white/5 rounded-xl border border-white/10 flex items-center gap-2 text-[10px] font-bold text-gray-400">
-                              <MapPin className="w-3 h-3" /> {resume?.location || 'Operational Base: Remote'}
-                           </div>
-                           <div className="px-4 py-2 bg-emerald-500/10 rounded-xl border border-emerald-500/20 flex items-center gap-2 text-[10px] font-black text-emerald-500 uppercase tracking-tighter">
-                              Status: Verified Ready
-                           </div>
-                        </div>
+                        <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+                            <div className="px-3 md:px-4 py-2 bg-white/5 rounded-xl border border-white/10 flex items-center gap-2 text-[9px] md:text-[10px] font-bold text-gray-400">
+                               <MapPin className="w-3 h-3" /> {resume?.location || 'Operational Base: Remote'}
+                            </div>
+                            <div className="px-3 md:px-4 py-2 bg-emerald-500/10 rounded-xl border border-emerald-500/20 flex items-center gap-2 text-[9px] md:text-[10px] font-black text-emerald-500 uppercase tracking-tighter">
+                               Status: Verified Ready
+                            </div>
+                         </div>
 
                         <div className="grid grid-cols-2 gap-4 pt-8 border-t border-white/5">
                            <div>
@@ -184,7 +183,7 @@ export default function PublicArchitectPortfolio() {
             <section className="lg:col-span-8 space-y-12">
                
                {/* Primary Section Switcher */}
-               <div className="flex p-1.5 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-2xl w-fit">
+               <div className="grid grid-cols-1 sm:flex p-1.5 bg-white/5 border border-white/10 rounded-2xl md:rounded-[2rem] backdrop-blur-2xl w-full sm:w-fit gap-1 sm:gap-0">
                   {[
                     { id: 'resume', icon: FileText, label: 'Resume Profile' },
                     { id: 'projects', icon: Briefcase, label: 'Project Vault' },
@@ -194,7 +193,7 @@ export default function PublicArchitectPortfolio() {
                       key={t.id} 
                       onClick={() => setActiveTab(t.id as any)} 
                       className={cn(
-                        "flex items-center justify-center gap-3 px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-500 group",
+                        "flex items-center justify-center gap-3 px-4 md:px-8 py-3 rounded-xl md:rounded-2xl text-[10px] md:text-xs font-black uppercase tracking-widest transition-all duration-500 group",
                         activeTab === t.id 
                           ? "bg-white text-black shadow-xl" 
                           : "text-gray-500 hover:text-white hover:bg-white/5"
@@ -210,9 +209,9 @@ export default function PublicArchitectPortfolio() {
                   {activeTab === 'resume' && (
                     <motion.div key="resume" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-12">
                        <GlassCard>
-                          <GlassCardContent className="p-10">
-                             <h2 className="text-3xl font-black italic mb-8">Professional Summary</h2>
-                             <p className="text-xl text-gray-400 leading-relaxed font-medium italic">"{resume?.summary || 'No objective statement available.'}"</p>
+                          <GlassCardContent className="p-6 md:p-10">
+                             <h2 className="text-xl md:text-3xl font-black italic mb-6 md:mb-8">Professional Summary</h2>
+                             <p className="text-base md:text-xl text-gray-400 leading-relaxed font-medium italic">"{resume?.summary || 'No objective statement available.'}"</p>
                           </GlassCardContent>
                        </GlassCard>
 
@@ -222,18 +221,18 @@ export default function PublicArchitectPortfolio() {
                           </h3>
                           <div className="space-y-8 px-2">
                              {resume?.experience?.map((exp: any, i: number) => (
-                               <div key={i} className="flex gap-10 group relative">
+                               <div key={i} className="flex gap-4 md:gap-10 group relative">
                                   <div className="flex flex-col items-center">
-                                     <div className="w-12 h-12 bg-white text-black flex items-center justify-center font-black rounded-2xl shadow-xl z-10 group-hover:scale-110 transition-transform">
+                                     <div className="w-10 h-10 md:w-12 md:h-12 bg-white text-black flex items-center justify-center font-black rounded-xl md:rounded-2xl shadow-xl z-10 group-hover:scale-110 transition-transform">
                                         {i + 1}
                                      </div>
                                      <div className="flex-1 w-px bg-white/10 my-2" />
                                   </div>
-                                  <div className="pb-12 flex-1">
-                                     <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-2">{exp.startDate} — {exp.endDate}</p>
-                                     <h4 className="text-2xl font-black italic mb-1">{exp.role}</h4>
-                                     <p className="text-sm font-bold text-gray-500 uppercase tracking-tighter mb-4">{exp.company}</p>
-                                     <p className="text-lg text-gray-400 font-medium leading-relaxed">{exp.description}</p>
+                                  <div className="pb-10 md:pb-12 flex-1">
+                                     <p className="text-[9px] md:text-[10px] font-black text-primary uppercase tracking-widest mb-2">{exp.startDate} — {exp.endDate}</p>
+                                     <h4 className="text-xl md:text-2xl font-black italic mb-1">{exp.role}</h4>
+                                     <p className="text-[10px] md:text-sm font-bold text-gray-500 uppercase tracking-tighter mb-4">{exp.company}</p>
+                                     <p className="text-base md:text-lg text-gray-400 font-medium leading-relaxed">{exp.description}</p>
                                   </div>
                                </div>
                              ))}
