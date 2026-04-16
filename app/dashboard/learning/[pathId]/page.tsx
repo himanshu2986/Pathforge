@@ -60,16 +60,19 @@ const MentorBot = ({ moduleTitle, moduleContent }: { moduleTitle: string, module
     setMessages(prev => [...prev, { role: 'user', content: userMsg }])
     setIsTyping(true)
 
-    setTimeout(() => {
-      let aiResponse = `Based on the "${moduleTitle}" documentation, remember that the core objective is efficiency. `
-      if (userMsg.toLowerCase().includes('help') || userMsg.toLowerCase().includes('explain')) {
-        aiResponse += `This module focuses on: ${moduleContent.substring(0, 100)}... Is there a specific part of the blueprint you'd like me to break down?`
-      } else {
-        aiResponse += "That's a great question! In professional environments, we prioritize modularity and clean architecture as discussed in this chapter."
-      }
-      setMessages(prev => [...prev, { role: 'ai', content: aiResponse }])
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMsg, moduleTitle, moduleContent })
+      })
+      const data = await res.json()
+      setMessages(prev => [...prev, { role: 'ai', content: data.reply }])
+    } catch (error) {
+      setMessages(prev => [...prev, { role: 'ai', content: "Connection to Neural Matrix lost. Cannot process request." }])
+    } finally {
       setIsTyping(false)
-    }, 1500)
+    }
   }
 
   return (
