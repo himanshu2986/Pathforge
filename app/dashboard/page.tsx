@@ -70,8 +70,8 @@ function StatCard({ stat, index }: { stat: {
 }
 
 function PublicProfileCard() {
-  const { user } = useAuthStore()
-  const [isPublished, setIsPublished] = useState(true)
+  const { user, updateUser } = useAuthStore()
+  const [isPublished, setIsPublished] = useState(user?.isPublished ?? true)
   const publicUrl = typeof window !== 'undefined' ? `${window.location.origin}/p/${user?.id}` : ''
   
   const handleCopy = () => {
@@ -82,6 +82,7 @@ function PublicProfileCard() {
   const toggleVisibility = async () => {
     const nextState = !isPublished
     setIsPublished(nextState)
+    updateUser({ isPublished: nextState })
     
     try {
       await fetch('/api/user/visibility', {
@@ -94,6 +95,7 @@ function PublicProfileCard() {
       })
     } catch (e) {
       setIsPublished(!nextState)
+      updateUser({ isPublished: !nextState })
       toast.error("Protocol Sync Failure: Please re-authenticate.")
     }
   }

@@ -12,6 +12,7 @@ export interface User {
   website?: string
   role: 'student' | 'admin'
   createdAt: string
+  isPublished?: boolean
 }
 
 export interface Skill {

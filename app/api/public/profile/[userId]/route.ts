@@ -3,6 +3,8 @@ import dbConnect from '@/lib/mongodb';
 import User from '@/lib/models/User';
 import DashboardData from '@/lib/models/DashboardData';
 import Resume from '@/lib/models/Resume';
+import { cookies } from 'next/headers';
+import jwt from 'jsonwebtoken';
 
 export async function GET(
   req: Request,
@@ -17,7 +19,21 @@ export async function GET(
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
-    if (user.isPublished === false) {
+    let isOwner = false;
+    try {
+      const cookieStore = await cookies();
+      const token = cookieStore.get('auth_token')?.value;
+      if (token) {
+        const decoded: any = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret');
+        if (decoded.userId === userId) {
+          isOwner = true;
+        }
+      }
+    } catch(e) {
+      // Ignored
+    }
+
+    if (user.isPublished === false && !isOwner) {
       return NextResponse.json({ message: 'Stealth Protocol Active: This node is currently hidden from the global registry.' }, { status: 403 });
     }
 

@@ -63,7 +63,8 @@ export async function POST(req: Request) {
       name: user.name,
       avatar: user.avatar,
       role: user.role,
-      createdAt: user.createdAt.toISOString()
+      createdAt: user.createdAt.toISOString(),
+      isPublished: user.isPublished
     };
 
     const response = NextResponse.json(
