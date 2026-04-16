@@ -331,16 +331,16 @@ export default function PathDetailsPage() {
 
   return (
     <div className="min-h-screen bg-white text-slate-900 overflow-hidden flex flex-col font-sans">
-      <header className="fixed top-0 inset-x-0 h-16 bg-[#002d5b] text-white z-50 flex items-center justify-between px-6 border-b border-white/5">
-         <div className="flex items-center gap-6">
+      <header className="fixed top-0 inset-x-0 h-16 bg-[#002d5b] text-white z-50 flex items-center justify-between px-4 md:px-6 border-b border-white/5">
+         <div className="flex items-center gap-4 md:gap-6 w-full md:w-auto">
             <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-white/10 rounded-lg transition-colors"><Menu className="w-5 h-5" /></button>
-            <div className="flex items-center gap-3">
-               <div className="w-8 h-8 bg-pink-600 rounded-lg flex items-center justify-center shadow-lg"><BookOpen className="w-5 h-5 text-white" /></div>
-               <span className="font-black tracking-tight text-lg hidden md:block">{path.title}</span>
+            <div className="flex items-center gap-3 overflow-hidden">
+               <div className="shrink-0 w-8 h-8 bg-pink-600 rounded-lg flex items-center justify-center shadow-lg"><BookOpen className="w-5 h-5 text-white" /></div>
+               <span className="font-black tracking-tight text-sm md:text-lg truncate max-w-[150px] sm:max-w-[200px] md:max-w-none">{path.title}</span>
             </div>
          </div>
-         <div className="flex items-center gap-4">
-            {path.progress === 100 && <button onClick={() => setShowCertificate(true)} className="px-5 py-2 bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full flex items-center gap-2"><Trophy className="w-4 h-4" /> Claim Certificate</button>}
+         <div className="flex items-center gap-2 md:gap-4 shrink-0">
+            {path.progress === 100 && <button onClick={() => setShowCertificate(true)} className="px-3 md:px-5 py-2 bg-emerald-500 text-white text-[9px] md:text-[10px] font-black uppercase tracking-widest rounded-full flex items-center gap-2"><Trophy className="w-4 h-4 shrink-0" /> <span className="hidden md:inline">Claim Certificate</span></button>}
             <div className="hidden lg:flex flex-col items-end mr-4">
                <div className="flex justify-between w-32 mb-1"><span className="text-[8px] font-black uppercase text-white/40">Path Status</span><span className="text-[8px] font-black text-emerald-400">{path.progress}%</span></div>
                <div className="w-32 h-1 bg-white/10 rounded-full overflow-hidden"><div className="h-full bg-emerald-500" style={{ width: `${path.progress}%` }} /></div>
@@ -350,51 +350,56 @@ export default function PathDetailsPage() {
       </header>
 
       <div className="flex flex-1 pt-16 h-full relative">
-         <aside className={cn("fixed left-0 top-16 bottom-0 bg-[#f1f5f9] border-r border-slate-200 overflow-y-auto custom-scrollbar transition-all z-40", sidebarOpen ? "w-64" : "w-0 opacity-0 pointer-events-none")}>
+         {/* Mobile sidebar overlay */}
+         {sidebarOpen && (
+            <div className="fixed inset-0 bg-black/50 z-30 md:hidden" onClick={() => setSidebarOpen(false)} />
+         )}
+
+         <aside className={cn("fixed left-0 top-16 bottom-0 bg-[#f1f5f9] border-r border-slate-200 overflow-y-auto custom-scrollbar transition-all z-40", sidebarOpen ? "w-[260px] md:w-64" : "w-0 opacity-0 pointer-events-none")}>
             <div className="px-4 py-8">
                <h3 className="px-4 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Course Chapters</h3>
                <nav className="space-y-1">
                   {modules.map((m, i) => (
-                    <button key={m.id} onClick={() => setSelectedModuleId(m.id)} className={cn("w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold transition-all group", selectedModuleId === m.id ? "bg-white text-[#002d5b] shadow-sm ring-1 ring-slate-200" : "text-slate-500 hover:bg-slate-200")}>
+                    <button key={m.id} onClick={() => { setSelectedModuleId(m.id); if(window.innerWidth < 768) setSidebarOpen(false); }} className={cn("w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold transition-all group", selectedModuleId === m.id ? "bg-white text-[#002d5b] shadow-sm ring-1 ring-slate-200" : "text-slate-500 hover:bg-slate-200")}>
                        <div className={cn("w-5 h-5 rounded-md flex items-center justify-center text-[10px] shrink-0", m.completed ? "bg-emerald-500 text-white" : selectedModuleId === m.id ? "bg-[#002d5b] text-white" : "bg-slate-300 text-slate-500")}>
                           {m.completed ? <CheckCircle2 className="w-3 h-3" /> : i + 1}
                        </div>
-                       <span className="truncate">{m.title}</span>
-                       <ChevronRight className={cn("ml-auto w-3 h-3 transition-transform", selectedModuleId === m.id ? "opacity-100" : "opacity-0 group-hover:opacity-40")} />
+                       <span className="truncate text-left">{m.title}</span>
+                       <ChevronRight className={cn("ml-auto w-3 h-3 transition-transform shrink-0", selectedModuleId === m.id ? "opacity-100" : "opacity-0 group-hover:opacity-40")} />
                     </button>
                   ))}
                </nav>
             </div>
          </aside>
 
-         <main className={cn("flex-1 overflow-y-auto transition-all bg-white relative", sidebarOpen ? "ml-64" : "ml-0")}>
+         <main className={cn("flex-1 overflow-x-hidden overflow-y-auto transition-all bg-white relative w-full", sidebarOpen ? "md:ml-64" : "ml-0")}>
             {selectedModule && (
-              <div className="max-w-4xl mx-auto py-16 px-8 md:px-12 lg:px-16 min-h-screen flex flex-col">
+              <div className="max-w-4xl mx-auto py-12 md:py-16 px-5 sm:px-8 md:px-12 lg:px-16 min-h-screen flex flex-col w-full">
                  <article className="prose prose-slate max-w-none flex-1">
-                    <h1 className="text-5xl font-black text-slate-900 tracking-tighter mb-8 leading-none">{selectedModule.title}</h1>
-                    <div className="text-lg leading-relaxed text-slate-600 space-y-6">{selectedModule.content?.split('\n').map((line, i) => <p key={i}>{line}</p>)}</div>
+                    <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter mb-6 md:mb-8 leading-tight md:leading-none break-words">{selectedModule.title}</h1>
+                    <div className="text-base md:text-lg leading-relaxed text-slate-600 space-y-6">{selectedModule.content?.split('\n').map((line, i) => <p key={i}>{line}</p>)}</div>
                     
-                    <div className="my-14 space-y-4">
-                       <h3 className="text-xl font-black text-slate-900">Practical Example</h3>
-                       <div className="bg-[#030712] border-2 border-slate-100 rounded-[2rem] overflow-hidden shadow-sm p-10">
-                          <pre className="font-mono text-sm text-pink-600 mb-8">{selectedModule.example || `<!-- Example -->`}</pre>
-                          <div className="flex gap-4">
-                             <button onClick={() => setShowPlayground(true)} className="px-8 py-3 bg-emerald-500 text-white rounded-xl text-xs font-black uppercase transition-all">Launch Trial Ground</button>
-                             <button onClick={() => { setShowPlayground(true); /* Logic to trigger timed mode */ }} className="px-8 py-3 border-2 border-red-500/20 text-red-500 rounded-xl text-xs font-black uppercase flex items-center gap-2 hover:bg-red-500 hover:text-white transition-all">
-                                <Timer className="w-4 h-4" /> Timed Mission Mode
+                    <div className="my-10 md:my-14 space-y-4">
+                       <h3 className="text-lg md:text-xl font-black text-slate-900">Practical Example</h3>
+                       <div className="bg-[#030712] border-2 border-slate-100 rounded-3xl overflow-hidden shadow-sm p-6 md:p-10 scrollbar-hide">
+                          <pre className="font-mono text-[10px] sm:text-xs md:text-sm text-pink-600 mb-8 overflow-x-auto whitespace-pre-wrap break-all">{selectedModule.example || `<!-- Example -->`}</pre>
+                          <div className="flex flex-col sm:flex-row gap-4">
+                             <button onClick={() => setShowPlayground(true)} className="px-6 md:px-8 py-3 bg-emerald-500 text-white rounded-xl text-[10px] md:text-xs font-black uppercase transition-all w-full sm:w-auto text-center">Launch Trial Ground</button>
+                             <button onClick={() => { setShowPlayground(true); /* Logic to trigger timed mode */ }} className="px-6 md:px-8 py-3 w-full sm:w-auto border-2 border-red-500/20 text-red-500 rounded-xl text-[10px] md:text-xs font-black uppercase flex items-center justify-center gap-2 hover:bg-red-500 hover:text-white transition-all">
+                                <Timer className="w-4 h-4 shrink-0" /> Timed Mission Mode
                              </button>
                           </div>
                        </div>
                     </div>
                  </article>
 
-                 <footer className="mt-12 pt-16 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-8 pb-10">
-                    <button onClick={() => { if (!selectedModule.completed && selectedModule.quiz?.length) setShowQuiz(true); else finalizeModule(); }} className={cn("px-10 py-5 rounded-2xl text-[12px] font-black uppercase transition-all flex items-center gap-4", selectedModule.completed ? "bg-slate-100 text-emerald-600" : "bg-[#002d5b] text-white shadow-2xl")}>
-                       {selectedModule.completed ? <><CheckCircle2 className="w-5 h-5" /> Module Mastered</> : <><Zap className="w-5 h-5 text-pink-500" /> Verify Knowledge</>}
+                 <footer className="mt-8 md:mt-12 pt-10 md:pt-16 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8 pb-10">
+                    <button onClick={() => { if (!selectedModule.completed && selectedModule.quiz?.length) setShowQuiz(true); else finalizeModule(); }} className={cn("w-full md:w-auto justify-center px-6 md:px-10 py-4 md:py-5 rounded-2xl text-[10px] md:text-[12px] font-black uppercase transition-all flex items-center gap-3 md:gap-4", selectedModule.completed ? "bg-slate-100 text-emerald-600" : "bg-[#002d5b] text-white shadow-2xl")}>
+                       {selectedModule.completed ? <><CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 shrink-0" /> Module Mastered</> : <><Zap className="w-4 h-4 md:w-5 md:h-5 text-pink-500 shrink-0" /> Verify Knowledge</>}
                     </button>
-                    <div className="flex gap-4">
-                       <button onClick={handlePrev} disabled={currentIdx === 0} className="w-14 h-14 bg-slate-50 text-slate-400 rounded-2xl border-2 border-slate-100 flex items-center justify-center"><ArrowLeft className="w-5 h-5" /></button>
-                       <button onClick={handleNext} disabled={currentIdx === modules.length - 1} className="h-14 px-10 bg-slate-50 text-[#002d5b] text-[10px] font-black uppercase rounded-2xl border-2 border-slate-100 flex items-center justify-center gap-2">Next Chapter <ArrowRight className="w-4 h-4" /></button>
+                    <div className="flex gap-3 md:gap-4 w-full md:w-auto justify-between md:justify-end">
+                       <button onClick={handlePrev} disabled={currentIdx === 0} className="w-12 h-12 md:w-14 md:h-14 shrink-0 bg-slate-50 text-slate-400 rounded-2xl border-2 border-slate-100 flex items-center justify-center"><ArrowLeft className="w-5 h-5" /></button>
+                       <button onClick={handleNext} disabled={currentIdx === modules.length - 1} className="h-12 md:h-14 flex-1 md:flex-none px-6 md:px-10 bg-slate-50 text-[#002d5b] text-[9px] md:text-[10px] font-black uppercase rounded-2xl border-2 border-slate-100 flex items-center justify-center gap-2">Next Chapter <ArrowRight className="w-4 h-4 shrink-0" /></button>
                     </div>
                  </footer>
               </div>
