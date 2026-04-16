@@ -5,6 +5,8 @@ import User from '@/lib/models/User';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import { z } from 'zod';
+import { getBrandedEmail } from '@/lib/utils/email-template';
+
 
 const signupSchema = z.object({
   email: z.string().email('Invalid email format'),
@@ -63,8 +65,11 @@ export async function POST(req: Request) {
     const baseUrl = `${protocol}://${host}`;
     const verificationUrl = `${baseUrl}/api/auth/verify?token=${verificationToken}&email=${email}`;
 
-    const { getBrandedEmail } = await import('@/lib/utils/email-template');
-    
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error("CRITICAL: EMAIL_USER or EMAIL_PASS is undefined. Did you restart the dev server after editing .env?");
+      throw new Error("Email configuration is missing. Please restart your development server.");
+    }
+
     const mailOptions = {
       from: `"Pathforge Atlas" <${process.env.EMAIL_USER}>`,
       to: email,
