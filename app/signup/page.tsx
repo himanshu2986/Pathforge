@@ -47,11 +47,11 @@ export default function SignupPage() {
       return
     }
     
-    const success = await signup(email, password, name)
-    if (success) {
+    const result = await signup(email, password, name)
+    if (result.success) {
       setIsEmailSent(true)
     } else {
-      setError('An account with this email already exists')
+      setError(result.error || 'An account with this email already exists')
     }
   }
   

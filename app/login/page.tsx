@@ -41,19 +41,12 @@ function LoginContent() {
       return
     }
     
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    })
+    const result = await login(email, password)
 
-    if (res.ok) {
-      const data = await res.json()
-      useAuthStore.getState().login(email, password) // This calls the store login which fetch again, but it's simpler for now
+    if (result.success) {
       router.push('/dashboard')
     } else {
-      const data = await res.json()
-      setError(data.message || 'Invalid email or password')
+      setError(result.error || 'Invalid email or password')
     }
   }
   

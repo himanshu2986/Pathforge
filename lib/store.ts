@@ -84,8 +84,8 @@ interface AuthState {
   user: User | null
   isAuthenticated: boolean
   isLoading: boolean
-  login: (email: string, password: string) => Promise<boolean>
-  signup: (email: string, password: string, name: string) => Promise<boolean>
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>
+  signup: (email: string, password: string, name: string) => Promise<{ success: boolean; error?: string }>
   logout: () => void
   updateUser: (updates: Partial<User>) => void
 }
@@ -111,13 +111,17 @@ export const useAuthStore = create<AuthState>()(
             const data = await response.json()
             set({ user: data.user, isAuthenticated: true, isLoading: false })
             useDashboardStore.getState().loadUserData(data.user.id)
-            return true
+            return { success: true }
+          } else {
+            const data = await response.json()
+            set({ isLoading: false })
+            return { success: false, error: data.message || 'Invalid credentials' }
           }
-        } catch (error) {
+        } catch (error: any) {
           console.error('Login error:', error)
+          set({ isLoading: false })
+          return { success: false, error: error.message || 'Network error' }
         }
-        set({ isLoading: false })
-        return false
       },
       
       signup: async (email: string, password: string, name: string) => {
@@ -131,13 +135,17 @@ export const useAuthStore = create<AuthState>()(
 
           if (response.ok) {
             set({ isLoading: false })
-            return true
+            return { success: true }
+          } else {
+            const data = await response.json()
+            set({ isLoading: false })
+            return { success: false, error: data.message || 'Signup failed' }
           }
-        } catch (error) {
+        } catch (error: any) {
           console.error('Signup error:', error)
+          set({ isLoading: false })
+          return { success: false, error: error.message || 'Network error' }
         }
-        set({ isLoading: false })
-        return false
       },
       
       logout: async () => {

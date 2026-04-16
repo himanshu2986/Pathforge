@@ -12,17 +12,17 @@ const signupSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
 });
 
-// Create Nodemailer Transporter
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
 export async function POST(req: Request) {
   try {
+    // Create Nodemailer Transporter dynamically to ensure env vars are loaded
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
     await dbConnect();
     const body = await req.json();
     
