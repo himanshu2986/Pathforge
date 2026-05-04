@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowLeft, Rocket, Github, Code2, Database, Layout, Brain, Shield, Terminal, Globe, Cpu, HeartPulse, Leaf, Users, CloudRain, Activity, BarChart, Bell } from 'lucide-react'
 import { MagneticButton } from '@/components/ui/magnetic-button'
+import { PracticeWorkspace } from '@/components/ui/practice-workspace'
 import { projectLevels } from '@/lib/projectsData'
 
 const iconMap: Record<string, any> = {
@@ -132,6 +133,17 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
                    ))}
                 </ol>
               </section>
+              
+              <PracticeWorkspace
+                title="PROJECT WORKSPACE"
+                intro={`Write and practice code for ${title} here. Your work is saved for ${title}.`}
+                placeholder={`<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  <title>${title}</title>\n</head>\n<body>\n  <h1>Hello ${title}</h1>\n  <p>Build this project example here.</p>\n</body>\n</html>`}
+                checks={[
+                  { label: "Has a valid HTML document structure", pattern: "<!DOCTYPE html>" },
+                  { label: "Includes a page heading", pattern: "<h[1-6]" },
+                  { label: "Includes body content for this lesson", pattern: "<body.*>.*</body>" }
+                ]}
+              />
               
               <section>
                 <h3 className="text-2xl font-semibold mb-4 text-foreground">Submission Checklist</h3>
