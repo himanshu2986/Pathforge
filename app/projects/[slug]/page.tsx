@@ -137,11 +137,18 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
               <PracticeWorkspace
                 title="PROJECT WORKSPACE"
                 intro={`Write and practice code for ${title} here. Your work is saved for ${title}.`}
-                placeholder={`<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  <title>${title}</title>\n</head>\n<body>\n  <h1>Hello ${title}</h1>\n  <p>Build this project example here.</p>\n</body>\n</html>`}
-                checks={[
+                mode={tags.includes('React') || tags.includes('Next.js') || tags.includes('Vue') || tags.includes('HTML') ? 'code' : 'studio'}
+                placeholder={tags.includes('React') || tags.includes('Next.js') ? `import React from 'react';\n\nexport default function ${title.replace(/\s+/g, '')}() {\n  return (\n    <div>\n      <h1>${title}</h1>\n      <p>Build your React project here.</p>\n    </div>\n  );\n}` : tags.includes('Python') || tags.includes('Django') ? `def main():\n    print("Welcome to ${title}")\n\nif __name__ == "__main__":\n    main()` : `<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  <title>${title}</title>\n</head>\n<body>\n  <h1>Hello ${title}</h1>\n  <p>Build this project example here.</p>\n</body>\n</html>`}
+                checks={tags.includes('React') || tags.includes('Next.js') ? [
+                  { label: "Defines a component", pattern: "export default function|function\\s+[A-Z]" },
+                  { label: "Returns JSX", pattern: "return\\s*\\(|return\\s*<" }
+                ] : tags.includes('Python') || tags.includes('Django') ? [
+                  { label: "Defines a function or class", pattern: "def\\s+|class\\s+" },
+                  { label: "Includes main block", pattern: "if __name__ == .__main__." }
+                ] : [
                   { label: "Has a valid HTML document structure", pattern: "<!DOCTYPE html>" },
                   { label: "Includes a page heading", pattern: "<h[1-6]" },
-                  { label: "Includes body content for this lesson", pattern: "<body.*>.*</body>" }
+                  { label: "Includes body content", pattern: "<body.*>.*</body>" }
                 ]}
               />
               
