@@ -17,7 +17,7 @@ async function isAdmin() {
   }
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   await dbConnect();
   if (!(await isAdmin())) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   const { id } = await params;
@@ -30,7 +30,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   await dbConnect();
   if (!(await isAdmin())) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   const { id } = await params;
